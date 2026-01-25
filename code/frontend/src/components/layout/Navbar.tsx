@@ -1,24 +1,29 @@
 'use client';
 
-import { Bell, User } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
-// Simplified Navbar without complex Dropdown for now
 export function Navbar({ userName }: { userName: string }) {
     return (
-        <header className="flex h-16 items-center justify-between border-b bg-background px-6">
-            <div className="flex items-center gap-4">
-                <h2 className="text-lg font-semibold">Dashboard</h2>
+        <header className="flex h-20 items-center justify-between px-8 lg:px-12 bg-transparent">
+            {/* Optional Search Bar or context info */}
+            <div className="flex items-center flex-1 max-w-md">
+                {/* Placeholder if needed */}
             </div>
-            <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" className="text-muted-foreground">
-                    <Bell className="h-5 w-5" />
+
+            <div className="flex items-center gap-6">
+                <Button variant="ghost" size="icon" className="h-10 w-10 text-slate-500 hover:bg-white hover:shadow-sm">
+                    <Bell className="h-6 w-6" />
                 </Button>
-                <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                        <User className="h-4 w-4" />
+                <div className="flex items-center gap-4 pl-4 border-l border-slate-300">
+                    <div className="flex flex-col items-end">
+                        <span className="text-sm font-black text-slate-900 leading-none">{userName}</span>
+                        <span className="text-xs font-bold text-blue-600 mt-1 uppercase">Administrator</span>
                     </div>
-                    <span className="text-sm font-medium">{userName}</span>
+                    <div className="h-12 w-12 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-400">
+                        <div className="h-8 w-8 rounded-full bg-slate-100" />
+                    </div>
                 </div>
             </div>
         </header>
