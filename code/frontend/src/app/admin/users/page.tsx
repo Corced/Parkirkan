@@ -11,7 +11,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { userService } from "@/lib/api";
-import { Edit, Trash2, Plus, Eye, Search, ChevronDown, User as UserIcon, X, Check, Save } from "lucide-react";
+import { Edit, Trash2, Plus, Eye, Search, ChevronDown, User as UserIcon, X, Check, Save, FileText } from "lucide-react";
 import { User, Role } from '@/types';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
@@ -23,6 +23,11 @@ export default function UserManagementPage() {
     const [isAdding, setIsAdding] = useState(false);
     const [userToDelete, setUserToDelete] = useState<User | null>(null);
     const [confirmUsername, setConfirmUsername] = useState('');
+
+    // Search and Filter State
+    const [searchQuery, setSearchQuery] = useState('');
+    const [roleFilter, setRoleFilter] = useState<string>('semua');
+    const [showRoleDropdown, setShowRoleDropdown] = useState(false);
 
     // Form State
     const [formData, setFormData] = useState({
@@ -110,6 +115,15 @@ export default function UserManagementPage() {
         }
     };
 
+    // Filtered Users Logic
+    const filteredUsers = users.filter(user => {
+        const matchesSearch = user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (user.name && user.name.toLowerCase().includes(searchQuery.toLowerCase()));
+        const matchesRole = roleFilter === 'semua' || user.role === roleFilter;
+        return matchesSearch && matchesRole;
+    });
+
     return (
         <div className="space-y-10 relative">
             <div className="flex items-center justify-between">
@@ -127,20 +141,42 @@ export default function UserManagementPage() {
 
             {/* Filter Section - Hidden in Form/Detail Mode */}
             {!selectedUser && !isAdding && (
-                <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 z-20 relative">
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="relative flex-1">
                             <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
                             <Input
                                 placeholder="Cari User...."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 className="h-16 pl-16 rounded-2xl border-2 border-slate-100 bg-[#F9FAFB] font-bold text-lg focus:border-blue-400 focus:bg-white transition-all shadow-inner"
                             />
                         </div>
                         <div className="relative min-w-[240px]">
-                            <button className="w-full h-16 rounded-2xl border-2 border-slate-100 bg-white px-8 flex items-center justify-between font-bold text-lg text-slate-600 hover:border-blue-400 transition-all">
-                                Semua Role
-                                <ChevronDown className="h-6 w-6" />
+                            <button
+                                onClick={() => setShowRoleDropdown(!showRoleDropdown)}
+                                className="w-full h-16 rounded-2xl border-2 border-slate-100 bg-white px-8 flex items-center justify-between font-bold text-lg text-slate-600 hover:border-blue-400 transition-all active:scale-95"
+                            >
+                                {roleFilter === 'semua' ? 'Semua Role' : roleFilter.toUpperCase()}
+                                <ChevronDown className={cn("h-6 w-6 transition-transform", showRoleDropdown ? "rotate-180" : "")} />
                             </button>
+
+                            {showRoleDropdown && (
+                                <div className="absolute top-20 left-0 w-full bg-white border border-slate-100 rounded-2xl shadow-2xl p-2 z-50 animate-in slide-in-from-top-2 duration-200">
+                                    {['semua', 'admin', 'petugas', 'owner'].map((role) => (
+                                        <button
+                                            key={role}
+                                            onClick={() => { setRoleFilter(role); setShowRoleDropdown(false); }}
+                                            className={cn(
+                                                "w-full text-left px-6 py-4 rounded-xl font-bold text-lg transition-colors",
+                                                roleFilter === role ? "bg-blue-50 text-blue-600" : "text-slate-600 hover:bg-slate-50"
+                                            )}
+                                        >
+                                            {role === 'semua' ? 'Semua Role' : role.toUpperCase()}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -150,65 +186,87 @@ export default function UserManagementPage() {
             <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 min-h-[500px]">
                 {/* Table View */}
                 {!selectedUser && !isAdding && (
-                    <Table>
-                        <TableHeader>
-                            <TableRow className="hover:bg-transparent border-slate-50">
-                                <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest px-8 pb-8">Username</TableHead>
-                                <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Email</TableHead>
-                                <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Role</TableHead>
-                                <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Status</TableHead>
-                                <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest text-right pb-8 pr-8">Aksi</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {users.map((user) => (
-                                <TableRow key={user.id} className="group border-none hover:bg-blue-50/30 transition-colors cursor-pointer" onClick={() => setSelectedUser(user)}>
-                                    <TableCell className="px-8 py-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-12 w-12 rounded-full border-2 border-slate-900 flex items-center justify-center bg-white shadow-sm overflow-hidden">
-                                                <UserIcon className="h-6 w-6 text-slate-500" />
-                                            </div>
-                                            <span className="text-xl font-black text-slate-900 tracking-tight">{user.username}</span>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="py-6">
-                                        <span className="text-lg font-bold text-slate-500 tracking-tight">{user.email}</span>
-                                    </TableCell>
-                                    <TableCell className="py-6">
-                                        <div className={cn(
-                                            "inline-flex px-6 py-2 rounded-xl text-lg font-black uppercase tracking-tighter",
-                                            user.role === 'admin' ? "bg-pink-300 text-pink-900" :
-                                                user.role === 'petugas' ? "bg-yellow-300 text-yellow-900" :
-                                                    "bg-cyan-300 text-cyan-900"
-                                        )}>
-                                            {user.role}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="py-6">
-                                        <div className={cn(
-                                            "inline-flex items-center px-6 py-2 rounded-xl text-lg font-black uppercase tracking-tighter",
-                                            user.is_active ? "bg-green-400 text-green-950" : "bg-red-400 text-red-950"
-                                        )}>
-                                            {user.is_active ? 'Aktif' : 'Nonaktif'}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="py-6 text-right pr-8">
-                                        <div className="flex justify-end gap-6" onClick={(e) => e.stopPropagation()}>
-                                            <Button variant="ghost" size="icon" className="h-10 w-10 text-blue-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg" onClick={() => setSelectedUser(user)}>
-                                                <Eye className="h-6 w-6" />
-                                            </Button>
-                                            <Button variant="ghost" size="icon" className="h-10 w-10 text-orange-400 hover:text-orange-600 hover:bg-orange-100 rounded-lg" onClick={() => handleEditClick(user)}>
-                                                <Edit className="h-6 w-6" />
-                                            </Button>
-                                            <Button variant="ghost" size="icon" className="h-10 w-10 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-lg" onClick={() => setUserToDelete(user)}>
-                                                <Trash2 className="h-6 w-6" />
-                                            </Button>
-                                        </div>
-                                    </TableCell>
+                    <>
+                        <Table>
+                            <TableHeader>
+                                <TableRow className="hover:bg-transparent border-slate-50">
+                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest px-8 pb-8">Username</TableHead>
+                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Email</TableHead>
+                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Role</TableHead>
+                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Status</TableHead>
+                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest text-right pb-8 pr-8">Aksi</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {filteredUsers.map((user) => (
+                                    <TableRow key={user.id} className="group border-none hover:bg-blue-50/30 transition-colors cursor-pointer" onClick={() => setSelectedUser(user)}>
+                                        <TableCell className="px-8 py-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="h-12 w-12 rounded-full border-2 border-slate-900 flex items-center justify-center bg-white shadow-sm overflow-hidden">
+                                                    <UserIcon className="h-6 w-6 text-slate-500" />
+                                                </div>
+                                                <span className="text-xl font-black text-slate-900 tracking-tight">{user.username}</span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="py-6">
+                                            <span className="text-lg font-bold text-slate-500 tracking-tight">{user.email}</span>
+                                        </TableCell>
+                                        <TableCell className="py-6">
+                                            <div className={cn(
+                                                "inline-flex px-6 py-2 rounded-xl text-lg font-black uppercase tracking-tighter",
+                                                user.role === 'admin' ? "bg-pink-300 text-pink-900" :
+                                                    user.role === 'petugas' ? "bg-yellow-300 text-yellow-900" :
+                                                        "bg-cyan-300 text-cyan-900"
+                                            )}>
+                                                {user.role}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="py-6">
+                                            <div className={cn(
+                                                "inline-flex items-center px-6 py-2 rounded-xl text-lg font-black uppercase tracking-tighter",
+                                                user.is_active ? "bg-green-400 text-green-950" : "bg-red-400 text-red-950"
+                                            )}>
+                                                {user.is_active ? 'Aktif' : 'Nonaktif'}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="py-6 text-right pr-8">
+                                            <div className="flex justify-end gap-6" onClick={(e) => e.stopPropagation()}>
+                                                <button className="h-10 w-10 flex items-center justify-center text-blue-400 hover:text-blue-600 transition-colors" onClick={() => setSelectedUser(user)}>
+                                                    <Eye className="h-6 w-6" />
+                                                </button>
+                                                <button className="h-10 w-10 flex items-center justify-center text-orange-400 hover:text-orange-600 transition-colors" onClick={() => handleEditClick(user)}>
+                                                    <Edit className="h-6 w-6" />
+                                                </button>
+                                                <button className="h-10 w-10 flex items-center justify-center text-red-300 hover:text-red-500 transition-colors" onClick={() => setUserToDelete(user)}>
+                                                    <Trash2 className="h-6 w-6" />
+                                                </button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                                {filteredUsers.length === 0 && (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center h-48 text-2xl font-black text-slate-300 italic uppercase">
+                                            Tidak ada user yang cocok.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+
+                        {/* Pagination Footer (Placeholder like image) */}
+                        <div className="flex justify-end gap-6 pt-10 text-slate-400 items-center">
+                            <button className="h-10 w-10 flex items-center justify-center cursor-pointer hover:text-slate-900 transition-colors">
+                                <ChevronDown className="rotate-90 h-8 w-8" />
+                            </button>
+                            <div className="h-12 w-12 rounded-2xl border-2 border-slate-900 flex items-center justify-center text-slate-900 bg-white shadow-sm">
+                                <FileText className="h-6 w-6" />
+                            </div>
+                            <button className="h-10 w-10 flex items-center justify-center cursor-pointer hover:text-slate-900 transition-colors">
+                                <ChevronDown className="-rotate-90 h-8 w-8" />
+                            </button>
+                        </div>
+                    </>
                 )}
 
                 {/* Detail View / Edit View / Add View */}
@@ -228,10 +286,10 @@ export default function UserManagementPage() {
                             )}
                             {selectedUser && !isEditing && (
                                 <div className="flex gap-4">
-                                    <button className="p-3 bg-orange-50 text-orange-500 rounded-2xl hover:bg-orange-100 transition-all" onClick={() => handleEditClick(selectedUser)}>
+                                    <button className="p-3 bg-orange-50 text-orange-500 rounded-2xl hover:bg-orange-100 transition-all font-black flex items-center gap-2" onClick={() => handleEditClick(selectedUser)}>
                                         <Edit className="h-8 w-8" />
                                     </button>
-                                    <button className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all" onClick={() => setUserToDelete(selectedUser)}>
+                                    <button className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all font-black flex items-center gap-2" onClick={() => setUserToDelete(selectedUser)}>
                                         <Trash2 className="h-8 w-8" />
                                     </button>
                                 </div>
@@ -277,6 +335,40 @@ export default function UserManagementPage() {
                                     </div>
                                 </div>
                             ))}
+
+                            {/* Constant Detail Fields from Image */}
+                            {!isEditing && !isAdding && (
+                                <>
+                                    <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
+                                        <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Status</label>
+                                        <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                        <div className="flex-1">
+                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">Aktif</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
+                                        <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Jadwal Shift</label>
+                                        <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                        <div className="flex-1">
+                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">ID-001 : Shift Siang</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
+                                        <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Jam Masuk</label>
+                                        <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                        <div className="flex-1">
+                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">12:00</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
+                                        <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Jam Keluar</label>
+                                        <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                        <div className="flex-1">
+                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">18:00</span>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
 
                             {/* Status Switch if editing */}
                             {(isEditing || isAdding) && (
