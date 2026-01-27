@@ -17,14 +17,24 @@ export default function RatesPage() {
 
     // Form State
     const [formData, setFormData] = useState<{
-        vehicle_type: ParkingRate['vehicle_type'] | '';
+        vehicle_type: string;
+        icon: string;
         hourly_rate: number;
         daily_max_rate: number;
     }>({
         vehicle_type: '',
+        icon: 'car',
         hourly_rate: 0,
         daily_max_rate: 0
     });
+
+    const icons = [
+        { id: 'bike', icon: BikeIcon },
+        { id: 'car', icon: Car },
+        { id: 'truck', icon: TruckIcon },
+        { id: 'bus', icon: BusIcon },
+        { id: 'van', icon: BuildingIcon },
+    ];
 
     useEffect(() => {
         fetchRates();
@@ -43,6 +53,7 @@ export default function RatesPage() {
         setEditingId(rate.id);
         setFormData({
             vehicle_type: rate.vehicle_type,
+            icon: rate.icon || 'car',
             hourly_rate: rate.hourly_rate,
             daily_max_rate: rate.daily_max_rate || 0
         });
@@ -59,7 +70,7 @@ export default function RatesPage() {
                 setRates([...rates, created]);
                 setIsAdding(false);
             }
-            setFormData({ vehicle_type: '', hourly_rate: 0, daily_max_rate: 0 });
+            setFormData({ vehicle_type: '', icon: 'car', hourly_rate: 0, daily_max_rate: 0 });
         } catch (error: any) {
             alert('Gagal menyimpan: ' + (error.message || 'Error'));
         }
@@ -77,12 +88,14 @@ export default function RatesPage() {
         }
     };
 
-    const VehicleIcon = ({ type }: { type: string }) => {
-        // Simple map for icons based on type
-        if (type.toLowerCase().includes('motor')) return <BikeIcon className="h-10 w-10 text-slate-600" />;
-        if (type.toLowerCase().includes('van')) return <TruckIcon className="h-10 w-10 text-slate-600" />;
-        if (type.toLowerCase().includes('bus')) return <BusIcon className="h-10 w-10 text-slate-600" />;
-        return <Car className="h-10 w-10 text-slate-600" />;
+    const VehicleIcon = ({ id, type, className }: { id?: string, type?: string, className?: string }) => {
+        const iconId = id || (type?.toLowerCase().includes('motor') ? 'bike' : type?.toLowerCase().includes('truck') ? 'truck' : type?.toLowerCase().includes('bus') ? 'bus' : 'car');
+
+        if (iconId === 'bike') return <BikeIcon className={cn("h-10 w-10 text-slate-600", className)} />;
+        if (iconId === 'truck') return <TruckIcon className={cn("h-10 w-10 text-slate-600", className)} />;
+        if (iconId === 'bus') return <BusIcon className={cn("h-10 w-10 text-slate-600", className)} />;
+        if (iconId === 'van') return <BuildingIcon className={cn("h-10 w-10 text-slate-600", className)} />;
+        return <Car className={cn("h-10 w-10 text-slate-600", className)} />;
     };
 
     return (
@@ -91,7 +104,7 @@ export default function RatesPage() {
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Tarif Parkir</h1>
-                    <p className="text-slate-500 font-bold uppercase text-xs tracking-widest">Pengaturan tarif parkir kendaraan</p>
+                    <p className="text-slate-500 font-bold uppercase text-xs tracking-widest leading-none">Pengaturan tarif parkir kendaraan</p>
                 </div>
                 <Button onClick={() => setIsAdding(true)} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
                     <Plus className="h-6 w-6" strokeWidth={3} />
@@ -107,13 +120,31 @@ export default function RatesPage() {
                         <div
                             key={rate.id}
                             className={cn(
-                                "bg-white rounded-[2rem] p-10 shadow-sm border-2 transition-all relative overflow-hidden group",
-                                isEditing ? "border-blue-400 shadow-2xl scale-[1.02] z-10" : "border-transparent hover:shadow-md"
+                                "bg-white rounded-[2rem] p-10 shadow-sm border-2 transition-all relative overflow-visible group",
+                                isEditing ? "border-blue-400 shadow-2xl scale-[1.02] z-50" : "border-transparent hover:shadow-md"
                             )}
                         >
                             <div className="flex justify-between items-start mb-8">
-                                <div className="h-20 w-20 rounded-[1.5rem] border-2 border-slate-900 flex items-center justify-center bg-white shadow-inner">
-                                    <VehicleIcon type={rate.vehicle_type} />
+                                <div className="space-y-4">
+                                    <div className="h-20 w-20 rounded-[1.5rem] border-2 border-slate-900 flex items-center justify-center bg-white shadow-inner">
+                                        <VehicleIcon id={isEditing ? formData.icon : rate.icon} type={rate.vehicle_type} />
+                                    </div>
+                                    {isEditing && (
+                                        <div className="flex gap-2 p-2 bg-slate-50 rounded-xl border-2 border-slate-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                                            {icons.map((item) => (
+                                                <button
+                                                    key={item.id}
+                                                    onClick={() => setFormData({ ...formData, icon: item.id })}
+                                                    className={cn(
+                                                        "p-2 rounded-lg transition-all",
+                                                        formData.icon === item.id ? "bg-white shadow-md text-blue-600 scale-110" : "text-slate-400 hover:text-slate-600"
+                                                    )}
+                                                >
+                                                    <item.icon className="h-5 w-5" />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="flex gap-4">
                                     {isEditing ? (
@@ -154,7 +185,7 @@ export default function RatesPage() {
                                                     type="number"
                                                     value={formData.hourly_rate}
                                                     onChange={(e) => setFormData({ ...formData, hourly_rate: Number(e.target.value) })}
-                                                    className="w-32 h-10 text-xl font-black text-right border-none bg-slate-50"
+                                                    className="w-32 h-10 text-xl font-black text-right border-none bg-slate-50 px-2"
                                                 />
                                             </div>
                                         ) : (
@@ -172,7 +203,7 @@ export default function RatesPage() {
                                                     type="number"
                                                     value={formData.daily_max_rate}
                                                     onChange={(e) => setFormData({ ...formData, daily_max_rate: Number(e.target.value) })}
-                                                    className="w-32 h-10 text-xl font-black text-right border-none bg-slate-50"
+                                                    className="w-32 h-10 text-xl font-black text-right border-none bg-slate-50 px-2"
                                                 />
                                             </div>
                                         ) : (
@@ -189,10 +220,26 @@ export default function RatesPage() {
 
                 {/* Adding Card */}
                 {isAdding && (
-                    <div className="bg-white rounded-[2rem] p-10 shadow-2xl border-2 border-blue-400 animate-in zoom-in-95 duration-200">
+                    <div className="bg-white rounded-[2rem] p-10 shadow-2xl border-2 border-blue-400 animate-in zoom-in-95 duration-200 overflow-visible relative z-20">
                         <div className="flex justify-between items-start mb-8">
-                            <div className="h-20 w-20 rounded-[1.5rem] border-2 border-dashed border-slate-300 flex items-center justify-center bg-slate-50">
-                                <Plus className="h-10 w-10 text-slate-300" />
+                            <div className="space-y-4">
+                                <div className="h-20 w-20 rounded-[1.5rem] border-2 border-slate-900 flex items-center justify-center bg-white shadow-inner">
+                                    <VehicleIcon id={formData.icon} />
+                                </div>
+                                <div className="flex gap-2 p-2 bg-slate-50 rounded-xl border-2 border-slate-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                                    {icons.map((item) => (
+                                        <button
+                                            key={item.id}
+                                            onClick={() => setFormData({ ...formData, icon: item.id })}
+                                            className={cn(
+                                                "p-2 rounded-lg transition-all",
+                                                formData.icon === item.id ? "bg-white shadow-md text-blue-600 scale-110" : "text-slate-400 hover:text-slate-600"
+                                            )}
+                                        >
+                                            <item.icon className="h-5 w-5" />
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                             <div className="flex gap-4">
                                 <button onClick={() => handleSave()} className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-all">
@@ -217,7 +264,7 @@ export default function RatesPage() {
                                         type="number"
                                         placeholder="0"
                                         onChange={(e) => setFormData({ ...formData, hourly_rate: Number(e.target.value) })}
-                                        className="w-40 h-12 text-xl font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl"
+                                        className="w-40 h-12 text-xl font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
                                     />
                                 </div>
                                 <div className="flex justify-between items-center">
@@ -226,7 +273,7 @@ export default function RatesPage() {
                                         type="number"
                                         placeholder="0"
                                         onChange={(e) => setFormData({ ...formData, daily_max_rate: Number(e.target.value) })}
-                                        className="w-40 h-12 text-xl font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl"
+                                        className="w-40 h-12 text-xl font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
                                     />
                                 </div>
                             </div>
@@ -237,10 +284,10 @@ export default function RatesPage() {
 
             {/* SECURE DELETE MODAL */}
             {rateToDelete && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md text-slate-900">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-3xl p-20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] space-y-16 text-center animate-in zoom-in-95 duration-200 border border-slate-100">
                         <div className="space-y-4">
-                            <h3 className="text-4xl font-black text-slate-900 leading-tight tracking-tighter uppercase italic">
+                            <h3 className="text-4xl font-black leading-tight tracking-tighter uppercase italic">
                                 Hapus Tarif Parkir?
                             </h3>
                             <p className="text-2xl font-bold text-slate-400 tracking-tight">
@@ -254,7 +301,7 @@ export default function RatesPage() {
                                 value={confirmVehicleType}
                                 onChange={(e) => setConfirmVehicleType(e.target.value)}
                                 placeholder={rateToDelete.vehicle_type}
-                                className="h-24 rounded-[2rem] border-4 border-slate-100 bg-slate-50 px-12 text-3xl font-black text-slate-900 focus:border-red-400 focus:bg-white transition-all text-center shadow-inner tracking-tight"
+                                className="h-24 rounded-[2rem] border-4 border-slate-100 bg-slate-50 px-12 text-3xl font-black focus:border-red-400 focus:bg-white transition-all text-center shadow-inner tracking-tight uppercase"
                             />
                         </div>
 
@@ -301,5 +348,11 @@ function TruckIcon(props: any) {
 function BusIcon(props: any) {
     return (
         <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 6v6" /><path d="M15 6v6" /><path d="M2 12h20v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5Z" /><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5H2V7Z" /><path d="M6 19v2" /><path d="M18 19v2" /></svg>
+    )
+}
+
+function BuildingIcon(props: any) {
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2" /><path d="M9 22v-4h6v4" /><path d="M8 6h.01" /><path d="M16 6h.01" /><path d="M8 10h.01" /><path d="M16 10h.01" /><path d="M8 14h.01" /><path d="M16 14h.01" /></svg>
     )
 }

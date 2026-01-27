@@ -7,6 +7,8 @@ import { dashboardService } from "@/lib/api";
 import { AdminStats } from '@/types';
 import { cn } from '@/lib/utils';
 
+import Link from 'next/link';
+
 export default function AdminDashboard() {
     const [stats, setStats] = useState<AdminStats>({
         total_revenue: 0,
@@ -24,15 +26,15 @@ export default function AdminDashboard() {
     const statCards = [
         { label: 'Total User', value: stats.total_users, icon: Users, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', borderColor: 'border-blue-200' },
         { label: 'Total Area', value: 10, icon: MapPin, iconBg: 'bg-green-50', iconColor: 'text-green-600', borderColor: 'border-green-200' },
-        { label: 'Total Area', value: 10, icon: Car, iconBg: 'bg-orange-50', iconColor: 'text-orange-600', borderColor: 'border-orange-200' }, // Label duplicated in image but icons differ
+        { label: 'Total Area', value: 10, icon: Car, iconBg: 'bg-orange-50', iconColor: 'text-orange-600', borderColor: 'border-orange-200' },
         { label: 'Total Pendapatan', value: `Rp ${(stats.total_revenue / 1000000).toFixed(1)}jt`, icon: CreditCard, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', borderColor: 'border-purple-200' },
     ];
 
     const quickActions = [
-        { label: 'Tambah User', icon: Users, color: 'text-slate-600', border: 'border-blue-200' },
-        { label: 'Atur Tarif', icon: CreditCard, color: 'text-slate-600', border: 'border-purple-200' },
-        { label: 'Kelola Area', icon: MapPin, color: 'text-slate-600', border: 'border-green-200' },
-        { label: 'Lihat Log', icon: Activity, color: 'text-slate-600', border: 'border-blue-200' },
+        { label: 'Tambah User', icon: Users, color: 'text-slate-600', border: 'border-blue-200', path: '/admin/users' },
+        { label: 'Atur Tarif', icon: CreditCard, color: 'text-slate-600', border: 'border-purple-200', path: '/admin/rates' },
+        { label: 'Kelola Area', icon: MapPin, color: 'text-slate-600', border: 'border-green-200', path: '/admin/area' },
+        { label: 'Lihat Log', icon: Activity, color: 'text-slate-600', border: 'border-blue-200', path: '/admin/logs' },
     ];
 
     const recentActivities = [
@@ -73,18 +75,19 @@ export default function AdminDashboard() {
                 <h2 className="text-2xl font-black text-slate-900 mb-8">Aksi Cepat</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                     {quickActions.map((action, idx) => (
-                        <button
+                        <Link
                             key={idx}
+                            href={action.path}
                             className={cn(
-                                "flex items-center gap-4 p-5 rounded-2xl border bg-white transition-all hover:scale-[1.02] hover:shadow-md active:scale-95 group",
+                                "flex items-center gap-4 p-5 rounded-2xl border bg-white transition-all hover:scale-[1.02] hover:shadow-md active:scale-95 group shadow-sm",
                                 action.border
                             )}
                         >
                             <div className="flex items-center justify-center h-10 w-10">
                                 <action.icon className={cn("h-6 w-6", action.color)} />
                             </div>
-                            <span className="font-bold text-slate-800 group-hover:text-black">{action.label}</span>
-                        </button>
+                            <span className="font-bold text-slate-800 group-hover:text-black whitespace-nowrap">{action.label}</span>
+                        </Link>
                     ))}
                 </div>
             </div>

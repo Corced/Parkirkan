@@ -55,6 +55,7 @@ export interface Transaction {
 export interface ParkingRate {
     id: number;
     vehicle_type: string;
+    icon?: string;
     hourly_rate: number;
     daily_max_rate: number;
     created_at: string;
