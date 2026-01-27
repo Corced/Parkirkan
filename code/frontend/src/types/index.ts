@@ -101,10 +101,12 @@ export interface PetugasStats {
 
 export interface OwnerStats {
     monthly_revenue: number;
+    monthly_revenue_change: number;
     occupancy_rate: number;
+    occupancy_rate_change: number;
     total_transactions: number;
-    occupancy_data?: { name: string; value: number }[]; // For charts if needed
-    revenue_data?: { name: string; value: number }[];
+    total_transactions_change: number;
+    revenue_data: { name: string; value: number }[];
 }
 
 export interface AuthResponse {

@@ -35,11 +35,68 @@ class DashboardController extends Controller
 
     public function ownerStats()
     {
-        // Owner sees revenue trends
+        $now = Carbon::now();
+        $thisMonth = $now->month;
+        $thisYear = $now->year;
+
+        $lastMonth = $now->copy()->subMonth();
+        $lastMonthMonth = $lastMonth->month;
+        $lastMonthYear = $lastMonth->year;
+
+        // Revenue
+        $monthlyRevenue = Transaction::whereMonth('created_at', $thisMonth)
+            ->whereYear('created_at', $thisYear)
+            ->where('status', 'completed')
+            ->sum('total_cost');
+
+        $prevMonthlyRevenue = Transaction::whereMonth('created_at', $lastMonthMonth)
+            ->whereYear('created_at', $lastMonthYear)
+            ->where('status', 'completed')
+            ->sum('total_cost');
+
+        $revenueChange = $prevMonthlyRevenue > 0 
+            ? (($monthlyRevenue - $prevMonthlyRevenue) / $prevMonthlyRevenue) * 100 
+            : ($monthlyRevenue > 0 ? 100 : 0);
+
+        // Occupancy (Current State)
+        $occupancyRate = ParkingArea::selectRaw('SUM(occupied_slots) / SUM(total_capacity) * 100 as rate')->value('rate');
+        
+        // Total Transactions (Current Month)
+        $totalTransactions = Transaction::whereMonth('created_at', $thisMonth)
+            ->whereYear('created_at', $thisYear)
+            ->count();
+
+        $prevTotalTransactions = Transaction::whereMonth('created_at', $lastMonthMonth)
+            ->whereYear('created_at', $lastMonthYear)
+            ->count();
+
+        $transactionsChange = $prevTotalTransactions > 0
+            ? (($totalTransactions - $prevTotalTransactions) / $prevTotalTransactions) * 100
+            : ($totalTransactions > 0 ? 100 : 0);
+
+        // Revenue Data for Chart (Jan - Dec of Current Year)
+        $revenueData = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $monthName = Carbon::create($thisYear, $m, 1)->format('M');
+            $rev = Transaction::whereMonth('created_at', $m)
+                ->whereYear('created_at', $thisYear)
+                ->where('status', 'completed')
+                ->sum('total_cost');
+            
+            $revenueData[] = [
+                'name' => $monthName,
+                'value' => (float)$rev
+            ];
+        }
+
         return response()->json([
-            'monthly_revenue' => Transaction::whereMonth('created_at', Carbon::now()->month)->sum('total_cost'),
-            'occupancy_rate' => ParkingArea::selectRaw('SUM(occupied_slots) / SUM(total_capacity) * 100 as rate')->value('rate'),
-            'total_transactions' => Transaction::count(),
+            'monthly_revenue' => (float)$monthlyRevenue,
+            'monthly_revenue_change' => round($revenueChange, 1),
+            'occupancy_rate' => round($occupancyRate, 1),
+            'occupancy_rate_change' => 0, // Simplified: needs historical occupancy logs for real trend
+            'total_transactions' => $totalTransactions,
+            'total_transactions_change' => round($transactionsChange, 1),
+            'revenue_data' => $revenueData,
         ]);
     }
 }
