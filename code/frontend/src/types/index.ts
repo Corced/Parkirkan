@@ -14,7 +14,7 @@ export interface User {
 export interface Vehicle {
     id: number;
     license_plate: string;
-    vehicle_type: "motor" | "mobil" | "truck";
+    vehicle_type: string;
     owner_name?: string;
     owner_phone?: string;
     total_visits: number;
@@ -54,7 +54,7 @@ export interface Transaction {
 
 export interface ParkingRate {
     id: number;
-    vehicle_type: "motor" | "mobil" | "truck";
+    vehicle_type: string;
     hourly_rate: number;
     daily_max_rate: number;
     created_at: string;

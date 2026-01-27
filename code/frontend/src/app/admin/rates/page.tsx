@@ -136,7 +136,7 @@ export default function RatesPage() {
                                     {isEditing ? (
                                         <Input
                                             value={formData.vehicle_type}
-                                            onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value as any })}
+                                            onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
                                             className="h-12 text-2xl font-black text-slate-900 border-none bg-slate-50 rounded-lg p-0 italic uppercase"
                                         />
                                     ) : (
@@ -207,7 +207,7 @@ export default function RatesPage() {
                             <Input
                                 placeholder="JENIS KENDARAAN"
                                 value={formData.vehicle_type}
-                                onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value as any })}
+                                onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
                                 className="h-14 text-2xl font-black text-slate-900 border-4 border-slate-100 bg-slate-50 rounded-xl px-4 uppercase italic tracking-tighter"
                             />
                             <div className="space-y-4 pt-2">

@@ -142,7 +142,10 @@ export default function Home() {
         <section className="py-24 bg-[#1F2937] text-white text-center">
           <div className="container mx-auto px-6 space-y-10">
             <h2 className="text-5xl lg:text-7xl font-black tracking-tighter leading-none italic uppercase">Siap Modernisasi Sistem <br /> Parkir Anda?</h2>
-            <button className="text-sm font-black text-slate-400 uppercase tracking-widest hover:text-white transition-colors">
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-sm font-black text-slate-400 uppercase tracking-widest hover:text-white transition-colors"
+            >
               Bagian Laman teratas
             </button>
           </div>
