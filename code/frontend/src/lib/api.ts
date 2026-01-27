@@ -74,6 +74,7 @@ export const vehicleService = {
     checkOut: (data: { ticket_number: string }) =>
         fetchAPI<Transaction>('/vehicles/check-out', { method: 'POST', body: JSON.stringify(data) }),
     getParked: () => fetchAPI<Transaction[]>('/vehicles/parked'),
+    searchParked: (license_plate: string) => fetchAPI<Transaction>(`/vehicles/search-parked?license_plate=${license_plate}`),
     getHistory: () => fetchAPI<Vehicle[]>('/vehicles'),
     delete: (id: number | string) => fetchAPI<void>(`/vehicles/${id}`, { method: 'DELETE' }),
 };

@@ -28,14 +28,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard/owner', [DashboardController::class, 'ownerStats']);
 
     // Resources
+    // Specific Vehicle Actions (Must be before resource)
+    Route::get('/vehicles/parked', [VehicleController::class, 'parked']);
+    Route::get('/vehicles/search-parked', [VehicleController::class, 'searchParked']);
+    Route::post('/vehicles/check-in', [VehicleController::class, 'checkIn']);
+    Route::post('/vehicles/check-out', [VehicleController::class, 'checkOut']);
+
+    // Resources
     Route::apiResource('users', UserController::class);
-    Route::apiResource('vehicles', VehicleController::class); // includes park/unpark logic potentially
+    Route::apiResource('vehicles', VehicleController::class);
     Route::apiResource('transactions', TransactionController::class);
     Route::apiResource('rates', ParkingRateController::class);
     Route::apiResource('areas', ParkingAreaController::class);
-
-    // Specific Actions
-    Route::post('/vehicles/check-in', [VehicleController::class, 'checkIn']);
-    Route::post('/vehicles/check-out', [VehicleController::class, 'checkOut']);
-    Route::get('/vehicles/parked', [VehicleController::class, 'parked']);
 });

@@ -119,4 +119,32 @@ class VehicleController extends Controller
             return response()->json($transaction);
         });
     }
+
+    public function searchParked(Request $request)
+    {
+        $validated = $request->validate([
+            'license_plate' => 'required|string',
+        ]);
+
+        $licensePlate = strtoupper($validated['license_plate']);
+
+        // Find the vehicle first
+        $vehicle = Vehicle::where('license_plate', $licensePlate)->first();
+
+        if (!$vehicle) {
+            return response()->json(['message' => 'Kendaraan dengan plat tersebut belum pernah terdaftar'], 404);
+        }
+
+        // Find its latest transaction (active or not)
+        $latestTransaction = Transaction::with('area', 'rate')
+            ->where('vehicle_id', $vehicle->id)
+            ->latest()
+            ->first();
+
+        return response()->json([
+            'vehicle' => $vehicle,
+            'latest_transaction' => $latestTransaction,
+            'is_currently_parked' => $latestTransaction && $latestTransaction->status === 'active'
+        ]);
+    }
 }

@@ -6,18 +6,40 @@ import { Button } from "@/components/ui/button";
 import { LogIn, LogOut, Search, Car, Clock, User as UserIcon, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
-import { dashboardService } from "@/lib/api";
+import { dashboardService, vehicleService } from "@/lib/api";
 import { cn } from '@/lib/utils';
+import { Transaction } from '@/types';
 
 export default function PetugasDashboard() {
     const [stats, setStats] = useState({
         parked_vehicles: 0,
         today_transactions: 0
     });
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchResult, setSearchResult] = useState<any>(null);
+    const [searchError, setSearchError] = useState('');
 
     useEffect(() => {
         dashboardService.getPetugasStats().then(setStats).catch(console.error);
     }, []);
+
+    const handleSearch = async () => {
+        if (!searchQuery.trim()) return;
+
+        setIsSearching(true);
+        setSearchError('');
+        setSearchResult(null);
+
+        try {
+            const result = await vehicleService.searchParked(searchQuery);
+            setSearchResult(result);
+        } catch (error: any) {
+            setSearchError(error.message || 'Kendaraan tidak ditemukan');
+        } finally {
+            setIsSearching(false);
+        }
+    };
 
     const statCards = [
         { label: 'Kendaraan Terparkir', value: stats.parked_vehicles, icon: Car, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', borderColor: 'border-blue-200' },
@@ -82,20 +104,82 @@ export default function PetugasDashboard() {
 
             <div className="grid gap-10 lg:grid-cols-3">
                 {/* Search Card */}
-                <div className="lg:col-span-2 bg-white rounded-[3rem] p-12 shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div className="lg:col-span-2 bg-white rounded-[3rem] p-12 shadow-sm border border-slate-100 flex flex-col justify-between overflow-hidden relative">
                     <div className="space-y-4 mb-8">
                         <h3 className="text-2xl font-black text-slate-900 uppercase italic">Cari Kendaraan</h3>
                         <p className="text-slate-400 font-bold">Temukan posisi kendaraan terparkir berdasarkan plat nomor.</p>
                     </div>
-                    <div className="relative">
-                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-8 w-8 text-slate-300" />
-                        <Input
-                            placeholder="MASUKKAN NOMOR PLAT..."
-                            className="h-24 pl-20 pr-40 rounded-[2rem] border-4 border-slate-50 bg-slate-50 text-2xl font-black uppercase focus:border-blue-400 focus:bg-white transition-all shadow-inner"
-                        />
-                        <Button className="absolute right-4 top-1/2 -translate-y-1/2 h-16 px-10 rounded-2xl bg-slate-900 hover:bg-black text-lg font-black uppercase italic shadow-xl">
-                            Cari
-                        </Button>
+
+                    <div className="space-y-8">
+                        <div className="relative">
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-8 w-8 text-slate-300" />
+                            <Input
+                                placeholder="MASUKKAN NOMOR PLAT..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                                className="h-24 pl-20 pr-40 rounded-[2rem] border-4 border-slate-50 bg-slate-50 text-2xl font-black uppercase focus:border-blue-400 focus:bg-white transition-all shadow-inner"
+                            />
+                            <Button
+                                onClick={handleSearch}
+                                disabled={isSearching}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 h-16 px-10 rounded-2xl bg-slate-900 hover:bg-black text-lg font-black uppercase italic shadow-xl disabled:opacity-50"
+                            >
+                                {isSearching ? '...' : 'Cari'}
+                            </Button>
+                        </div>
+
+                        {/* Search Result Display */}
+                        {searchResult && (
+                            <div className={cn(
+                                "p-8 rounded-[2rem] border-2 animate-in fade-in slide-in-from-top-4 duration-300",
+                                searchResult.is_currently_parked ? "bg-blue-50 border-blue-100" : "bg-slate-50 border-slate-100"
+                            )}>
+                                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                                    <div className="flex items-center gap-6">
+                                        <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                                            <Car className={cn("h-8 w-8", searchResult.is_currently_parked ? "text-blue-600" : "text-slate-400")} />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">
+                                                {searchResult.is_currently_parked ? 'Kendaraan Terparkir' : 'Terakhir Berkunjung'}
+                                            </p>
+                                            <h4 className="text-2xl font-black text-slate-900 uppercase italic">{searchResult.vehicle?.license_plate}</h4>
+                                        </div>
+                                    </div>
+
+                                    <div className="h-12 w-[2px] bg-slate-200 hidden md:block" />
+
+                                    <div className="flex items-center gap-6">
+                                        <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                                            <MapPin className={cn("h-8 w-8", searchResult.is_currently_parked ? "text-emerald-600" : "text-slate-300")} />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Lokasi Area</p>
+                                            <h4 className="text-2xl font-black text-slate-900 uppercase italic">
+                                                {searchResult.latest_transaction?.area?.name || '---'}
+                                            </h4>
+                                        </div>
+                                    </div>
+
+                                    <div className={cn(
+                                        "px-6 py-2 rounded-full font-black uppercase italic text-sm tracking-tighter",
+                                        searchResult.is_currently_parked ? "bg-blue-600 text-white" : "bg-slate-200 text-slate-500"
+                                    )}>
+                                        {searchResult.is_currently_parked ? 'PARKED' : 'OUT'}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {searchError && (
+                            <div className="p-8 bg-red-50 rounded-[2rem] border-2 border-red-100 flex items-center gap-4 text-red-600 animate-in fade-in slide-in-from-top-4 duration-300">
+                                <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                                    <Search className="h-6 w-6" />
+                                </div>
+                                <p className="font-bold uppercase tracking-tight italic">{searchError}</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
