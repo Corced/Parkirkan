@@ -8,7 +8,8 @@ import {
     AuthResponse,
     Vehicle,
     ParkedVehicle,
-    ParkingArea
+    ParkingArea,
+    ParkingRate
 } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
@@ -78,4 +79,11 @@ export const vehicleService = {
 
 export const transactionService = {
     getAll: () => fetchAPI<Transaction[]>('/transactions'),
+};
+
+export const rateService = {
+    getAll: () => fetchAPI<ParkingRate[]>('/rates'),
+    create: (data: Partial<ParkingRate>) => fetchAPI<ParkingRate>('/rates', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id: number | string, data: Partial<ParkingRate>) => fetchAPI<ParkingRate>(`/rates/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id: number | string) => fetchAPI<void>(`/rates/${id}`, { method: 'DELETE' }),
 };
