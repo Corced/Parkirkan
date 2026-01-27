@@ -9,6 +9,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ParkingRateController;
 use App\Http\Controllers\ParkingAreaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ActivityLogController;
 
 // Public Routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -17,6 +18,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+
+    // Logs
+    Route::get('/logs', [ActivityLogController::class, 'index']);
 
     // Dashboard Stats
     Route::get('/dashboard/admin', [DashboardController::class, 'adminStats']);

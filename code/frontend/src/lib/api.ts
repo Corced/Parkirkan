@@ -75,6 +75,18 @@ export const vehicleService = {
         fetchAPI<Transaction>('/vehicles/check-out', { method: 'POST', body: JSON.stringify(data) }),
     getParked: () => fetchAPI<Transaction[]>('/vehicles/parked'),
     getHistory: () => fetchAPI<Vehicle[]>('/vehicles'),
+    delete: (id: number | string) => fetchAPI<void>(`/vehicles/${id}`, { method: 'DELETE' }),
+};
+
+export const areaService = {
+    getAll: () => fetchAPI<ParkingArea[]>('/areas'),
+    create: (data: Partial<ParkingArea>) => fetchAPI<ParkingArea>('/areas', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id: number | string, data: Partial<ParkingArea>) => fetchAPI<ParkingArea>(`/areas/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id: number | string) => fetchAPI<void>(`/areas/${id}`, { method: 'DELETE' }),
+};
+
+export const logService = {
+    getAll: () => fetchAPI<{ data: any[] }>('/logs'), // Paginated response
 };
 
 export const transactionService = {
