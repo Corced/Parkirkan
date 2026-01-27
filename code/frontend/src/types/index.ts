@@ -117,3 +117,9 @@ export interface LoginCredentials {
     email?: string;
     password?: string;
 }
+
+export interface SearchParkedResponse {
+    vehicle: Vehicle;
+    latest_transaction: Transaction | null;
+    is_currently_parked: boolean;
+}

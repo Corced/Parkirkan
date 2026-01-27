@@ -33,14 +33,28 @@ class VehicleController extends Controller
             'license_plate' => 'required|string|uppercase',
             'vehicle_type' => 'required|string', // motor, mobil, truck
             'area_id' => 'required|exists:parking_areas,id',
+            'owner_name' => 'nullable|string|max:255',
+            'owner_phone' => 'nullable|string|max:20',
         ]);
 
         return DB::transaction(function () use ($validated, $request) {
             // Find or Create Vehicle
             $vehicle = Vehicle::firstOrCreate(
                 ['license_plate' => $validated['license_plate']],
-                ['vehicle_type' => $validated['vehicle_type'], 'total_visits' => 0]
+                [
+                    'vehicle_type' => $validated['vehicle_type'], 
+                    'owner_name' => $validated['owner_name'] ?? null,
+                    'owner_phone' => $validated['owner_phone'] ?? null,
+                    'total_visits' => 0
+                ]
             );
+
+            // If vehicle exists, update owner info if provided
+            if (!$vehicle->wasRecentlyCreated) {
+                if (isset($validated['owner_name'])) $vehicle->owner_name = $validated['owner_name'];
+                if (isset($validated['owner_phone'])) $vehicle->owner_phone = $validated['owner_phone'];
+                $vehicle->save();
+            }
 
             // Check if already parked
             $existingTransaction = Transaction::where('vehicle_id', $vehicle->id)
@@ -95,14 +109,27 @@ class VehicleController extends Controller
 
             $checkOutTime = now();
             $checkInTime = Carbon::parse($transaction->check_in_time);
-            $durationHours = $checkInTime->diffInHours($checkOutTime) ?: 1; // Minimum 1 hour
             
-            // Calculate Cost
+            // Calculate Duration in Minutes first for "Fair and Square" logic
+            $totalMinutes = $checkInTime->diffInMinutes($checkOutTime);
+            
+            // Round up to the nearest hour (any fraction of an hour counts as a full hour)
+            // Minimum 1 hour
+            $durationHours = max(1, (int) ceil($totalMinutes / 60));
+            
+            // Calculate Cost with Daily Max Cap
             $rate = $transaction->rate;
-            $cost = $rate->hourly_rate * $durationHours; // Simplified logic, can be more complex
-            // Apply Max Daily if needed
-            if ($durationHours > 24 && $rate->daily_max_rate) {
-                // Simplified daily calc logic placeholder
+            $dailyMax = $rate->daily_max_rate;
+            $hourlyRate = $rate->hourly_rate;
+
+            $days = (int) floor($durationHours / 24);
+            $remainingHours = $durationHours % 24;
+
+            if ($dailyMax > 0) {
+                // (Full Days * Daily Max) + min(Remaining Hours * Hourly Rate, Daily Max)
+                $cost = ($days * $dailyMax) + min($remainingHours * $hourlyRate, $dailyMax);
+            } else {
+                $cost = $durationHours * $hourlyRate;
             }
 
             $transaction->update([
@@ -110,7 +137,7 @@ class VehicleController extends Controller
                 'duration_hours' => $durationHours,
                 'total_cost' => $cost,
                 'status' => 'completed',
-                'payment_status' => 'paid' // Assuming cash/immediate payment
+                'payment_status' => 'paid'
             ]);
 
             // Decrement Area Occupancy

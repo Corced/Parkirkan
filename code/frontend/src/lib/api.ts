@@ -9,7 +9,8 @@ import {
     Vehicle,
     ParkedVehicle,
     ParkingArea,
-    ParkingRate
+    ParkingRate,
+    SearchParkedResponse
 } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
@@ -69,12 +70,12 @@ export const dashboardService = {
 };
 
 export const vehicleService = {
-    checkIn: (data: { license_plate: string; vehicle_type: string; area_id: number }) =>
+    checkIn: (data: { license_plate: string; vehicle_type: string; area_id: number; owner_name?: string; owner_phone?: string }) =>
         fetchAPI<Transaction>('/vehicles/check-in', { method: 'POST', body: JSON.stringify(data) }),
     checkOut: (data: { ticket_number: string }) =>
         fetchAPI<Transaction>('/vehicles/check-out', { method: 'POST', body: JSON.stringify(data) }),
     getParked: () => fetchAPI<Transaction[]>('/vehicles/parked'),
-    searchParked: (license_plate: string) => fetchAPI<Transaction>(`/vehicles/search-parked?license_plate=${license_plate}`),
+    searchParked: (license_plate: string) => fetchAPI<SearchParkedResponse>(`/vehicles/search-parked?license_plate=${license_plate}`),
     getHistory: () => fetchAPI<Vehicle[]>('/vehicles'),
     delete: (id: number | string) => fetchAPI<void>(`/vehicles/${id}`, { method: 'DELETE' }),
 };
