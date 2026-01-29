@@ -9,8 +9,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { transactionService } from "@/lib/api";
-import { Transaction } from '@/types';
+import { transactionService, areaService, rateService } from "@/lib/api";
+import { Transaction, ParkingArea, ParkingRate } from '@/types';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +31,10 @@ export default function TransactionsPage() {
     const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // Dynamic Dropdown Data
+    const [vehicleTypes, setVehicleTypes] = useState<string[]>([]);
+    const [parkingAreas, setParkingAreas] = useState<ParkingArea[]>([]);
+
     // Filter States
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -39,12 +43,20 @@ export default function TransactionsPage() {
 
     useEffect(() => {
         setLoading(true);
-        transactionService.getAll()
-            .then(data => {
-                if (Array.isArray(data)) {
-                    setTransactions(data);
-                    setFilteredTransactions(data);
+        Promise.all([
+            transactionService.getAll(),
+            areaService.getAll(),
+            rateService.getAll()
+        ])
+            .then(([transactions, areas, rates]) => {
+                if (Array.isArray(transactions)) {
+                    setTransactions(transactions);
+                    setFilteredTransactions(transactions);
                 }
+                setParkingAreas(areas);
+                // Extract unique vehicle types from rates
+                const types = rates.map(r => r.vehicle_type);
+                setVehicleTypes(types);
             })
             .catch(console.error)
             .finally(() => setLoading(false));
@@ -69,14 +81,7 @@ export default function TransactionsPage() {
         }
 
         if (parkingArea !== 'all') {
-            // Mock area filter since area might not be fully populated or mapped
-            // filtered = filtered.filter(t => t.area?.id.toString() === parkingArea); 
-            // Using simple check if needed, but for now strict on existing data might return empty if mock data is incomplete.
-            // Let's assume 'a' and 'b' map to area codes or names for now if we had them.
-            // To remain safe with current mock data structure, we might skip implementation or implement checks on 'Area A' text logic if backend isn't sending area objects.
-            // Checking the previous file content, usage was <TableCell>Area A</TableCell>. It's hardcoded.
-            // So I will assume we can't effectively filter by area on the client yet without real area data.
-            // I'll leave the logic here but commented out or loose.
+            filtered = filtered.filter(t => t.area?.id.toString() === parkingArea);
         }
 
         setFilteredTransactions(filtered);
@@ -93,7 +98,7 @@ export default function TransactionsPage() {
             t.ticket_number,
             t.vehicle?.license_plate || '-',
             t.vehicle?.vehicle_type || '-',
-            "Area A", // Mock
+            t.area?.name || '-',
             new Date(t.check_in_time).toLocaleTimeString(),
             t.check_out_time ? new Date(t.check_out_time).toLocaleTimeString() : '-',
             t.total_cost ? `Rp ${Number(t.total_cost).toLocaleString('id-ID')}` : '-'
@@ -114,7 +119,7 @@ export default function TransactionsPage() {
             No_Tiket: t.ticket_number,
             Plat_Nomor: t.vehicle?.license_plate,
             Jenis: t.vehicle?.vehicle_type,
-            Area: "Area A",
+            Area: t.area?.name || '-',
             Masuk: new Date(t.check_in_time).toLocaleTimeString(),
             Keluar: t.check_out_time ? new Date(t.check_out_time).toLocaleTimeString() : '-',
             Biaya: t.total_cost
@@ -174,8 +179,9 @@ export default function TransactionsPage() {
                         </SelectTrigger>
                         <SelectContent className="bg-white text-slate-900">
                             <SelectItem value="all">Semua</SelectItem>
-                            <SelectItem value="motor">Motor</SelectItem>
-                            <SelectItem value="mobil">Mobil</SelectItem>
+                            {vehicleTypes.map(type => (
+                                <SelectItem key={type} value={type}>{type.toUpperCase()}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
@@ -187,8 +193,9 @@ export default function TransactionsPage() {
                         </SelectTrigger>
                         <SelectContent className="bg-white text-slate-900">
                             <SelectItem value="all">Semua area</SelectItem>
-                            <SelectItem value="a">Area A</SelectItem>
-                            <SelectItem value="b">Area B</SelectItem>
+                            {parkingAreas.map(area => (
+                                <SelectItem key={area.id} value={area.id.toString()}>{area.name}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
@@ -271,7 +278,7 @@ export default function TransactionsPage() {
                                                 {tr.vehicle?.vehicle_type || '-'}
                                             </span>
                                         </TableCell>
-                                        <TableCell className="text-slate-600">Area A</TableCell> {/* Mock Area */}
+                                        <TableCell className="text-slate-600">{tr.area?.name || '-'}</TableCell>
                                         <TableCell className="text-slate-600">
                                             {new Date(tr.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </TableCell>

@@ -6,6 +6,7 @@ use App\Models\Vehicle;
 use App\Models\Transaction;
 use App\Models\ParkingRate;
 use App\Models\ParkingArea;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -91,6 +92,15 @@ class VehicleController extends Controller
             $vehicle->increment('total_visits');
             $vehicle->update(['last_visit' => now()]);
 
+            // Log Activity
+            ActivityLog::create([
+                'user_id' => $request->user()->id,
+                'action' => 'VEHICLE_CHECK_IN',
+                'description' => "Vehicle {$vehicle->license_plate} checked in at {$area->name}.",
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+
             return response()->json($transaction, 201);
         });
     }
@@ -142,6 +152,15 @@ class VehicleController extends Controller
 
             // Decrement Area Occupancy
             $transaction->area->decrement('occupied_slots');
+
+            // Log Activity
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'VEHICLE_CHECK_OUT',
+                'description' => "Vehicle {$transaction->vehicle->license_plate} checked out. Cost: Rp {$cost}.",
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent()
+            ]);
 
             return response()->json($transaction);
         });

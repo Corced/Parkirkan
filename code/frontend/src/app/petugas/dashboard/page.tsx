@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { LogIn, LogOut, Search, Car, Clock, User as UserIcon, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
-import { dashboardService, vehicleService } from "@/lib/api";
+import { dashboardService, vehicleService, shiftService } from "@/lib/api";
 import { cn } from '@/lib/utils';
 import { Transaction } from '@/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function PetugasDashboard() {
     const [stats, setStats] = useState({
@@ -19,6 +20,11 @@ export default function PetugasDashboard() {
     const [isSearching, setIsSearching] = useState(false);
     const [searchResult, setSearchResult] = useState<any>(null);
     const [searchError, setSearchError] = useState('');
+
+    // Shift States
+    const [isShiftActive, setIsShiftActive] = useState(false);
+    const [currentShift, setCurrentShift] = useState<string>('Pagi');
+    const [shiftMessage, setShiftMessage] = useState<string | null>(null);
 
     useEffect(() => {
         dashboardService.getPetugasStats().then(setStats).catch(console.error);
@@ -38,6 +44,28 @@ export default function PetugasDashboard() {
             setSearchError(error.message || 'Kendaraan tidak ditemukan');
         } finally {
             setIsSearching(false);
+        }
+    };
+
+    const handleStartShift = async () => {
+        try {
+            const result = await shiftService.start(currentShift);
+            setIsShiftActive(true);
+            setShiftMessage(result.message);
+            setTimeout(() => setShiftMessage(null), 3000);
+        } catch (error: any) {
+            setShiftMessage(error.message || 'Gagal memulai shift');
+        }
+    };
+
+    const handleEndShift = async () => {
+        try {
+            const result = await shiftService.end(currentShift, stats.today_transactions);
+            setIsShiftActive(false);
+            setShiftMessage(result.message);
+            setTimeout(() => setShiftMessage(null), 3000);
+        } catch (error: any) {
+            setShiftMessage(error.message || 'Gagal mengakhiri shift');
         }
     };
 
@@ -183,45 +211,58 @@ export default function PetugasDashboard() {
                     </div>
                 </div>
 
-                {/* Info Card */}
-                <div className="bg-slate-50 rounded-[3rem] p-12 border-4 border-white shadow-inner flex flex-col space-y-10">
+                {/* Shift Control Card */}
+                <div className="bg-white rounded-[3rem] p-12 border-4 border-slate-100 shadow-sm flex flex-col space-y-8">
                     <div className="space-y-2 text-center">
-                        <div className="h-20 w-20 bg-white rounded-full mx-auto flex items-center justify-center shadow-md border border-slate-100">
-                            <UserIcon className="h-10 w-10 text-slate-400" />
+                        <div className="h-20 w-20 bg-slate-100 rounded-full mx-auto flex items-center justify-center shadow-sm border border-slate-200">
+                            <Clock className="h-10 w-10 text-blue-500" />
                         </div>
-                        <h4 className="text-xl font-black text-slate-900 uppercase italic">Informasi Shift</h4>
+                        <h4 className="text-xl font-black text-slate-900 uppercase italic">Kontrol Shift</h4>
                     </div>
 
                     <div className="space-y-6">
-                        <div className="flex items-center gap-4 group">
-                            <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
-                                <Clock className="h-6 w-6 text-blue-500" />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Shift Sekarang</p>
-                                <p className="text-lg font-bold text-slate-900">Pagi (07:00 - 15:00)</p>
-                            </div>
-                        </div>
+                        {!isShiftActive ? (
+                            <>
+                                <div className="space-y-3">
+                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Pilih Shift</label>
+                                    <Select value={currentShift} onValueChange={setCurrentShift}>
+                                        <SelectTrigger className="h-14 bg-slate-50 border-2 font-bold text-lg rounded-2xl">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Pagi">Pagi (07:00 - 15:00)</SelectItem>
+                                            <SelectItem value="Siang">Siang (15:00 - 23:00)</SelectItem>
+                                            <SelectItem value="Malam">Malam (23:00 - 07:00)</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <Button
+                                    onClick={handleStartShift}
+                                    className="w-full h-16 bg-blue-600 hover:bg-blue-700 font-black uppercase italic text-lg rounded-2xl"
+                                >
+                                    Mulai Shift
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <div className="p-6 bg-emerald-50 rounded-2xl border-2 border-emerald-100">
+                                    <p className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-2">Shift Aktif</p>
+                                    <p className="text-2xl font-black text-slate-900 italic">{currentShift}</p>
+                                </div>
+                                <Button
+                                    onClick={handleEndShift}
+                                    className="w-full h-16 bg-slate-900 hover:bg-black font-black uppercase italic text-lg rounded-2xl"
+                                >
+                                    Akhiri Shift
+                                </Button>
+                            </>
+                        )}
 
-                        <div className="flex items-center gap-4 group">
-                            <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
-                                <UserIcon className="h-6 w-6 text-purple-500" />
+                        {shiftMessage && (
+                            <div className="text-sm font-bold text-center text-blue-600 bg-blue-50 px-4 py-3 rounded-xl border border-blue-100">
+                                {shiftMessage}
                             </div>
-                            <div>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Petugas Aktif</p>
-                                <p className="text-lg font-bold text-slate-900">Budi Santoso</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-4 group">
-                            <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
-                                <MapPin className="h-6 w-6 text-red-500" />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Lokasi Pos</p>
-                                <p className="text-lg font-bold text-slate-900">Gerbang Utama</p>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>

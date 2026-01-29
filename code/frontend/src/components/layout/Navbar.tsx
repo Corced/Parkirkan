@@ -1,8 +1,7 @@
-'use client';
-
 import { Bell, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { NotificationBell } from './NotificationBell';
 
 export function Navbar({ userName }: { userName: string }) {
     return (
@@ -13,9 +12,7 @@ export function Navbar({ userName }: { userName: string }) {
             </div>
 
             <div className="flex items-center gap-6">
-                <Button variant="ghost" size="icon" className="h-10 w-10 text-slate-500 hover:bg-white hover:shadow-sm">
-                    <Bell className="h-6 w-6" />
-                </Button>
+                <NotificationBell />
                 <div className="flex items-center gap-4 pl-4 border-l border-slate-300">
                     <div className="flex flex-col items-end">
                         <span className="text-sm font-black text-slate-900 leading-none">{userName}</span>

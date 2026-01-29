@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,6 +32,15 @@ class UserController extends Controller
             'role' => $validated['role'],
         ]);
 
+        // Log Activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'USER_CREATED',
+            'description' => "User {$validated['username']} ({$validated['role']}) created.",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
         return response()->json($user, 201);
     }
 
@@ -54,12 +64,32 @@ class UserController extends Controller
         
         $user->update($request->except('status')); // Update other fields
 
+        // Log Activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'USER_UPDATED',
+            'description' => "User {$user->username} updated.",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
         return response()->json($user);
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        $username = $user->username;
         $user->delete();
+
+        // Log Activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'USER_DELETED',
+            'description' => "User {$username} deleted.",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
         return response()->noContent();
     }
 }

@@ -108,3 +108,15 @@ export const simulationService = {
         body: JSON.stringify({ shift })
     }),
 };
+
+// Shift Service
+export const shiftService = {
+    start: (shift_type: string) => fetchAPI<{ message: string; shift_type: string; started_at: string }>('/shifts/start', {
+        method: 'POST',
+        body: JSON.stringify({ shift_type })
+    }),
+    end: (shift_type: string, transaction_count?: number) => fetchAPI<{ message: string; transaction_count: number }>('/shifts/end', {
+        method: 'POST',
+        body: JSON.stringify({ shift_type, transaction_count })
+    }),
+};
