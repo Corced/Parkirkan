@@ -42,8 +42,6 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
         ],
         owner: [
             { href: '/owner/dashboard', label: 'Beranda', icon: LayoutDashboard },
-            { href: '/owner/area', label: 'Area Parkir', icon: MapPin },
-            { href: '/owner/vehicles', label: 'Data Kendaraan', icon: Car },
             { href: '/owner/transactions', label: 'Rekap Transaksi', icon: History },
         ],
     };

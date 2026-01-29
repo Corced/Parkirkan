@@ -34,6 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/vehicles/check-in', [VehicleController::class, 'checkIn']);
     Route::post('/vehicles/check-out', [VehicleController::class, 'checkOut']);
 
+    // Simulation
+    Route::post('/simulate/shift', [App\Http\Controllers\SimulationController::class, 'simulateShift']);
+
     // Resources
     Route::apiResource('users', UserController::class);
     Route::apiResource('vehicles', VehicleController::class);

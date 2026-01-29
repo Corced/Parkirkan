@@ -99,5 +99,12 @@ export const rateService = {
     getAll: () => fetchAPI<ParkingRate[]>('/rates'),
     create: (data: Partial<ParkingRate>) => fetchAPI<ParkingRate>('/rates', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number | string, data: Partial<ParkingRate>) => fetchAPI<ParkingRate>(`/rates/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-    delete: (id: number | string) => fetchAPI<void>(`/rates/${id}`, { method: 'DELETE' }),
+};
+
+// Simulation Service
+export const simulationService = {
+    simulateShift: (shift: string) => fetchAPI<{ message: string; generated_transactions: number }>('/simulate/shift', {
+        method: 'POST',
+        body: JSON.stringify({ shift })
+    }),
 };

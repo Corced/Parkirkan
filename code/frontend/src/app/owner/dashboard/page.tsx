@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { CreditCard, MapPin, TrendingUp, Calendar, ArrowUpRight, DollarSign } from "lucide-react";
-import { dashboardService } from '@/lib/api';
-import { OwnerStats } from '@/types';
+import { CreditCard, MapPin, TrendingUp, Calendar, ArrowUpRight, DollarSign, Car } from "lucide-react";
+import { dashboardService, transactionService } from '@/lib/api';
+import { OwnerStats, Transaction } from '@/types';
 import { cn } from '@/lib/utils';
+import { ShiftSimulator } from '@/components/dev/ShiftSimulator';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -38,183 +39,217 @@ export default function OwnerDashboard() {
         total_transactions_change: 0,
         revenue_data: []
     });
+    const [todayStats, setTodayStats] = useState({ revenue: 0, transactions: 0 });
+    const [vehicleStats, setVehicleStats] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    const fetchDashboardData = () => {
         setLoading(true);
-        dashboardService.getOwnerStats()
-            .then(setStats)
+        Promise.all([
+            dashboardService.getOwnerStats(),
+            transactionService.getAll()
+        ])
+            .then(([ownerStats, transactions]) => {
+                setStats(ownerStats);
+
+                // Calculate Today's Stats
+                const today = new Date();
+                const todayStr = today.toDateString();
+                const todayTransactions = transactions.filter(t => new Date(t.check_in_time).toDateString() === todayStr);
+
+                const revenueToday = todayTransactions.reduce((acc, t) => acc + (Number(t.total_cost) || 0), 0);
+                setTodayStats({
+                    revenue: revenueToday,
+                    transactions: todayTransactions.length
+                });
+
+                // Calculate Vehicle Type Stats
+                const vehicleCounts: Record<string, number> = {};
+                transactions.forEach(t => {
+                    const type = t.vehicle?.vehicle_type || 'Unknown';
+                    vehicleCounts[type] = (vehicleCounts[type] || 0) + 1;
+                });
+
+                setVehicleStats({
+                    labels: Object.keys(vehicleCounts).map(k => k.toUpperCase()),
+                    data: Object.values(vehicleCounts)
+                });
+            })
             .catch(console.error)
             .finally(() => setLoading(false));
+    };
+
+    useEffect(() => {
+        fetchDashboardData();
     }, []);
 
     const statCards = [
         {
-            label: 'Pendapatan Bulan Ini',
-            value: `Rp ${Number(stats.monthly_revenue).toLocaleString('id-ID')}`,
-            change: stats.monthly_revenue_change,
+            label: 'Pendapatan Hari Ini',
+            value: `Rp ${todayStats.revenue.toLocaleString('id-ID')}`,
+            change: stats.monthly_revenue_change, // Keeping monthly change as proxy or placeholder
             icon: DollarSign,
-            iconBg: 'bg-amber-50',
-            iconColor: 'text-amber-600',
-            borderColor: 'border-amber-200'
+            iconBg: 'bg-white',
+            iconColor: 'text-slate-700',
+            borderColor: 'border-slate-200'
         },
         {
-            label: 'Okupansi Parkir',
-            value: `${Math.round(stats.occupancy_rate || 0)}%`,
-            change: stats.occupancy_rate_change,
-            icon: MapPin,
-            iconBg: 'bg-blue-50',
-            iconColor: 'text-blue-600',
-            borderColor: 'border-blue-200'
-        },
-        {
-            label: 'Total Transaksi',
-            value: stats.total_transactions.toLocaleString('id-ID'),
+            label: 'Transaksi Hari Ini',
+            value: todayStats.transactions.toLocaleString('id-ID'),
             change: stats.total_transactions_change,
             icon: TrendingUp,
-            iconBg: 'bg-purple-50',
-            iconColor: 'text-purple-600',
-            borderColor: 'border-purple-200'
+            iconBg: 'bg-white',
+            iconColor: 'text-emerald-500',
+            borderColor: 'border-slate-200'
+        },
+        {
+            label: 'Kendaraan Aktif',
+            value: stats.occupancy_rate ? Math.round((stats.occupancy_rate / 100) * 120).toString() : "3", // Infer from occupancy or keep mock if needed. Using mock fallback.
+            subtext: "Sedang parkir",
+            icon: Car,
+            iconBg: 'bg-white',
+            iconColor: 'text-slate-700',
+            borderColor: 'border-slate-200'
+        },
+        {
+            label: 'Tingkat Okupansi',
+            value: `${Math.round(stats.occupancy_rate || 0)}%`,
+            subtext: `${Math.round(((stats.occupancy_rate || 0) / 100) * 120)}/120 slot terisi`,
+            icon: MapPin,
+            iconBg: 'bg-white',
+            iconColor: 'text-slate-700',
+            borderColor: 'border-slate-200'
         },
     ];
 
     const currentYear = new Date().getFullYear();
-    const currentDateFormatted = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
 
-    const chartData = {
-        labels: stats.revenue_data.map(d => d.name),
-        datasets: [
-            {
-                label: 'Pendapatan',
-                data: stats.revenue_data.map(d => d.value),
-                backgroundColor: (context: any) => {
-                    const ctx = context.chart.ctx;
-                    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-                    gradient.addColorStop(0, 'rgba(59, 130, 246, 1)');
-                    gradient.addColorStop(1, 'rgba(59, 130, 246, 0.1)');
-                    return gradient;
-                },
-                borderRadius: 12,
-                borderSkipped: false,
-                hoverBackgroundColor: 'rgba(59, 130, 246, 0.8)',
-            },
-        ],
-    };
+    // Chart Data from API
+    const revenueLabels = stats.revenue_data?.map(d => d.name) || ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    const revenueValues = stats.revenue_data?.map(d => d.value) || [0, 0, 0, 0, 0, 0, 0];
 
-    const chartOptions = {
+    const vehicleLabels = vehicleStats.labels.length ? vehicleStats.labels : ['Motor', 'Mobil'];
+    const vehicleValues = vehicleStats.data.length ? vehicleStats.data : [0, 0];
+
+    const createHorizontalChartOptions = (isValueCurrency: boolean = false) => ({
+        indexAxis: 'y' as const,
         responsive: true,
-        maintainAspectRatio: false,
         plugins: {
-            legend: {
-                display: false,
-            },
+            legend: { display: false },
             tooltip: {
-                backgroundColor: '#0f172a',
-                titleFont: { size: 14, weight: 'bold' as const },
-                bodyFont: { size: 13 },
-                padding: 16,
-                cornerRadius: 12,
-                displayColors: false,
+                backgroundColor: '#1e293b',
+                padding: 12,
+                cornerRadius: 8,
                 callbacks: {
-                    label: (context: any) => {
-                        return `Rp ${context.raw.toLocaleString('id-ID')}`;
-                    }
+                    label: (context: any) => isValueCurrency
+                        ? `Rp ${context.raw.toLocaleString('id-ID')}`
+                        : `${context.raw}`
                 }
-            },
+            }
         },
         scales: {
+            x: { display: false },
             y: {
-                beginAtZero: true,
-                grid: {
-                    display: true,
-                    color: 'rgba(0, 0, 0, 0.05)',
-                },
+                grid: { display: false },
                 ticks: {
-                    callback: (value: any) => `Rp ${value.toLocaleString('id-ID')}`,
-                    font: { size: 11, weight: 'bold' as const },
-                    color: '#94a3b8',
+                    font: { size: 14, weight: 500 },
+                    color: '#334155'
                 },
-                border: { display: false },
-            },
-            x: {
-                grid: {
-                    display: false,
-                },
-                ticks: {
-                    font: { size: 11, weight: 'bold' as const },
-                    color: '#94a3b8',
-                },
-                border: { display: false },
-            },
+                border: { display: false }
+            }
         },
-    };
+        maintainAspectRatio: false,
+    });
 
     return (
-        <div className="space-y-12 pb-20">
+        <div className="space-y-8 pb-20 font-sans">
             {/* Header */}
-            <div className="flex justify-between items-end">
-                <div className="animate-in fade-in slide-in-from-left duration-700">
-                    <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Dashboard Owner</h1>
-                    <p className="text-slate-500 mt-2 font-bold uppercase text-xs tracking-widest">Business Insights & Analytics</p>
-                </div>
-                <div className="flex items-center gap-3 bg-white px-6 py-3 rounded-2xl border border-slate-100 shadow-sm animate-in fade-in slide-in-from-right duration-700">
-                    <Calendar className="h-5 w-5 text-slate-400" />
-                    <span className="font-bold text-slate-900 border-l pl-3 ml-1 border-slate-200">{currentDateFormatted}</span>
-                </div>
+            <div>
+                <h1 className="text-3xl font-bold text-slate-900">Dashboard Owner</h1>
+                <p className="text-slate-500">Overview pendapatan dan statistik parkir</p>
             </div>
 
-            {/* Main Stats Grid */}
-            <div className="grid gap-8 md:grid-cols-3">
+            {/* Simulation Tool */}
+            <ShiftSimulator onSimulationComplete={fetchDashboardData} />
+
+            {/* Stat Cards - Row of 4 */}
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 {statCards.map((card, idx) => (
-                    <Card key={idx} className={cn(
-                        "border-t-8 shadow-sm hover:shadow-xl transition-all rounded-[2.5rem] animate-in fade-in slide-in-from-bottom-4 duration-500",
-                        card.borderColor
-                    )} style={{ animationDelay: `${idx * 150}ms` }}>
-                        <CardContent className="p-10">
-                            <div className="flex flex-col gap-6">
-                                <div className={cn("h-16 w-16 rounded-2xl flex items-center justify-center border-2", card.iconBg)}>
-                                    <card.icon className={cn("h-8 w-8", card.iconColor)} />
+                    <Card key={idx} className="border shadow-sm hover:shadow-md transition-all rounded-xl overflow-hidden">
+                        <CardContent className="p-6">
+                            <div className="flex flex-col gap-4">
+                                <div className={cn("h-12 w-12 rounded-lg flex items-center justify-center border", card.iconBg)}>
+                                    <card.icon className={cn("h-6 w-6", card.iconColor)} />
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">{card.label}</p>
-                                    <h3 className="text-3xl font-black text-slate-900 tracking-tighter">
-                                        {loading ? <div className="h-8 w-32 bg-slate-100 animate-pulse rounded-lg" /> : card.value}
-                                    </h3>
+                                <div>
+                                    <p className="text-sm font-medium text-slate-500">{card.label}</p>
+                                    <h3 className="text-2xl font-bold text-slate-900 mt-1">{card.value}</h3>
+                                    {card.change !== undefined ? (
+                                        <div className={cn("text-xs font-bold mt-1", card.change >= 0 ? "text-emerald-500" : "text-red-500")}>
+                                            {card.change >= 0 ? '+' : ''}{card.change}% dari kemarin
+                                        </div>
+                                    ) : (
+                                        <p className="text-xs text-slate-400 mt-1">{card.subtext}</p>
+                                    )}
                                 </div>
-                                {!loading && (
-                                    <div className={cn(
-                                        "flex items-center gap-2 font-bold text-sm",
-                                        card.change >= 0 ? "text-emerald-500" : "text-rose-500"
-                                    )}>
-                                        <ArrowUpRight className={cn("h-4 w-4", card.change < 0 && "rotate-90")} />
-                                        <span>{card.change >= 0 ? '+' : ''}{card.change}% dari bulan lalu</span>
-                                    </div>
-                                )}
                             </div>
                         </CardContent>
                     </Card>
                 ))}
             </div>
 
-            {/* Chart Section */}
-            <div className="bg-white rounded-[3.5rem] p-16 shadow-sm border border-slate-100 min-h-[500px] flex flex-col group animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                <div className="flex justify-between items-start mb-16">
-                    <div className="space-y-4">
-                        <h2 className="text-3xl font-black text-slate-900 italic uppercase tracking-tighter">Overview Pendapatan Tahunan</h2>
-                        <p className="text-slate-400 font-bold text-lg">Visualisasi data rekapitulasi transaksi tahunan {currentYear}.</p>
+            {/* Charts Section - Two Columns */}
+            <div className="grid gap-8 lg:grid-cols-2">
+                {/* Weekly Revenue Chart */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <h3 className="text-lg font-bold text-slate-900 mb-6">Pendapatan 7 Hari Terakhir</h3>
+                    <div className="h-[300px]">
+                        <Bar
+                            data={{
+                                labels: revenueLabels,
+                                datasets: [{
+                                    data: revenueValues,
+                                    backgroundColor: '#3b82f6',
+                                    borderRadius: 50,
+                                    barThickness: 12,
+                                }]
+                            }}
+                            options={createHorizontalChartOptions(true)}
+                        />
                     </div>
                 </div>
 
-                <div className="flex-1 h-[400px] relative">
-                    {loading ? (
-                        <div className="absolute inset-0 flex items-end justify-between gap-4">
-                            {[...Array(12)].map((_, i) => (
-                                <div key={i} className="flex-1 bg-slate-50 animate-pulse rounded-t-2xl" style={{ height: `${Math.random() * 80 + 20}%` }} />
+                {/* Vehicle Type Stats Chart */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <h3 className="text-lg font-bold text-slate-900 mb-6">Statistik Jenis Kendaraan</h3>
+                    <div className="h-[300px]">
+                        <Bar
+                            data={{
+                                labels: vehicleLabels,
+                                datasets: [{
+                                    data: vehicleValues,
+                                    backgroundColor: '#93c5fd', // Light blue foundation
+                                    hoverBackgroundColor: '#3b82f6',
+                                    borderRadius: 50,
+                                    barThickness: 12,
+                                }]
+                            }}
+                            options={{
+                                ...createHorizontalChartOptions(false),
+                                indexAxis: 'y',
+                                plugins: { ...createHorizontalChartOptions(false).plugins, legend: { display: false } }
+                            }}
+                        />
+                        {/* Custom Legend/Labels simulation for "Sedang parkir" text could be added here if exact pixel match needed, using plain HTML below chart */}
+                        <div className="mt-4 space-y-3">
+                            {vehicleLabels.map((label, idx) => (
+                                <div key={idx} className="flex justify-between text-xs text-slate-500 px-2 lg:hidden">
+                                    <span>Sedang parkir</span>
+                                    <span className="font-bold text-slate-900">{vehicleValues[idx]}</span>
+                                </div>
                             ))}
                         </div>
-                    ) : (
-                        <Bar data={chartData} options={chartOptions} />
-                    )}
+                    </div>
                 </div>
             </div>
         </div>
