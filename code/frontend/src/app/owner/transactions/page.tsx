@@ -22,7 +22,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Search, Calendar, Filter, FileSpreadsheet, FileIcon } from "lucide-react";
 
@@ -104,7 +104,7 @@ export default function TransactionsPage() {
             t.total_cost ? `Rp ${Number(t.total_cost).toLocaleString('id-ID')}` : '-'
         ]);
 
-        (doc as any).autoTable({
+        autoTable(doc, {
             head: [tableColumn],
             body: tableRows,
             startY: 30,
