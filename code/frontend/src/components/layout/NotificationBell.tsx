@@ -7,15 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover
 import { logService } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
-interface ActivityLog {
-    id: number;
-    action: string;
-    description: string;
-    created_at: string;
-    user?: {
-        name: string;
-    };
-}
+import { ActivityLog } from '@/types';
 
 export function NotificationBell() {
     const [notifications, setNotifications] = useState<ActivityLog[]>([]);

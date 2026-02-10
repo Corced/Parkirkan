@@ -24,7 +24,7 @@ import {
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
-import { Search, Calendar, Filter, FileSpreadsheet, FileIcon } from "lucide-react";
+import { Search, Calendar, FileSpreadsheet, FileIcon } from "lucide-react";
 
 export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -42,7 +42,6 @@ export default function TransactionsPage() {
     const [parkingArea, setParkingArea] = useState('all');
 
     useEffect(() => {
-        setLoading(true);
         Promise.all([
             transactionService.getAll(),
             areaService.getAll(),

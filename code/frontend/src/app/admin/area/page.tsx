@@ -46,8 +46,9 @@ export default function AreaPage() {
                 setIsAdding(false);
             }
             setFormData({ name: '', code: '', total_capacity: 0 });
-        } catch (error: any) {
-            alert('Gagal menyimpan: ' + (error.message || 'Error'));
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Error';
+            alert('Gagal menyimpan: ' + msg);
         }
     };
 

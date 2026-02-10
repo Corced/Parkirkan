@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Car, Clock, MapPin, Activity, Search, Loader2 } from "lucide-react";
+import { Clock, Loader2 } from "lucide-react";
 import { vehicleService } from "@/lib/api";
 import { ParkedVehicle } from "@/types";
 import { cn } from '@/lib/utils';

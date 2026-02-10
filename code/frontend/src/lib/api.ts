@@ -7,7 +7,7 @@ import {
     LoginCredentials,
     AuthResponse,
     Vehicle,
-    ParkedVehicle,
+    ActivityLog,
     ParkingArea,
     ParkingRate,
     SearchParkedResponse
@@ -16,17 +16,17 @@ import {
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const headers = {
+    const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        ...(options.headers || {}),
-    } as HeadersInit;
+        ...(options.headers as Record<string, string> || {}),
+    };
 
     // Add auth token if available (simple localStorage implementation)
     if (typeof window !== 'undefined') {
         const token = localStorage.getItem('token');
         if (token) {
-            (headers as any)['Authorization'] = `Bearer ${token}`; // Simplified typing for now
+            headers['Authorization'] = `Bearer ${token}`;
         }
     }
 
@@ -89,7 +89,7 @@ export const areaService = {
 };
 
 export const logService = {
-    getAll: () => fetchAPI<{ data: any[] }>('/logs'), // Paginated response
+    getAll: () => fetchAPI<{ data: ActivityLog[] }>('/logs'), // Paginated response
 };
 
 export const transactionService = {

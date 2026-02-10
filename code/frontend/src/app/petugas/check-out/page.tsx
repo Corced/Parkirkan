@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Loader2, CreditCard, Clock, MapPin, Car, Receipt, CheckCircle2 } from "lucide-react";
+import { Search, Loader2, CreditCard, Receipt, CheckCircle2 } from "lucide-react";
 import { vehicleService } from "@/lib/api";
 import { Transaction } from "@/types";
 import { cn } from '@/lib/utils';
@@ -27,16 +27,7 @@ function CheckOutContent() {
         return () => clearInterval(timer);
     }, []);
 
-    useEffect(() => {
-        const ticket = searchParams.get('ticket');
-        if (ticket) {
-            setSearchQuery(ticket);
-            handleSearch(ticket);
-        }
-    }, [searchParams]);
-
-    const handleSearch = async (queryOverride?: string) => {
-        const query = queryOverride || searchQuery;
+    const performSearch = useCallback(async (query: string) => {
         if (!query.trim()) return;
         setLoading(true);
         setCheckoutSuccess(false);
@@ -48,12 +39,25 @@ function CheckOutContent() {
             } else {
                 setTransaction(res.latest_transaction);
             }
-        } catch (error: any) {
-            alert('Cari Gagal: ' + (error.message || 'Kendaraan tidak ditemukan'));
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Kendaraan tidak ditemukan';
+            alert('Cari Gagal: ' + msg);
             setTransaction(null);
         } finally {
             setLoading(false);
         }
+    }, []);
+
+    useEffect(() => {
+        const ticket = searchParams.get('ticket');
+        if (ticket) {
+            setSearchQuery(ticket);
+            performSearch(ticket);
+        }
+    }, [searchParams, performSearch]);
+
+    const handleSearch = () => {
+        performSearch(searchQuery);
     };
 
     const handleCheckOut = async () => {
@@ -65,8 +69,9 @@ function CheckOutContent() {
             setCheckoutSuccess(true);
             // Auto-print receipt on success
             setTimeout(() => window.print(), 500);
-        } catch (error: any) {
-            alert('Check-out Gagal: ' + (error.message || 'Error tidak diketahui'));
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Error tidak diketahui';
+            alert('Check-out Gagal: ' + msg);
         } finally {
             setIsProcessing(false);
         }

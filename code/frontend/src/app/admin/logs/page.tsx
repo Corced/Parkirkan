@@ -4,14 +4,7 @@ import { useEffect, useState } from 'react';
 import { logService } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Plus, Edit, Trash2, DollarSign, Clock, User as UserIcon } from "lucide-react";
-
-interface ActivityLog {
-    id: number;
-    user: { name: string; username: string };
-    action: string;
-    description: string;
-    created_at: string;
-}
+import { ActivityLog } from "@/types";
 
 export default function LogsPage() {
     const [logs, setLogs] = useState<ActivityLog[]>([]);
@@ -77,7 +70,7 @@ export default function LogsPage() {
                                 <div className="space-y-3 pt-1 flex-1">
                                     <div className="flex items-center gap-4">
                                         <span className="text-xl font-black text-slate-900 tracking-tight lowercase">
-                                            {log.user?.username || 'system'}
+                                            {log.user?.username || log.userName || 'system'}
                                         </span>
                                         <span className={cn(
                                             "px-4 py-1 rounded-lg text-[10px] font-black text-white italic tracking-[0.1em] uppercase shadow-sm",

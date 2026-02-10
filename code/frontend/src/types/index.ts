@@ -74,16 +74,23 @@ export interface ParkingArea {
 }
 
 export interface ActivityLog {
-    id: number | string;
-    userId: number | string;
-    userName?: string;
-    user?: User;
+    id: number;
+    user_id?: number;
     action: string;
-    details: string;
-    timestamp: string;
-    created_at: string; // for compatibility
-    type: "info" | "warning" | "error";
-    description?: string; // for compatibility
+    description: string;
+    created_at: string;
+    updated_at?: string;
+    user?: {
+        id: number;
+        name: string;
+        username: string;
+    };
+    // Legacy/Compatibility fields
+    userId?: number | string;
+    userName?: string;
+    details?: string;
+    timestamp?: string;
+    type?: "info" | "warning" | "error";
 }
 
 // Dashboard Stats Interfaces

@@ -2,22 +2,14 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowRight,
-  Shield,
-  Clock,
-  Coins,
-  LayoutDashboard,
-  Users,
-  Car,
+import {LayoutDashboard,
   FileText,
   CreditCard,
   MapPin,
   Building2,
   Hospital,
   School,
-  Hotel
-} from "lucide-react";
+  Hotel } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Home() {

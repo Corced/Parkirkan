@@ -96,8 +96,9 @@ export default function UserManagementPage() {
                 setIsAdding(false);
             }
             resetForm();
-        } catch (error: any) {
-            alert('Gagal menyimpan: ' + (error.message || 'Error tidak diketahui'));
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Error tidak diketahui';
+            alert('Gagal menyimpan: ' + msg);
         }
     };
 
@@ -320,7 +321,7 @@ export default function UserManagementPage() {
                                             ) : (
                                                 <Input
                                                     type={field.type}
-                                                    value={(formData as any)[field.key]}
+                                                    value={String(formData[field.key as keyof typeof formData] || '')}
                                                     onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
                                                     placeholder={field.placeholder}
                                                     className="h-20 rounded-[1.5rem] border-4 border-slate-100 bg-slate-50 px-10 text-2xl font-black text-slate-900 focus:border-blue-400 focus:bg-white transition-all shadow-inner tracking-tight"
@@ -329,7 +330,7 @@ export default function UserManagementPage() {
                                             )
                                         ) : (
                                             <span className="text-2xl font-medium text-slate-500 tracking-tight">
-                                                {(selectedUser as any)[field.key] || '-'}
+                                                {selectedUser ? String(selectedUser[field.key as keyof User] || '-') : '-'}
                                             </span>
                                         )}
                                     </div>

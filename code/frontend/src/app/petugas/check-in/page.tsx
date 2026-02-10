@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Car, MapPin, User, Phone, Info, ChevronDown, CheckCircle2 } from "lucide-react";
 import { vehicleService, areaService, rateService } from "@/lib/api";
 import { Transaction, ParkingArea, ParkingRate } from "@/types";
-import { cn } from '@/lib/utils';
+
 
 export default function CheckInPage() {
     const [loading, setLoading] = useState(false);
@@ -61,8 +61,9 @@ export default function CheckInPage() {
                 owner_name: '',
                 owner_phone: ''
             });
-        } catch (error: any) {
-            alert('Check-in Failed: ' + (error.message || 'Unknown error'));
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Unknown error';
+            alert('Check-in Failed: ' + msg);
         } finally {
             setLoading(false);
         }

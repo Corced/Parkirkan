@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, Search, Car, Clock, User as UserIcon, MapPin } from "lucide-react";
+import { LogIn, LogOut, Search, Car, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { dashboardService, vehicleService, shiftService } from "@/lib/api";
 import { cn } from '@/lib/utils';
-import { Transaction } from '@/types';
+import { SearchParkedResponse } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function PetugasDashboard() {
@@ -18,7 +18,7 @@ export default function PetugasDashboard() {
     });
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
-    const [searchResult, setSearchResult] = useState<any>(null);
+    const [searchResult, setSearchResult] = useState<SearchParkedResponse | null>(null);
     const [searchError, setSearchError] = useState('');
 
     // Shift States
@@ -40,8 +40,9 @@ export default function PetugasDashboard() {
         try {
             const result = await vehicleService.searchParked(searchQuery);
             setSearchResult(result);
-        } catch (error: any) {
-            setSearchError(error.message || 'Kendaraan tidak ditemukan');
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Kendaraan tidak ditemukan';
+            setSearchError(msg);
         } finally {
             setIsSearching(false);
         }
@@ -53,8 +54,9 @@ export default function PetugasDashboard() {
             setIsShiftActive(true);
             setShiftMessage(result.message);
             setTimeout(() => setShiftMessage(null), 3000);
-        } catch (error: any) {
-            setShiftMessage(error.message || 'Gagal memulai shift');
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Gagal memulai shift';
+            setShiftMessage(msg);
         }
     };
 
@@ -64,8 +66,9 @@ export default function PetugasDashboard() {
             setIsShiftActive(false);
             setShiftMessage(result.message);
             setTimeout(() => setShiftMessage(null), 3000);
-        } catch (error: any) {
-            setShiftMessage(error.message || 'Gagal mengakhiri shift');
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Gagal mengakhiri shift';
+            setShiftMessage(msg);
         }
     };
 

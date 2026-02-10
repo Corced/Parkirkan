@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, SVGProps } from 'react';
 import { Button } from "@/components/ui/button";
 import { rateService } from "@/lib/api";
 import { ParkingRate } from "@/types";
@@ -71,8 +71,9 @@ export default function RatesPage() {
                 setIsAdding(false);
             }
             setFormData({ vehicle_type: '', icon: 'car', hourly_rate: 0, daily_max_rate: 0 });
-        } catch (error: any) {
-            alert('Gagal menyimpan: ' + (error.message || 'Error'));
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Error';
+            alert('Gagal menyimpan: ' + msg);
         }
     };
 
@@ -333,25 +334,25 @@ export default function RatesPage() {
 }
 
 // Custom Icons
-function BikeIcon(props: any) {
+function BikeIcon(props: SVGProps<SVGSVGElement>) {
     return (
         <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="5.5" cy="17.5" r="3.5" /><circle cx="18.5" cy="17.5" r="3.5" /><path d="M15 10l-3.5 3h3.5" /><path d="M12 13v-5l-4-3h4" /><path d="M18.5 14l-1.5-4h3l1.5 4" /><path d="M5.5 14l1.5-4h-3l-1.5 4" /></svg>
     )
 }
 
-function TruckIcon(props: any) {
+function TruckIcon(props: SVGProps<SVGSVGElement>) {
     return (
         <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18h3a1 1 0 0 0 1-1V9l-3-3" /><circle cx="7" cy="18" r="2" /><circle cx="17" cy="18" r="2" /></svg>
     )
 }
 
-function BusIcon(props: any) {
+function BusIcon(props: SVGProps<SVGSVGElement>) {
     return (
         <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 6v6" /><path d="M15 6v6" /><path d="M2 12h20v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5Z" /><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5H2V7Z" /><path d="M6 19v2" /><path d="M18 19v2" /></svg>
     )
 }
 
-function BuildingIcon(props: any) {
+function BuildingIcon(props: SVGProps<SVGSVGElement>) {
     return (
         <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2" /><path d="M9 22v-4h6v4" /><path d="M8 6h.01" /><path d="M16 6h.01" /><path d="M8 10h.01" /><path d="M16 10h.01" /><path d="M8 14h.01" /><path d="M16 14h.01" /></svg>
     )
