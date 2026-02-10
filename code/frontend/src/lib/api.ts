@@ -77,6 +77,7 @@ export const vehicleService = {
     getParked: () => fetchAPI<Transaction[]>('/vehicles/parked'),
     searchParked: (license_plate: string) => fetchAPI<SearchParkedResponse>(`/vehicles/search-parked?license_plate=${license_plate}`),
     getHistory: () => fetchAPI<Vehicle[]>('/vehicles'),
+    update: (id: number | string, data: Partial<Vehicle>) => fetchAPI<Vehicle>(`/vehicles/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number | string) => fetchAPI<void>(`/vehicles/${id}`, { method: 'DELETE' }),
 };
 
@@ -99,6 +100,7 @@ export const rateService = {
     getAll: () => fetchAPI<ParkingRate[]>('/rates'),
     create: (data: Partial<ParkingRate>) => fetchAPI<ParkingRate>('/rates', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number | string, data: Partial<ParkingRate>) => fetchAPI<ParkingRate>(`/rates/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id: number | string) => fetchAPI<void>(`/rates/${id}`, { method: 'DELETE' }),
 };
 
 // Simulation Service

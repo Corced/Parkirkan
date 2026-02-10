@@ -193,4 +193,26 @@ class VehicleController extends Controller
             'is_currently_parked' => $latestTransaction && $latestTransaction->status === 'active'
         ]);
     }
+
+    public function update(Request $request, Vehicle $vehicle)
+    {
+        $validated = $request->validate([
+            'vehicle_type' => 'sometimes|string',
+            'owner_name' => 'nullable|string|max:255',
+            'owner_phone' => 'nullable|string|max:20',
+        ]);
+
+        $vehicle->update($validated);
+
+        // Log Activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'VEHICLE_UPDATED',
+            'description' => "Vehicle {$vehicle->license_plate} data updated.",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
+        return response()->json($vehicle);
+    }
 }

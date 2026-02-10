@@ -2,18 +2,29 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Trash2, Eye, Search, X } from "lucide-react";
-import { vehicleService } from "@/lib/api";
-import { Vehicle } from "@/types";
+import { Plus, Edit, Trash2, Eye, Search, X, Car, User, Phone, Calendar, Hash } from "lucide-react";
+import { vehicleService, transactionService } from "@/lib/api";
+import { Vehicle, Transaction } from "@/types";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function VehiclesPage() {
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [vehicleToDelete, setVehicleToDelete] = useState<Vehicle | null>(null);
     const [confirmPlate, setConfirmPlate] = useState('');
+
+    // View Modal State
+    const [viewVehicle, setViewVehicle] = useState<Vehicle | null>(null);
+    const [vehicleTransactions, setVehicleTransactions] = useState<Transaction[]>([]);
+    const [loadingTransactions, setLoadingTransactions] = useState(false);
+
+    // Edit Modal State
+    const [editVehicle, setEditVehicle] = useState<Vehicle | null>(null);
+    const [editForm, setEditForm] = useState({ owner_name: '', owner_phone: '', vehicle_type: '' });
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         fetchVehicles();
@@ -37,6 +48,49 @@ export default function VehiclesPage() {
             setConfirmPlate('');
         } catch (error) {
             alert('Gagal menghapus data kendaraan');
+        }
+    };
+
+    // Handle View - fetch vehicle transactions
+    const handleView = async (vehicle: Vehicle) => {
+        setViewVehicle(vehicle);
+        setLoadingTransactions(true);
+        try {
+            const allTransactions = await transactionService.getAll();
+            const vehicleTx = allTransactions.filter(t => t.vehicle_id === vehicle.id);
+            setVehicleTransactions(vehicleTx);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoadingTransactions(false);
+        }
+    };
+
+    // Handle Edit - open edit form
+    const handleEdit = (vehicle: Vehicle) => {
+        setEditVehicle(vehicle);
+        setEditForm({
+            owner_name: vehicle.owner_name || '',
+            owner_phone: vehicle.owner_phone || '',
+            vehicle_type: vehicle.vehicle_type
+        });
+    };
+
+    // Save Edit
+    const handleSaveEdit = async () => {
+        if (!editVehicle) return;
+        setSaving(true);
+        try {
+            await vehicleService.update(editVehicle.id, editForm);
+            // Update local state
+            setVehicles(vehicles.map(v =>
+                v.id === editVehicle.id ? { ...v, ...editForm } : v
+            ));
+            setEditVehicle(null);
+        } catch (error) {
+            alert('Gagal menyimpan perubahan');
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -115,15 +169,24 @@ export default function VehiclesPage() {
                                 </td>
                                 <td className="px-10 py-8 text-right">
                                     <div className="flex justify-end gap-2">
-                                        <button className="p-3 text-slate-300 hover:text-blue-500 transition-colors">
+                                        <button
+                                            onClick={() => handleView(vehicle)}
+                                            className="p-3 text-slate-300 hover:text-blue-500 transition-colors"
+                                            title="Lihat Detail"
+                                        >
                                             <Eye className="h-6 w-6" />
                                         </button>
-                                        <button className="p-3 text-slate-300 hover:text-blue-500 transition-colors">
+                                        <button
+                                            onClick={() => handleEdit(vehicle)}
+                                            className="p-3 text-slate-300 hover:text-blue-500 transition-colors"
+                                            title="Edit Data"
+                                        >
                                             <Edit className="h-6 w-6" />
                                         </button>
                                         <button
                                             onClick={() => setVehicleToDelete(vehicle)}
                                             className="p-3 text-slate-300 hover:text-red-500 transition-colors"
+                                            title="Hapus"
                                         >
                                             <Trash2 className="h-6 w-6" />
                                         </button>
@@ -142,6 +205,178 @@ export default function VehiclesPage() {
                     </div>
                 )}
             </div>
+
+            {/* VIEW MODAL */}
+            {viewVehicle && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
+                    <div className="relative bg-white rounded-[3rem] w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+                        {/* Header */}
+                        <div className="p-10 border-b border-slate-100 bg-slate-50">
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-2">
+                                    <h3 className="text-3xl font-black text-slate-900 italic uppercase tracking-tighter">
+                                        {viewVehicle.license_plate}
+                                    </h3>
+                                    {getVehicleTypeBadge(viewVehicle.vehicle_type)}
+                                </div>
+                                <button onClick={() => setViewVehicle(null)} className="p-2 hover:bg-slate-200 rounded-xl transition-colors">
+                                    <X className="h-6 w-6 text-slate-400" />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-10 space-y-8 overflow-y-auto max-h-[60vh]">
+                            {/* Vehicle Info */}
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
+                                    <User className="h-6 w-6 text-blue-500" />
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pemilik</p>
+                                        <p className="text-lg font-bold text-slate-900">{viewVehicle.owner_name || '-'}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
+                                    <Phone className="h-6 w-6 text-emerald-500" />
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Telepon</p>
+                                        <p className="text-lg font-bold text-slate-900">{viewVehicle.owner_phone || '-'}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
+                                    <Hash className="h-6 w-6 text-purple-500" />
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Kunjungan</p>
+                                        <p className="text-lg font-bold text-slate-900">{viewVehicle.total_visits}x</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
+                                    <Calendar className="h-6 w-6 text-orange-500" />
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Kunjungan Terakhir</p>
+                                        <p className="text-lg font-bold text-slate-900">
+                                            {viewVehicle.last_visit ? new Date(viewVehicle.last_visit).toLocaleDateString('id-ID') : '-'}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Transaction History */}
+                            <div className="space-y-4">
+                                <h4 className="text-lg font-black text-slate-900 uppercase tracking-wide">Riwayat Transaksi</h4>
+                                {loadingTransactions ? (
+                                    <p className="text-slate-400 text-center py-8">Loading...</p>
+                                ) : vehicleTransactions.length === 0 ? (
+                                    <p className="text-slate-400 text-center py-8">Belum ada riwayat transaksi</p>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {vehicleTransactions.slice(0, 5).map(tx => (
+                                            <div key={tx.id} className="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
+                                                <div>
+                                                    <p className="font-bold text-slate-900">{tx.ticket_number}</p>
+                                                    <p className="text-sm text-slate-500">
+                                                        {new Date(tx.check_in_time).toLocaleDateString('id-ID')} • {tx.area?.name || 'Area'}
+                                                    </p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="font-black text-slate-900">
+                                                        {tx.total_cost ? `Rp ${Number(tx.total_cost).toLocaleString('id-ID')}` : '-'}
+                                                    </p>
+                                                    <Badge className={cn(
+                                                        "text-xs",
+                                                        tx.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
+                                                    )}>
+                                                        {tx.status === 'completed' ? 'Selesai' : 'Aktif'}
+                                                    </Badge>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-6 border-t border-slate-100 bg-slate-50">
+                            <Button onClick={() => setViewVehicle(null)} className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-black font-bold">
+                                Tutup
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* EDIT MODAL */}
+            {editVehicle && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
+                    <div className="relative bg-white rounded-[3rem] w-full max-w-xl p-12 shadow-2xl space-y-8 animate-in zoom-in-95 duration-200">
+                        <div className="flex justify-between items-start">
+                            <div className="space-y-2">
+                                <h3 className="text-3xl font-black text-slate-900 italic uppercase tracking-tighter">
+                                    Edit Kendaraan
+                                </h3>
+                                <p className="text-xl font-bold text-blue-500">{editVehicle.license_plate}</p>
+                            </div>
+                            <button onClick={() => setEditVehicle(null)} className="p-2 hover:bg-slate-100 rounded-xl transition-colors">
+                                <X className="h-6 w-6 text-slate-400" />
+                            </button>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Jenis Kendaraan</label>
+                                <Select value={editForm.vehicle_type} onValueChange={(v) => setEditForm({ ...editForm, vehicle_type: v })}>
+                                    <SelectTrigger className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className="z-[200]">
+                                        <SelectItem value="motor">Motor</SelectItem>
+                                        <SelectItem value="mobil">Mobil</SelectItem>
+                                        <SelectItem value="truck">Truck</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Nama Pemilik</label>
+                                <Input
+                                    value={editForm.owner_name}
+                                    onChange={(e) => setEditForm({ ...editForm, owner_name: e.target.value })}
+                                    placeholder="Nama pemilik kendaraan"
+                                    className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest">No. Telepon</label>
+                                <Input
+                                    value={editForm.owner_phone}
+                                    onChange={(e) => setEditForm({ ...editForm, owner_phone: e.target.value })}
+                                    placeholder="08xxxxxxxxxx"
+                                    className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex gap-4 pt-4">
+                            <Button
+                                onClick={() => setEditVehicle(null)}
+                                variant="outline"
+                                className="flex-1 h-14 rounded-2xl font-bold"
+                            >
+                                Batal
+                            </Button>
+                            <Button
+                                onClick={handleSaveEdit}
+                                disabled={saving}
+                                className="flex-1 h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 font-bold"
+                            >
+                                {saving ? 'Menyimpan...' : 'Simpan'}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* SECURE DELETE MODAL */}
             {vehicleToDelete && (
@@ -190,3 +425,4 @@ export default function VehiclesPage() {
         </div>
     );
 }
+
