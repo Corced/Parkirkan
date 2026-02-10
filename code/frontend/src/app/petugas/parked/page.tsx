@@ -57,8 +57,8 @@ export default function ParkedVehiclesPage() {
         <div className="space-y-12 pb-20">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Kendaraan yang Sedang Parkir</h1>
-                <p className="text-slate-500 mt-2 font-bold uppercase text-xs tracking-widest italic">Daftar kendaraan aktif di semua area</p>
+                <h1 className="text-4xl font-extrabold text-black tracking-tight">Kendaraan yang Sedang Parkir</h1>
+                <p className="text-slate-800 mt-2 font-bold uppercase text-xs tracking-widest italic">Daftar kendaraan aktif di semua area</p>
             </div>
 
             <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">
@@ -67,13 +67,13 @@ export default function ParkedVehiclesPage() {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-slate-50/50">
-                                    <th className="px-10 py-8 text-sm font-black text-slate-400 uppercase tracking-widest">Nomor Tiket</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-400 uppercase tracking-widest">Plat Nomor</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-400 uppercase tracking-widest">Jenis</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-400 uppercase tracking-widest text-center">Area</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-400 uppercase tracking-widest">Waktu Masuk</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-400 uppercase tracking-widest text-center">Durasi</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-400 uppercase tracking-widest text-right">Aksi</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest">Nomor Tiket</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest">Plat Nomor</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest">Jenis</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest text-center">Area</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest">Waktu Masuk</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest text-center">Durasi</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest text-right">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50">
@@ -88,10 +88,10 @@ export default function ParkedVehiclesPage() {
                                     parkedVehicles.map((t) => (
                                         <tr key={t.id} className="group hover:bg-slate-50/50 transition-colors">
                                             <td className="px-10 py-8">
-                                                <p className="text-lg font-mono font-black text-slate-500 italic tracking-tighter">{t.ticket_number}</p>
+                                                <p className="text-lg font-mono font-black text-slate-800 italic tracking-tighter">{t.ticket_number}</p>
                                             </td>
                                             <td className="px-10 py-8">
-                                                <p className="text-2xl font-black text-slate-900 uppercase tracking-tight">{t.vehicle?.license_plate}</p>
+                                                <p className="text-2xl font-black text-black uppercase tracking-tight">{t.vehicle?.license_plate}</p>
                                             </td>
                                             <td className="px-10 py-8">
                                                 <div className={cn(
@@ -101,9 +101,9 @@ export default function ParkedVehiclesPage() {
                                                     {t.vehicle?.vehicle_type}
                                                 </div>
                                             </td>
-                                            <td className="px-10 py-8 text-center text-xl font-bold text-slate-700">{t.area?.name || '---'}</td>
+                                            <td className="px-10 py-8 text-center text-xl font-bold text-black">{t.area?.name || '---'}</td>
                                             <td className="px-10 py-8">
-                                                <div className="flex items-center gap-2 text-slate-500 font-bold">
+                                                <div className="flex items-center gap-2 text-slate-800 font-bold">
                                                     <Clock className="h-4 w-4" />
                                                     {new Date(t.check_in_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                                                     <span className="text-xs opacity-50 ml-1">({new Date(t.check_in_time).toLocaleDateString('id-ID')})</span>

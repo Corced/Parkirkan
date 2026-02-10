@@ -15,4 +15,9 @@ class ParkingRate extends Model
         'hourly_rate',
         'daily_max_rate',
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'rate_id');
+    }
 }

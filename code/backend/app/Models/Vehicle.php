@@ -21,4 +21,9 @@ class Vehicle extends Model
     protected $casts = [
         'last_visit' => 'datetime',
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

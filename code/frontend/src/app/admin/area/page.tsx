@@ -76,8 +76,8 @@ export default function AreaPage() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                    <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Area Parkir</h1>
-                    <p className="text-slate-500 font-bold uppercase text-xs tracking-widest leading-none">Manajemen area dan kapasitas parkir</p>
+                    <h1 className="text-4xl font-extrabold text-black tracking-tight">Area Parkir</h1>
+                    <p className="text-slate-800 font-bold uppercase text-xs tracking-widest leading-none">Manajemen area dan kapasitas parkir</p>
                 </div>
                 <Button onClick={() => setIsAdding(true)} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
                     <Plus className="h-6 w-6" strokeWidth={3} />
@@ -96,8 +96,8 @@ export default function AreaPage() {
                         <div key={area.id} className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 space-y-8 group hover:shadow-xl transition-all duration-300">
                             <div className="flex justify-between items-start">
                                 <div className="space-y-1">
-                                    <h3 className="text-3xl font-black text-slate-900 italic uppercase tracking-tighter">{area.name}</h3>
-                                    <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">{area.code}</p>
+                                    <h3 className="text-3xl font-black text-black italic uppercase tracking-tighter">{area.name}</h3>
+                                    <p className="text-slate-700 font-bold text-sm uppercase tracking-widest">{area.code}</p>
                                 </div>
                                 <div className="flex gap-4">
                                     <button
@@ -120,7 +120,7 @@ export default function AreaPage() {
 
                             <div className="space-y-4">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-sm font-black text-slate-400 uppercase tracking-widest">Kapasitas</span>
+                                    <span className="text-sm font-black text-slate-700 uppercase tracking-widest">Kapasitas</span>
                                     <span className="text-lg font-bold text-slate-600 italic">{area.occupied_slots}/{area.total_capacity}</span>
                                 </div>
                                 <div className="h-4 bg-slate-100 rounded-full overflow-hidden shadow-inner">
@@ -139,8 +139,8 @@ export default function AreaPage() {
                                     {status.label}
                                 </span>
                                 <div className="text-right">
-                                    <p className="text-4xl font-black text-slate-900 tracking-tighter leading-none">{remaining}</p>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Slot Tersisa</p>
+                                    <p className="text-4xl font-black text-black tracking-tighter leading-none">{remaining}</p>
+                                    <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Slot Tersisa</p>
                                 </div>
                             </div>
                         </div>
@@ -153,17 +153,17 @@ export default function AreaPage() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-2xl p-16 shadow-2xl space-y-12 animate-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-4xl font-black text-slate-900 italic uppercase tracking-tighter">
+                            <h3 className="text-4xl font-black text-black italic uppercase tracking-tighter">
                                 {editingArea ? 'Edit Area' : 'Tambah Area'}
                             </h3>
                             <button onClick={() => { setIsAdding(false); setEditingArea(null); }} className="p-4 hover:bg-slate-50 rounded-2xl transition-all">
-                                <X className="h-8 w-8 text-slate-400" />
+                                <X className="h-8 w-8 text-slate-700" />
                             </button>
                         </div>
 
                         <div className="space-y-8">
                             <div className="space-y-4">
-                                <label className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Nama Area</label>
+                                <label className="text-sm font-black text-slate-700 uppercase tracking-[0.2em] ml-2">Nama Area</label>
                                 <Input
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -172,7 +172,7 @@ export default function AreaPage() {
                                 />
                             </div>
                             <div className="space-y-4">
-                                <label className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Kode Area</label>
+                                <label className="text-sm font-black text-slate-700 uppercase tracking-[0.2em] ml-2">Kode Area</label>
                                 <Input
                                     value={formData.code}
                                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
@@ -182,7 +182,7 @@ export default function AreaPage() {
                                 />
                             </div>
                             <div className="space-y-4">
-                                <label className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Total Kapasitas</label>
+                                <label className="text-sm font-black text-slate-700 uppercase tracking-[0.2em] ml-2">Total Kapasitas</label>
                                 <Input
                                     type="number"
                                     value={formData.total_capacity}
@@ -207,14 +207,14 @@ export default function AreaPage() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-2xl p-20 shadow-2xl space-y-16 text-center animate-in zoom-in-95 duration-200">
                         <div className="space-y-4">
-                            <h3 className="text-4xl font-black text-slate-900 italic uppercase tracking-tighter">Hapus Area Parkir?</h3>
-                            <p className="text-2xl font-bold text-slate-400 tracking-tight">
+                            <h3 className="text-4xl font-black text-black italic uppercase tracking-tighter">Hapus Area Parkir?</h3>
+                            <p className="text-2xl font-bold text-slate-700 tracking-tight">
                                 Apakah anda yakin untuk menghapus <br /><span className="text-red-500">"{areaToDelete.name}"</span>?
                             </p>
                         </div>
 
                         <div className="space-y-6">
-                            <p className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">Ketik Kode Area untuk Konfirmasi</p>
+                            <p className="text-xs font-black text-slate-700 uppercase tracking-[0.3em]">Ketik Kode Area untuk Konfirmasi</p>
                             <Input
                                 value={confirmCode}
                                 onChange={(e) => setConfirmCode(e.target.value)}

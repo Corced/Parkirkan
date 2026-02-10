@@ -66,7 +66,7 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
                         isCollapsed && "mx-auto"
                     )}
                 >
-                    <Menu className="h-6 w-6 text-slate-400" />
+                    <Menu className="h-6 w-6 text-slate-700" />
                 </button>
             </div>
 
@@ -87,7 +87,7 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
                                 isCollapsed ? "justify-center p-0 h-14 w-full" : "px-4 py-3 text-sm font-semibold",
                                 isActive
                                     ? "bg-[#2563EB] text-white border-blue-400 shadow-[0_0_15px_rgba(37,99,235,0.4)]"
-                                    : "text-slate-400 hover:bg-slate-800/50 hover:text-white border-slate-800/50"
+                                    : "text-slate-700 hover:bg-slate-800/50 hover:text-white border-slate-800/50"
                             )}
                         >
                             <div className={cn(

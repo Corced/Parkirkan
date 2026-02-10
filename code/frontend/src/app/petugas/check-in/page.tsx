@@ -82,8 +82,8 @@ export default function CheckInPage() {
         <div className="max-w-4xl mx-auto space-y-10 pb-20">
             {/* Header */}
             <div className="space-y-2">
-                <h1 className="text-4xl font-black text-slate-900 uppercase italic tracking-tighter">Check-in Kendaraan</h1>
-                <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Masukkan data kendaraan yang akan parkir</p>
+                <h1 className="text-4xl font-black text-black uppercase italic tracking-tighter">Check-in Kendaraan</h1>
+                <p className="text-slate-700 font-bold uppercase tracking-widest text-xs">Masukkan data kendaraan yang akan parkir</p>
             </div>
 
             <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">
@@ -93,7 +93,7 @@ export default function CheckInPage() {
                             {/* Left Column */}
                             <div className="space-y-8">
                                 <div className="space-y-3">
-                                    <Label htmlFor="plate" className="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">Plat nomor</Label>
+                                    <Label htmlFor="plate" className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">Plat nomor</Label>
                                     <div className="relative group">
                                         <Car className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300 group-focus-within:text-blue-500 transition-colors" />
                                         <Input
@@ -108,7 +108,7 @@ export default function CheckInPage() {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <Label className="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">Jenis Kendaraan</Label>
+                                    <Label className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">Jenis Kendaraan</Label>
                                     <div className="relative">
                                         <select
                                             value={formData.vehicle_type}
@@ -120,12 +120,12 @@ export default function CheckInPage() {
                                                 <option key={rate.id} value={rate.vehicle_type}>{rate.vehicle_type}</option>
                                             ))}
                                         </select>
-                                        <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400 pointer-events-none" />
+                                        <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-700 pointer-events-none" />
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
-                                    <Label className="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">Pilih Area Parkir</Label>
+                                    <Label className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">Pilih Area Parkir</Label>
                                     <div className="relative">
                                         <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300 pointer-events-none" />
                                         <select
@@ -138,7 +138,7 @@ export default function CheckInPage() {
                                                 <option key={area.id} value={area.id}>{area.name} (Tersedia: {area.total_capacity - area.occupied_slots})</option>
                                             ))}
                                         </select>
-                                        <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400 pointer-events-none" />
+                                        <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-700 pointer-events-none" />
                                     </div>
                                 </div>
                             </div>
@@ -147,7 +147,7 @@ export default function CheckInPage() {
                             <div className="space-y-8">
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-3">
-                                        <Label className="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">Nama Pemilik (opsional)</Label>
+                                        <Label className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">Nama Pemilik (opsional)</Label>
                                         <div className="relative">
                                             <User className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300" />
                                             <Input
@@ -159,7 +159,7 @@ export default function CheckInPage() {
                                         </div>
                                     </div>
                                     <div className="space-y-3">
-                                        <Label className="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">No. Telepon (opsional)</Label>
+                                        <Label className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">No. Telepon (opsional)</Label>
                                         <div className="relative">
                                             <Phone className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300" />
                                             <Input
@@ -179,15 +179,15 @@ export default function CheckInPage() {
                                     </div>
                                     <div className="flex items-center gap-3 mb-4">
                                         <Info className="h-6 w-6 text-cyan-500" />
-                                        <h4 className="text-lg font-black text-slate-900 uppercase italic">Info Transaksi</h4>
+                                        <h4 className="text-lg font-black text-black uppercase italic">Info Transaksi</h4>
                                     </div>
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
-                                            <p className="text-sm font-bold text-slate-500">Waktu Masuk :</p>
-                                            <p className="text-lg font-black text-slate-700 font-mono tracking-tight">{success && ticket ? new Date(ticket.check_in_time).toLocaleString('id-ID') : currentTime}</p>
+                                            <p className="text-sm font-bold text-slate-800">Waktu Masuk :</p>
+                                            <p className="text-lg font-black text-black font-mono tracking-tight">{success && ticket ? new Date(ticket.check_in_time).toLocaleString('id-ID') : currentTime}</p>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <p className="text-sm font-bold text-slate-500">Nomor Tiket :</p>
+                                            <p className="text-sm font-bold text-slate-800">Nomor Tiket :</p>
                                             <p className="text-xl font-black text-blue-600 font-mono italic">{success && ticket ? ticket.ticket_number : '---'}</p>
                                         </div>
                                     </div>

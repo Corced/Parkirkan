@@ -22,7 +22,7 @@ export function DashboardLayout({ children, role, userName }: DashboardLayoutPro
             />
             <div className="flex flex-1 flex-col overflow-hidden">
                 <Navbar userName={userName} />
-                <main className="flex-1 overflow-y-auto p-8 lg:p-12 text-slate-900">
+                <main className="flex-1 overflow-y-auto p-8 lg:p-12 text-black">
                     <div className="mx-auto max-w-7xl">
                         {children}
                     </div>

@@ -22,10 +22,8 @@ export default function LoginPage() {
             const usernameInput = document.getElementById('username') as HTMLInputElement;
             const passwordInput = document.getElementById('password') as HTMLInputElement;
 
-            // Note: authService.login currently expects an object, backend supports email/username usually
-            // I will use 'email' as the key for now since that's what the service expects, or update it
             const data = await authService.login({
-                email: usernameInput.value, // Temporarily using email field for username
+                login_id: usernameInput.value,
                 password: passwordInput.value,
             });
 
@@ -52,7 +50,7 @@ export default function LoginPage() {
             <div className="w-full max-w-md space-y-12 text-center pb-12">
                 <div className="space-y-2">
                     <h1 className="text-6xl font-black text-black tracking-tighter">PARKIRKAN</h1>
-                    <p className="text-lg font-black text-slate-900 tracking-tight uppercase">Masuk ke dashboard anda</p>
+                    <p className="text-lg font-black text-black tracking-tight uppercase">Masuk ke dashboard anda</p>
                 </div>
 
                 <Card className="rounded-[2.5rem] border-none shadow-2xl overflow-hidden">
@@ -60,19 +58,19 @@ export default function LoginPage() {
                         <form onSubmit={handleLogin} className="space-y-10">
                             <div className="space-y-6 text-left">
                                 <div className="space-y-3">
-                                    <Label htmlFor="username" className="text-xl font-black text-slate-800 tracking-tight pl-1">Username/ID</Label>
+                                    <Label htmlFor="username" className="text-xl font-black text-black tracking-tight pl-1">Username/ID</Label>
                                     <Input
                                         id="username"
-                                        className="h-16 rounded-2xl border-2 border-slate-900 bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] text-lg px-6 focus:ring-4 focus:ring-blue-100 transition-all font-bold"
+                                        className="h-16 rounded-2xl border-2 border-slate-900 bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] text-lg px-6 focus:ring-4 focus:ring-blue-100 transition-all font-bold text-black"
                                         required
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <Label htmlFor="password" title="password" className="text-xl font-black text-slate-800 tracking-tight pl-1">Password</Label>
+                                    <Label htmlFor="password" title="password" className="text-xl font-black text-black tracking-tight pl-1">Password</Label>
                                     <Input
                                         id="password"
                                         type="password"
-                                        className="h-16 rounded-2xl border-2 border-slate-900 bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] text-lg px-6 focus:ring-4 focus:ring-blue-100 transition-all font-bold"
+                                        className="h-16 rounded-2xl border-2 border-slate-900 bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] text-lg px-6 focus:ring-4 focus:ring-blue-100 transition-all font-bold text-black"
                                         required
                                     />
                                 </div>
@@ -86,7 +84,7 @@ export default function LoginPage() {
                     </CardContent>
                 </Card>
 
-                <Link href="/" className="inline-block text-lg font-black text-slate-900 hover:text-blue-600 transition-colors tracking-tight uppercase">
+                <Link href="/" className="inline-block text-lg font-black text-black hover:text-blue-600 transition-colors tracking-tight uppercase">
                     ← Kembali ke landing page
                 </Link>
             </div>

@@ -38,7 +38,7 @@ export default function LogsPage() {
         <div className="space-y-12 pb-20 max-w-5xl mx-auto">
             {/* Header */}
             <div className="space-y-1">
-                <h1 className="text-5xl font-black text-slate-900 tracking-tighter italic uppercase leading-tight">Log Aktivitas</h1>
+                <h1 className="text-5xl font-black text-black tracking-tighter italic uppercase leading-tight">Log Aktivitas</h1>
             </div>
 
             {/* Logs List Container */}
@@ -46,7 +46,7 @@ export default function LogsPage() {
                 {loading ? (
                     <div className="flex flex-col items-center justify-center h-96 space-y-4">
                         <div className="h-12 w-12 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin" />
-                        <p className="text-slate-400 font-bold italic">Memuat aktivitas...</p>
+                        <p className="text-slate-700 font-bold italic">Memuat aktivitas...</p>
                     </div>
                 ) : logs.length > 0 ? (
                     logs.map((log) => {
@@ -69,7 +69,7 @@ export default function LogsPage() {
                                 {/* Content Column */}
                                 <div className="space-y-3 pt-1 flex-1">
                                     <div className="flex items-center gap-4">
-                                        <span className="text-xl font-black text-slate-900 tracking-tight lowercase">
+                                        <span className="text-xl font-black text-black tracking-tight lowercase">
                                             {log.user?.username || log.userName || 'system'}
                                         </span>
                                         <span className={cn(
@@ -80,7 +80,7 @@ export default function LogsPage() {
                                         </span>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-2xl font-bold text-slate-500 tracking-tight leading-snug">
+                                        <p className="text-2xl font-bold text-slate-800 tracking-tight leading-snug">
                                             {log.description}
                                         </p>
                                         <p className="text-sm font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
@@ -104,7 +104,7 @@ export default function LogsPage() {
                         <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
                             <Clock className="h-10 w-10 text-slate-200" />
                         </div>
-                        <p className="text-slate-400 font-bold italic">Belum ada aktivitas tercatat</p>
+                        <p className="text-slate-700 font-bold italic">Belum ada aktivitas tercatat</p>
                     </div>
                 )}
             </div>

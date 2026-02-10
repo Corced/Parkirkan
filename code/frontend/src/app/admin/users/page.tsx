@@ -129,8 +129,8 @@ export default function UserManagementPage() {
         <div className="space-y-10 relative">
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                    <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Kelola User</h1>
-                    <p className="text-slate-500 font-bold uppercase text-xs tracking-widest">Manajemen pengguna sistem</p>
+                    <h1 className="text-4xl font-extrabold text-black tracking-tight">Kelola User</h1>
+                    <p className="text-slate-800 font-bold uppercase text-xs tracking-widest">Manajemen pengguna sistem</p>
                 </div>
                 {!isAdding && !isEditing && (
                     <Button onClick={handleAddClick} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
@@ -145,7 +145,7 @@ export default function UserManagementPage() {
                 <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 z-20 relative">
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="relative flex-1">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-700" />
                             <Input
                                 placeholder="Cari User...."
                                 value={searchQuery}
@@ -191,11 +191,11 @@ export default function UserManagementPage() {
                         <Table>
                             <TableHeader>
                                 <TableRow className="hover:bg-transparent border-slate-50">
-                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest px-8 pb-8">Username</TableHead>
-                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Email</TableHead>
-                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Role</TableHead>
-                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest pb-8">Status</TableHead>
-                                    <TableHead className="text-base font-black text-slate-900 uppercase tracking-widest text-right pb-8 pr-8">Aksi</TableHead>
+                                    <TableHead className="text-base font-black text-black uppercase tracking-widest px-8 pb-8">Username</TableHead>
+                                    <TableHead className="text-base font-black text-black uppercase tracking-widest pb-8">Email</TableHead>
+                                    <TableHead className="text-base font-black text-black uppercase tracking-widest pb-8">Role</TableHead>
+                                    <TableHead className="text-base font-black text-black uppercase tracking-widest pb-8">Status</TableHead>
+                                    <TableHead className="text-base font-black text-black uppercase tracking-widest text-right pb-8 pr-8">Aksi</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -204,13 +204,13 @@ export default function UserManagementPage() {
                                         <TableCell className="px-8 py-6">
                                             <div className="flex items-center gap-4">
                                                 <div className="h-12 w-12 rounded-full border-2 border-slate-900 flex items-center justify-center bg-white shadow-sm overflow-hidden">
-                                                    <UserIcon className="h-6 w-6 text-slate-500" />
+                                                    <UserIcon className="h-6 w-6 text-slate-800" />
                                                 </div>
-                                                <span className="text-xl font-black text-slate-900 tracking-tight">{user.username}</span>
+                                                <span className="text-xl font-black text-black tracking-tight">{user.username}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell className="py-6">
-                                            <span className="text-lg font-bold text-slate-500 tracking-tight">{user.email}</span>
+                                            <span className="text-lg font-bold text-slate-800 tracking-tight">{user.email}</span>
                                         </TableCell>
                                         <TableCell className="py-6">
                                             <div className={cn(
@@ -256,14 +256,14 @@ export default function UserManagementPage() {
                         </Table>
 
                         {/* Pagination Footer (Placeholder like image) */}
-                        <div className="flex justify-end gap-6 pt-10 text-slate-400 items-center">
-                            <button className="h-10 w-10 flex items-center justify-center cursor-pointer hover:text-slate-900 transition-colors">
+                        <div className="flex justify-end gap-6 pt-10 text-slate-700 items-center">
+                            <button className="h-10 w-10 flex items-center justify-center cursor-pointer hover:text-black transition-colors">
                                 <ChevronDown className="rotate-90 h-8 w-8" />
                             </button>
-                            <div className="h-12 w-12 rounded-2xl border-2 border-slate-900 flex items-center justify-center text-slate-900 bg-white shadow-sm">
+                            <div className="h-12 w-12 rounded-2xl border-2 border-slate-900 flex items-center justify-center text-black bg-white shadow-sm">
                                 <FileText className="h-6 w-6" />
                             </div>
-                            <button className="h-10 w-10 flex items-center justify-center cursor-pointer hover:text-slate-900 transition-colors">
+                            <button className="h-10 w-10 flex items-center justify-center cursor-pointer hover:text-black transition-colors">
                                 <ChevronDown className="-rotate-90 h-8 w-8" />
                             </button>
                         </div>
@@ -278,10 +278,10 @@ export default function UserManagementPage() {
                                 onClick={() => { setSelectedUser(null); setIsEditing(false); setIsAdding(false); resetForm(); }}
                                 className="bg-slate-100 hover:bg-slate-200 p-3 rounded-2xl transition-all active:scale-95"
                             >
-                                <X className="h-8 w-8 text-slate-500" />
+                                <X className="h-8 w-8 text-slate-800" />
                             </button>
                             {(isEditing || isAdding) && (
-                                <h2 className="text-3xl font-black text-slate-900 uppercase italic">
+                                <h2 className="text-3xl font-black text-black uppercase italic">
                                     {isAdding ? 'Tambah User Baru' : 'Edit Profil User'}
                                 </h2>
                             )}
@@ -306,15 +306,15 @@ export default function UserManagementPage() {
                                 { label: 'Password', key: 'password', type: 'password', placeholder: isEditing ? 'Kosongkan jika tidak diubah' : '********' },
                             ].map((field, idx) => (
                                 <div key={idx} className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                    <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">{field.label}</label>
-                                    <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                    <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">{field.label}</label>
+                                    <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                     <div className="flex-1">
                                         {isEditing || isAdding ? (
                                             field.type === 'select' ? (
                                                 <select
                                                     value={formData.role}
                                                     onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
-                                                    className="w-full h-20 rounded-[1.5rem] border-4 border-slate-100 bg-slate-50 px-10 text-2xl font-black text-slate-900 focus:border-blue-400 focus:bg-white transition-all appearance-none tracking-tight"
+                                                    className="w-full h-20 rounded-[1.5rem] border-4 border-slate-100 bg-slate-50 px-10 text-2xl font-black text-black focus:border-blue-400 focus:bg-white transition-all appearance-none tracking-tight"
                                                 >
                                                     {field.options?.map(opt => <option key={opt} value={opt}>{opt.toUpperCase()}</option>)}
                                                 </select>
@@ -324,12 +324,12 @@ export default function UserManagementPage() {
                                                     value={String(formData[field.key as keyof typeof formData] || '')}
                                                     onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
                                                     placeholder={field.placeholder}
-                                                    className="h-20 rounded-[1.5rem] border-4 border-slate-100 bg-slate-50 px-10 text-2xl font-black text-slate-900 focus:border-blue-400 focus:bg-white transition-all shadow-inner tracking-tight"
+                                                    className="h-20 rounded-[1.5rem] border-4 border-slate-100 bg-slate-50 px-10 text-2xl font-black text-black focus:border-blue-400 focus:bg-white transition-all shadow-inner tracking-tight"
                                                     required={isAdding && field.key !== 'name'}
                                                 />
                                             )
                                         ) : (
-                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">
+                                            <span className="text-2xl font-medium text-slate-800 tracking-tight">
                                                 {selectedUser ? String(selectedUser[field.key as keyof User] || '-') : '-'}
                                             </span>
                                         )}
@@ -341,31 +341,31 @@ export default function UserManagementPage() {
                             {!isEditing && !isAdding && (
                                 <>
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                        <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Status</label>
-                                        <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Status</label>
+                                        <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                         <div className="flex-1">
-                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">Aktif</span>
+                                            <span className="text-2xl font-medium text-slate-800 tracking-tight">Aktif</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                        <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Jadwal Shift</label>
-                                        <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Jadwal Shift</label>
+                                        <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                         <div className="flex-1">
-                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">ID-001 : Shift Siang</span>
+                                            <span className="text-2xl font-medium text-slate-800 tracking-tight">ID-001 : Shift Siang</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                        <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Jam Masuk</label>
-                                        <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Jam Masuk</label>
+                                        <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                         <div className="flex-1">
-                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">12:00</span>
+                                            <span className="text-2xl font-medium text-slate-800 tracking-tight">12:00</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                        <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Jam Keluar</label>
-                                        <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Jam Keluar</label>
+                                        <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                         <div className="flex-1">
-                                            <span className="text-2xl font-medium text-slate-500 tracking-tight">18:00</span>
+                                            <span className="text-2xl font-medium text-slate-800 tracking-tight">18:00</span>
                                         </div>
                                     </div>
                                 </>
@@ -374,8 +374,8 @@ export default function UserManagementPage() {
                             {/* Status Switch if editing */}
                             {(isEditing || isAdding) && (
                                 <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 pt-4">
-                                    <label className="lg:w-64 text-2xl font-bold text-slate-800 tracking-tight uppercase italic">Status</label>
-                                    <span className="hidden lg:block text-2xl font-bold text-slate-800">:</span>
+                                    <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Status</label>
+                                    <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                     <div className="flex items-center gap-6">
                                         <button
                                             type="button"
@@ -390,7 +390,7 @@ export default function UserManagementPage() {
                                                 formData.is_active ? "translate-x-13 border-green-500" : "translate-x-1 border-slate-300 shadow-sm"
                                             )} />
                                         </button>
-                                        <span className="text-xl font-black text-slate-900 uppercase">
+                                        <span className="text-xl font-black text-black uppercase">
                                             {formData.is_active ? 'Aktif' : 'Non-aktif'}
                                         </span>
                                     </div>
@@ -409,7 +409,7 @@ export default function UserManagementPage() {
                                     <Button
                                         type="button"
                                         onClick={() => { setIsEditing(false); setIsAdding(false); resetForm(); }}
-                                        className="flex-1 h-20 rounded-[2rem] bg-slate-100 hover:bg-slate-200 text-slate-500 text-3xl font-black transition-all active:scale-95 border-2 border-slate-200"
+                                        className="flex-1 h-20 rounded-[2rem] bg-slate-100 hover:bg-slate-200 text-slate-800 text-3xl font-black transition-all active:scale-95 border-2 border-slate-200"
                                     >
                                         Batal
                                     </Button>
@@ -425,21 +425,21 @@ export default function UserManagementPage() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-3xl p-20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] space-y-16 text-center animate-in zoom-in-95 duration-200 border border-slate-100">
                         <div className="space-y-4">
-                            <h3 className="text-4xl font-black text-slate-900 leading-tight tracking-tighter uppercase italic">
+                            <h3 className="text-4xl font-black text-black leading-tight tracking-tighter uppercase italic">
                                 Hapus Akun User?
                             </h3>
-                            <p className="text-2xl font-bold text-slate-400 tracking-tight">
+                            <p className="text-2xl font-bold text-slate-700 tracking-tight">
                                 Apakah anda yakin untuk menghapus <span className="text-red-500">"{userToDelete.username}"</span>?
                             </p>
                         </div>
 
                         <div className="space-y-6">
-                            <p className="text-lg font-black text-slate-400 uppercase tracking-[0.2em]">Ketik username untuk konfirmasi</p>
+                            <p className="text-lg font-black text-slate-700 uppercase tracking-[0.2em]">Ketik username untuk konfirmasi</p>
                             <Input
                                 value={confirmUsername}
                                 onChange={(e) => setConfirmUsername(e.target.value)}
                                 placeholder={userToDelete.username}
-                                className="h-24 rounded-[2rem] border-4 border-slate-100 bg-slate-50 px-12 text-3xl font-black text-slate-900 focus:border-red-400 focus:bg-white transition-all text-center shadow-inner tracking-tight"
+                                className="h-24 rounded-[2rem] border-4 border-slate-100 bg-slate-50 px-12 text-3xl font-black text-black focus:border-red-400 focus:bg-white transition-all text-center shadow-inner tracking-tight"
                             />
                         </div>
 

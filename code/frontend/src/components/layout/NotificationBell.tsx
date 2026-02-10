@@ -51,7 +51,7 @@ export function NotificationBell() {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="h-10 w-10 text-slate-500 hover:bg-white hover:shadow-sm relative"
+                    className="h-10 w-10 text-slate-800 hover:bg-white hover:shadow-sm relative"
                 >
                     <Bell className="h-6 w-6" />
                     {unreadCount > 0 && (
@@ -63,14 +63,14 @@ export function NotificationBell() {
             </PopoverTrigger>
             <PopoverContent className="w-96 p-0" align="end">
                 <div className="p-4 border-b bg-slate-50">
-                    <h4 className="font-bold text-slate-900">Notifikasi Aktivitas</h4>
-                    <p className="text-xs text-slate-500 mt-1">Riwayat aktivitas terbaru</p>
+                    <h4 className="font-bold text-black">Notifikasi Aktivitas</h4>
+                    <p className="text-xs text-slate-800 mt-1">Riwayat aktivitas terbaru</p>
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                     {loading ? (
-                        <div className="p-8 text-center text-slate-500">Loading...</div>
+                        <div className="p-8 text-center text-slate-800">Loading...</div>
                     ) : notifications.length === 0 ? (
-                        <div className="p-8 text-center text-slate-500">Tidak ada notifikasi</div>
+                        <div className="p-8 text-center text-slate-800">Tidak ada notifikasi</div>
                     ) : (
                         <div className="divide-y">
                             {notifications.map((notif) => (
@@ -83,10 +83,10 @@ export function NotificationBell() {
                                             {notif.action.replace('_', ' ')}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm text-slate-900 font-medium line-clamp-2">
+                                            <p className="text-sm text-black font-medium line-clamp-2">
                                                 {notif.description}
                                             </p>
-                                            <p className="text-xs text-slate-500 mt-1">
+                                            <p className="text-xs text-slate-800 mt-1">
                                                 {new Date(notif.created_at).toLocaleString('id-ID', {
                                                     day: '2-digit',
                                                     month: 'short',

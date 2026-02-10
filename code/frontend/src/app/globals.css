@@ -2,8 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  /* Fixed: removed transparency */
+  --foreground: #000000;
 }
 
 @theme inline {

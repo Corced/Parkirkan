@@ -21,8 +21,8 @@ export default function Home() {
           <span className="text-2xl font-black text-[#111827] tracking-tighter italic">PARKIRKAN</span>
         </Link>
         <nav className="hidden md:flex gap-10">
-          <Link href="#manual" className="text-sm font-black text-slate-900 uppercase">Manual</Link>
-          <Link href="#fitur" className="text-sm font-black text-slate-900 uppercase">Fitur</Link>
+          <Link href="#manual" className="text-sm font-black text-black uppercase">Manual</Link>
+          <Link href="#fitur" className="text-sm font-black text-black uppercase">Fitur</Link>
         </nav>
         <Link href="/login">
           <Button className="bg-[#2563EB] hover:bg-blue-700 text-white font-black px-12 rounded-lg text-sm h-11">
@@ -66,8 +66,8 @@ export default function Home() {
                   <div className={cn("h-12 w-12 rounded-lg flex items-center justify-center mb-6 border", f.bg)}>
                     <f.icon className={cn("h-6 w-6", f.iconColor)} />
                   </div>
-                  <h3 className="text-xl font-black text-slate-900 mb-4">{f.title}</h3>
-                  <p className="text-slate-500 font-bold text-sm leading-relaxed">{f.desc}</p>
+                  <h3 className="text-xl font-black text-black mb-4">{f.title}</h3>
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -92,7 +92,7 @@ export default function Home() {
                   </div>
                   <div className="space-y-1">
                     <h4 className="font-black text-sm uppercase tracking-tight">{s.label}</h4>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.desc}</p>
+                    <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">{s.desc}</p>
                   </div>
                 </div>
               ))}
@@ -136,7 +136,7 @@ export default function Home() {
             <h2 className="text-5xl lg:text-7xl font-black tracking-tighter leading-none italic uppercase">Siap Modernisasi Sistem <br /> Parkir Anda?</h2>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-sm font-black text-slate-400 uppercase tracking-widest hover:text-white transition-colors"
+              className="text-sm font-black text-slate-700 uppercase tracking-widest hover:text-white transition-colors"
             >
               Bagian Laman teratas
             </button>
@@ -148,8 +148,8 @@ export default function Home() {
       <footer className="px-6 lg:px-12 py-12 border-t bg-[#EBEDF2]">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <span className="text-2xl font-black text-[#111827] tracking-tighter italic opacity-30">PARKIRKAN</span>
-          <p className="text-xs font-bold text-slate-400 uppercase">
-            © 2025 Parkirkan. <span className="text-slate-900">Aplikasi Manajemen Parkir Online</span>
+          <p className="text-xs font-bold text-slate-700 uppercase">
+            © 2025 Parkirkan. <span className="text-black">Aplikasi Manajemen Parkir Online</span>
           </p>
         </div>
       </footer>

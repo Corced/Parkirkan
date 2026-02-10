@@ -32,7 +32,7 @@ export function ShiftSimulator({ onSimulationComplete }: ShiftSimulatorProps) {
     return (
         <Card className="border-blue-100 bg-blue-50/50">
             <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <CardTitle className="text-lg font-bold text-black flex items-center gap-2">
                     <Play className="h-4 w-4 text-blue-600" />
                     Simulasi Operasional (Dev)
                 </CardTitle>
@@ -45,7 +45,7 @@ export function ShiftSimulator({ onSimulationComplete }: ShiftSimulatorProps) {
                     <div className="flex flex-wrap gap-2">
                         <Button
                             variant="outline"
-                            className="bg-white border-blue-200 text-slate-700 hover:bg-blue-100 hover:text-blue-700 font-semibold"
+                            className="bg-white border-blue-200 text-black hover:bg-blue-100 hover:text-blue-700 font-semibold"
                             onClick={() => handleSimulate('Pagi')}
                             disabled={!!loading}
                         >
@@ -54,7 +54,7 @@ export function ShiftSimulator({ onSimulationComplete }: ShiftSimulatorProps) {
                         </Button>
                         <Button
                             variant="outline"
-                            className="bg-white border-blue-200 text-slate-700 hover:bg-blue-100 hover:text-blue-700 font-semibold"
+                            className="bg-white border-blue-200 text-black hover:bg-blue-100 hover:text-blue-700 font-semibold"
                             onClick={() => handleSimulate('Siang')}
                             disabled={!!loading}
                         >
@@ -63,7 +63,7 @@ export function ShiftSimulator({ onSimulationComplete }: ShiftSimulatorProps) {
                         </Button>
                         <Button
                             variant="outline"
-                            className="bg-white border-blue-200 text-slate-700 hover:bg-blue-100 hover:text-blue-700 font-semibold"
+                            className="bg-white border-blue-200 text-black hover:bg-blue-100 hover:text-blue-700 font-semibold"
                             onClick={() => handleSimulate('Malam')}
                             disabled={!!loading}
                         >

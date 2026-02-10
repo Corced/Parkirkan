@@ -90,7 +90,7 @@ export default function OwnerDashboard() {
             change: stats.monthly_revenue_change, // Keeping monthly change as proxy or placeholder
             icon: DollarSign,
             iconBg: 'bg-white',
-            iconColor: 'text-slate-700',
+            iconColor: 'text-black',
             borderColor: 'border-slate-200'
         },
         {
@@ -108,7 +108,7 @@ export default function OwnerDashboard() {
             subtext: "Sedang parkir",
             icon: Car,
             iconBg: 'bg-white',
-            iconColor: 'text-slate-700',
+            iconColor: 'text-black',
             borderColor: 'border-slate-200'
         },
         {
@@ -117,7 +117,7 @@ export default function OwnerDashboard() {
             subtext: `${Math.round(((stats.occupancy_rate || 0) / 100) * 120)}/120 slot terisi`,
             icon: MapPin,
             iconBg: 'bg-white',
-            iconColor: 'text-slate-700',
+            iconColor: 'text-black',
             borderColor: 'border-slate-200'
         },
     ];
@@ -165,8 +165,8 @@ export default function OwnerDashboard() {
         <div className="space-y-8 pb-20 font-sans">
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-bold text-slate-900">Dashboard Owner</h1>
-                <p className="text-slate-500">Overview pendapatan dan statistik parkir</p>
+                <h1 className="text-3xl font-bold text-black">Dashboard Owner</h1>
+                <p className="text-slate-800">Overview pendapatan dan statistik parkir</p>
             </div>
 
             {/* Simulation Tool */}
@@ -182,14 +182,14 @@ export default function OwnerDashboard() {
                                     <card.icon className={cn("h-6 w-6", card.iconColor)} />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-medium text-slate-500">{card.label}</p>
-                                    <h3 className="text-2xl font-bold text-slate-900 mt-1">{card.value}</h3>
+                                    <p className="text-sm font-medium text-slate-800">{card.label}</p>
+                                    <h3 className="text-2xl font-bold text-black mt-1">{card.value}</h3>
                                     {card.change !== undefined ? (
                                         <div className={cn("text-xs font-bold mt-1", card.change >= 0 ? "text-emerald-500" : "text-red-500")}>
                                             {card.change >= 0 ? '+' : ''}{card.change}% dari kemarin
                                         </div>
                                     ) : (
-                                        <p className="text-xs text-slate-400 mt-1">{card.subtext}</p>
+                                        <p className="text-xs text-slate-700 mt-1">{card.subtext}</p>
                                     )}
                                 </div>
                             </div>
@@ -202,7 +202,7 @@ export default function OwnerDashboard() {
             <div className="grid gap-8 lg:grid-cols-2">
                 {/* Weekly Revenue Chart */}
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                    <h3 className="text-lg font-bold text-slate-900 mb-6">Pendapatan 7 Hari Terakhir</h3>
+                    <h3 className="text-lg font-bold text-black mb-6">Pendapatan 7 Hari Terakhir</h3>
                     <div className="h-[300px]">
                         <Bar
                             data={{
@@ -221,7 +221,7 @@ export default function OwnerDashboard() {
 
                 {/* Vehicle Type Stats Chart */}
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                    <h3 className="text-lg font-bold text-slate-900 mb-6">Statistik Jenis Kendaraan</h3>
+                    <h3 className="text-lg font-bold text-black mb-6">Statistik Jenis Kendaraan</h3>
                     <div className="h-[300px]">
                         <Bar
                             data={{
@@ -243,9 +243,9 @@ export default function OwnerDashboard() {
                         {/* Custom Legend/Labels simulation for "Sedang parkir" text could be added here if exact pixel match needed, using plain HTML below chart */}
                         <div className="mt-4 space-y-3">
                             {vehicleLabels.map((label, idx) => (
-                                <div key={idx} className="flex justify-between text-xs text-slate-500 px-2 lg:hidden">
+                                <div key={idx} className="flex justify-between text-xs text-slate-800 px-2 lg:hidden">
                                     <span>Sedang parkir</span>
-                                    <span className="font-bold text-slate-900">{vehicleValues[idx]}</span>
+                                    <span className="font-bold text-black">{vehicleValues[idx]}</span>
                                 </div>
                             ))}
                         </div>

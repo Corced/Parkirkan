@@ -192,8 +192,8 @@ function CheckOutContent() {
             <div className="print:hidden space-y-10">
                 {/* Header */}
                 <div className="space-y-2">
-                    <h1 className="text-4xl font-black text-slate-900 uppercase italic tracking-tighter">Check-out Kendaraan</h1>
-                    <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Proses pembayaran dan keluar parkir</p>
+                    <h1 className="text-4xl font-black text-black uppercase italic tracking-tighter">Check-out Kendaraan</h1>
+                    <p className="text-slate-700 font-bold uppercase tracking-widest text-xs">Proses pembayaran dan keluar parkir</p>
                 </div>
 
                 <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">
@@ -224,7 +224,7 @@ function CheckOutContent() {
                             <div className="space-y-10 animate-in fade-in slide-in-from-top-4 duration-500">
                                 <div className="flex items-center gap-4 border-b-4 border-slate-50 pb-4">
                                     <Receipt className="h-6 w-6 text-blue-500" />
-                                    <h3 className="text-2xl font-black text-slate-900 uppercase italic">Detail Transaksi</h3>
+                                    <h3 className="text-2xl font-black text-black uppercase italic">Detail Transaksi</h3>
                                 </div>
 
                                 <div className="space-y-6">
@@ -239,7 +239,7 @@ function CheckOutContent() {
                                         { label: 'Tarif per Jam', value: formatCurrency(transaction.rate?.hourly_rate || 0) },
                                     ].map((item, idx) => (
                                         <div key={idx} className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0 group">
-                                            <p className="text-lg font-bold text-slate-400 uppercase tracking-tighter">{item.label}</p>
+                                            <p className="text-lg font-bold text-slate-700 uppercase tracking-tighter">{item.label}</p>
                                             <div className="flex items-center">
                                                 {item.isBadge ? (
                                                     <div className="bg-emerald-400 text-white px-6 py-1 rounded-full font-black text-sm uppercase italic">
@@ -247,9 +247,9 @@ function CheckOutContent() {
                                                     </div>
                                                 ) : (
                                                     <p className={cn(
-                                                        "text-xl font-black text-slate-700",
+                                                        "text-xl font-black text-black",
                                                         item.isMono && "font-mono",
-                                                        item.isBold && "text-slate-900",
+                                                        item.isBold && "text-black",
                                                         item.isFuture && "text-blue-500 animate-pulse"
                                                     )}>
                                                         {item.value || '---'}
@@ -263,7 +263,7 @@ function CheckOutContent() {
                                 {/* Total Cost */}
                                 <div className="flex justify-between items-center p-10 bg-slate-900 rounded-[2.5rem] text-white shadow-2xl shadow-slate-900/20">
                                     <div className="space-y-1">
-                                        <p className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">Total Biaya :</p>
+                                        <p className="text-sm font-black text-slate-700 uppercase tracking-[0.2em]">Total Biaya :</p>
                                         <h2 className="text-5xl font-black italic tracking-tighter">
                                             {totalCost ? formatCurrency(totalCost) : 'Mengkalkulasi...'}
                                         </h2>

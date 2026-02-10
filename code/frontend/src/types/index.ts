@@ -123,7 +123,7 @@ export interface AuthResponse {
 }
 
 export interface LoginCredentials {
-    email?: string;
+    login_id?: string;
     password?: string;
 }
 

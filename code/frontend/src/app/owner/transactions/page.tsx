@@ -140,43 +140,43 @@ export default function TransactionsPage() {
     return (
         <div className="space-y-8 pb-20 font-sans">
             <div>
-                <h1 className="text-3xl font-bold text-slate-900">Rekap Transaksi</h1>
-                <p className="text-slate-500">Laporan transaksi parkir dengan filter waktu</p>
+                <h1 className="text-3xl font-bold text-black">Rekap Transaksi</h1>
+                <p className="text-slate-800">Laporan transaksi parkir dengan filter waktu</p>
             </div>
 
             {/* Filters Section */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col lg:flex-row gap-4 items-end">
                 <div className="w-full lg:w-auto space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Tanggal Mulai</label>
+                    <label className="text-sm font-semibold text-black">Tanggal Mulai</label>
                     <div className="relative">
                         <Input
                             type="date"
-                            className="pl-10 h-10 border-slate-200 rounded-lg bg-white text-slate-900"
+                            className="pl-10 h-10 border-slate-200 rounded-lg bg-white text-black"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                         />
-                        <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                        <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-slate-700" />
                     </div>
                 </div>
                 <div className="w-full lg:w-auto space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Tanggal Akhir</label>
+                    <label className="text-sm font-semibold text-black">Tanggal Akhir</label>
                     <div className="relative">
                         <Input
                             type="date"
-                            className="pl-10 h-10 border-slate-200 rounded-lg bg-white text-slate-900"
+                            className="pl-10 h-10 border-slate-200 rounded-lg bg-white text-black"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                         />
-                        <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                        <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-slate-700" />
                     </div>
                 </div>
                 <div className="w-full lg:w-[200px] space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Jenis Kendaraan</label>
+                    <label className="text-sm font-semibold text-black">Jenis Kendaraan</label>
                     <Select value={vehicleType} onValueChange={setVehicleType}>
-                        <SelectTrigger className="h-10 border-slate-200 rounded-lg bg-white text-slate-900">
+                        <SelectTrigger className="h-10 border-slate-200 rounded-lg bg-white text-black">
                             <SelectValue placeholder="Semua" />
                         </SelectTrigger>
-                        <SelectContent className="bg-white text-slate-900">
+                        <SelectContent className="bg-white text-black">
                             <SelectItem value="all">Semua</SelectItem>
                             {vehicleTypes.map(type => (
                                 <SelectItem key={type} value={type}>{type.toUpperCase()}</SelectItem>
@@ -185,12 +185,12 @@ export default function TransactionsPage() {
                     </Select>
                 </div>
                 <div className="w-full lg:w-[200px] space-y-2">
-                    <label className="text-sm font-semibold text-slate-700">Area Parkir</label>
+                    <label className="text-sm font-semibold text-black">Area Parkir</label>
                     <Select value={parkingArea} onValueChange={setParkingArea}>
-                        <SelectTrigger className="h-10 border-slate-200 rounded-lg bg-white text-slate-900">
+                        <SelectTrigger className="h-10 border-slate-200 rounded-lg bg-white text-black">
                             <SelectValue placeholder="Semua area" />
                         </SelectTrigger>
-                        <SelectContent className="bg-white text-slate-900">
+                        <SelectContent className="bg-white text-black">
                             <SelectItem value="all">Semua area</SelectItem>
                             {parkingAreas.map(area => (
                                 <SelectItem key={area.id} value={area.id.toString()}>{area.name}</SelectItem>
@@ -211,8 +211,8 @@ export default function TransactionsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {summaryStats.map((stat, idx) => (
                     <div key={idx} className={`p-6 rounded-xl border-2 ${stat.border} ${stat.color} flex flex-col justify-center space-y-2`}>
-                        <span className="text-sm font-bold text-slate-700">{stat.label}</span>
-                        <span className="text-2xl font-black text-slate-900">{stat.value}</span>
+                        <span className="text-sm font-bold text-black">{stat.label}</span>
+                        <span className="text-2xl font-black text-black">{stat.value}</span>
                     </div>
                 ))}
             </div>
@@ -220,7 +220,7 @@ export default function TransactionsPage() {
             {/* Table Section */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <h3 className="text-xl font-bold text-slate-900">Detail Transaksi</h3>
+                    <h3 className="text-xl font-bold text-black">Detail Transaksi</h3>
                     <div className="flex gap-2">
                         <Button
                             className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold border-none"
@@ -241,16 +241,16 @@ export default function TransactionsPage() {
                     <Table>
                         <TableHeader className="bg-slate-50">
                             <TableRow>
-                                <TableHead className="font-bold text-slate-900">Tanggal</TableHead>
-                                <TableHead className="font-bold text-slate-900">No. Tiket</TableHead>
-                                <TableHead className="font-bold text-slate-900">Plat Nomor</TableHead>
-                                <TableHead className="font-bold text-slate-900">Jenis</TableHead>
-                                <TableHead className="font-bold text-slate-900">Area</TableHead>
-                                <TableHead className="font-bold text-slate-900">Masuk</TableHead>
-                                <TableHead className="font-bold text-slate-900">Keluar</TableHead>
-                                <TableHead className="font-bold text-slate-900">Durasi</TableHead>
-                                <TableHead className="font-bold text-slate-900 text-right">Biaya</TableHead>
-                                <TableHead className="font-bold text-slate-900 text-center">Petugas</TableHead>
+                                <TableHead className="font-bold text-black">Tanggal</TableHead>
+                                <TableHead className="font-bold text-black">No. Tiket</TableHead>
+                                <TableHead className="font-bold text-black">Plat Nomor</TableHead>
+                                <TableHead className="font-bold text-black">Jenis</TableHead>
+                                <TableHead className="font-bold text-black">Area</TableHead>
+                                <TableHead className="font-bold text-black">Masuk</TableHead>
+                                <TableHead className="font-bold text-black">Keluar</TableHead>
+                                <TableHead className="font-bold text-black">Durasi</TableHead>
+                                <TableHead className="font-bold text-black text-right">Biaya</TableHead>
+                                <TableHead className="font-bold text-black text-center">Petugas</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -260,7 +260,7 @@ export default function TransactionsPage() {
                                 </TableRow>
                             ) : filteredTransactions.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={10} className="h-24 text-center text-slate-500">Tidak ada data transaksi</TableCell>
+                                    <TableCell colSpan={10} className="h-24 text-center text-slate-800">Tidak ada data transaksi</TableCell>
                                 </TableRow>
                             ) : (
                                 filteredTransactions.map((tr) => (
@@ -268,11 +268,11 @@ export default function TransactionsPage() {
                                         <TableCell className="font-medium text-slate-600">
                                             {new Date(tr.check_in_time).toLocaleDateString()}
                                         </TableCell>
-                                        <TableCell className="font-medium text-slate-900">{tr.ticket_number}</TableCell>
+                                        <TableCell className="font-medium text-black">{tr.ticket_number}</TableCell>
                                         <TableCell className="font-mono text-slate-600">{tr.vehicle?.license_plate}</TableCell>
                                         <TableCell>
                                             <span className={`px-2 py-1 rounded text-xs font-bold font-mono uppercase ${tr.vehicle?.vehicle_type === 'motor' ? 'bg-emerald-100 text-emerald-700' :
-                                                tr.vehicle?.vehicle_type === 'mobil' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700'
+                                                tr.vehicle?.vehicle_type === 'mobil' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-black'
                                                 }`}>
                                                 {tr.vehicle?.vehicle_type || '-'}
                                             </span>
@@ -285,7 +285,7 @@ export default function TransactionsPage() {
                                             {tr.check_out_time ? new Date(tr.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
                                         </TableCell>
                                         <TableCell className="text-slate-600">2j 30m</TableCell> {/* Mock Duration */}
-                                        <TableCell className="text-right font-bold text-slate-900">
+                                        <TableCell className="text-right font-bold text-black">
                                             {tr.total_cost ? `Rp ${Number(tr.total_cost).toLocaleString('id-ID')}` : '-'}
                                         </TableCell>
                                         <TableCell className="text-center text-slate-600">petugas01</TableCell> {/* Mock Petugas */}
@@ -297,9 +297,9 @@ export default function TransactionsPage() {
                 </div>
 
                 <div className="flex justify-between items-center pt-4">
-                    <p className="text-sm text-slate-500">Menampilkan {filteredTransactions.length} transaksi</p>
+                    <p className="text-sm text-slate-800">Menampilkan {filteredTransactions.length} transaksi</p>
                     <div className="flex gap-2">
-                        <div className="text-xl font-black text-slate-900">
+                        <div className="text-xl font-black text-black">
                             Total Transaksi : Rp {totalRevenue.toLocaleString('id-ID')}
                         </div>
                     </div>

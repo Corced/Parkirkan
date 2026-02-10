@@ -16,4 +16,9 @@ class ParkingArea extends Model
         'occupied_slots',
         'is_active',
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'area_id');
+    }
 }

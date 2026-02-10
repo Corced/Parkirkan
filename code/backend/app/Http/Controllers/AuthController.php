@@ -10,13 +10,20 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
+        $request->validate([
+            'login_id' => 'required|string',
             'password' => 'required',
         ]);
 
+        $loginField = filter_var($request->login_id, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        $credentials = [
+            $loginField => $request->login_id,
+            'password' => $request->password,
+        ];
+
         if (Auth::attempt($credentials)) {
-            $user = User::where('email', $credentials['email'])->first();
+            $user = Auth::user();
             
             if (!$user->is_active) {
                 Auth::logout();

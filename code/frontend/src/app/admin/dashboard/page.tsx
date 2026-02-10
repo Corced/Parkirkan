@@ -80,8 +80,8 @@ export default function AdminDashboard() {
         <div className="space-y-10">
             {/* Header */}
             <div>
-                <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Dashboard Admin</h1>
-                <p className="text-slate-500 mt-2 font-medium">Selamat datang kembali, Admin</p>
+                <h1 className="text-4xl font-extrabold text-black tracking-tight">Dashboard Admin</h1>
+                <p className="text-slate-800 mt-2 font-medium">Selamat datang kembali, Admin</p>
             </div>
 
             {/* Stats Cards */}
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-sm font-bold text-slate-600 uppercase tracking-wide">{card.label}</p>
-                                    <h3 className="text-3xl font-black text-slate-900">{card.value}</h3>
+                                    <h3 className="text-3xl font-black text-black">{card.value}</h3>
                                 </div>
                             </div>
                         </CardContent>
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
 
             {/* Quick Actions */}
             <div className="bg-white rounded-[2rem] p-10 shadow-sm border border-slate-100">
-                <h2 className="text-2xl font-black text-slate-900 mb-8">Aksi Cepat</h2>
+                <h2 className="text-2xl font-black text-black mb-8">Aksi Cepat</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                     {quickActions.map((action, idx) => (
                         <Link
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
                             <div className="flex items-center justify-center h-10 w-10">
                                 <action.icon className={cn("h-6 w-6", action.color)} />
                             </div>
-                            <span className="font-bold text-slate-800 group-hover:text-black whitespace-nowrap">{action.label}</span>
+                            <span className="font-bold text-black group-hover:text-black whitespace-nowrap">{action.label}</span>
                         </Link>
                     ))}
                 </div>
@@ -145,25 +145,25 @@ export default function AdminDashboard() {
 
             {/* Recent Activity - Real Logs */}
             <div className="bg-white rounded-[2rem] p-10 shadow-sm border border-slate-100 min-h-[400px]">
-                <h2 className="text-2xl font-black text-slate-900 mb-10">Aktivitas Terkini</h2>
+                <h2 className="text-2xl font-black text-black mb-10">Aktivitas Terkini</h2>
                 <div className="space-y-8">
                     {recentLogs.length === 0 ? (
-                        <p className="text-slate-500 text-center py-8">Belum ada aktivitas terbaru</p>
+                        <p className="text-slate-800 text-center py-8">Belum ada aktivitas terbaru</p>
                     ) : (
                         recentLogs.map((log, idx) => (
                             <div key={idx} className="flex justify-between items-start group">
                                 <div className="space-y-2">
-                                    <h4 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight">
+                                    <h4 className="text-lg font-bold text-black group-hover:text-blue-600 transition-colors uppercase tracking-tight">
                                         {log.action?.replace('_', ' ')}
                                     </h4>
-                                    <p className="text-slate-500 font-medium tracking-tight leading-relaxed">
+                                    <p className="text-slate-800 font-medium tracking-tight leading-relaxed">
                                         {log.description}
                                     </p>
-                                    <p className="text-slate-400 text-sm">
+                                    <p className="text-slate-700 text-sm">
                                         oleh {log.user?.name || 'System'}
                                     </p>
                                 </div>
-                                <span className="text-slate-400 font-semibold tracking-tight shrink-0">
+                                <span className="text-slate-700 font-semibold tracking-tight shrink-0">
                                     {formatTimeAgo(log.created_at)}
                                 </span>
                             </div>
