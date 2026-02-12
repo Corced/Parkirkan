@@ -82,8 +82,8 @@ export default function CheckInPage() {
         <div className="max-w-4xl mx-auto space-y-10 pb-20">
             {/* Header */}
             <div className="space-y-2">
-                <h1 className="text-4xl font-black text-black uppercase italic tracking-tighter">Check-in Kendaraan</h1>
-                <p className="text-slate-700 font-bold uppercase tracking-widest text-xs">Masukkan data kendaraan yang akan parkir</p>
+                <h1 className="text-4xl font-black text-black tracking-tighter">Check-in Kendaraan</h1>
+                <p className="text-slate-700 font-bold tracking-widest text-xs">Masukkan data kendaraan yang akan parkir</p>
             </div>
 
             <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">
@@ -93,7 +93,7 @@ export default function CheckInPage() {
                             {/* Left Column */}
                             <div className="space-y-8">
                                 <div className="space-y-3">
-                                    <Label htmlFor="plate" className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">Plat nomor</Label>
+                                    <Label htmlFor="plate" className="text-sm font-black text-slate-700 tracking-widest ml-1">Plat nomor</Label>
                                     <div className="relative group">
                                         <Car className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300 group-focus-within:text-blue-500 transition-colors" />
                                         <Input
@@ -101,19 +101,19 @@ export default function CheckInPage() {
                                             placeholder="CONTOH : XY 123 BZ"
                                             value={formData.license_plate}
                                             onChange={(e) => setFormData({ ...formData, license_plate: e.target.value })}
-                                            className="h-20 pl-16 pr-6 rounded-2xl border-4 border-slate-50 bg-slate-50 text-xl font-black uppercase focus:border-blue-400 focus:bg-white transition-all shadow-inner"
+                                            className="h-20 pl-16 pr-6 rounded-2xl border-4 border-slate-50 bg-slate-50 text-xl font-black focus:border-blue-400 focus:bg-white transition-all shadow-inner"
                                             required
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
-                                    <Label className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">Jenis Kendaraan</Label>
+                                    <Label className="text-sm font-black text-slate-700 tracking-widest ml-1">Jenis Kendaraan</Label>
                                     <div className="relative">
                                         <select
                                             value={formData.vehicle_type}
                                             onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
-                                            className="w-full h-20 pl-6 pr-12 rounded-2xl border-4 border-slate-50 bg-slate-50 text-xl font-black uppercase focus:border-blue-400 focus:bg-white transition-all shadow-inner appearance-none outline-none"
+                                            className="w-full h-20 pl-6 pr-12 rounded-2xl border-4 border-slate-50 bg-slate-50 text-xl font-black focus:border-blue-400 focus:bg-white transition-all shadow-inner appearance-none outline-none"
                                             required
                                         >
                                             {rates.map(rate => (
@@ -125,13 +125,13 @@ export default function CheckInPage() {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <Label className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">Pilih Area Parkir</Label>
+                                    <Label className="text-sm font-black text-slate-700 tracking-widest ml-1">Pilih Area Parkir</Label>
                                     <div className="relative">
                                         <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300 pointer-events-none" />
                                         <select
                                             value={formData.area_id}
                                             onChange={(e) => setFormData({ ...formData, area_id: e.target.value })}
-                                            className="w-full h-20 pl-16 pr-12 rounded-2xl border-4 border-slate-50 bg-slate-50 text-xl font-black uppercase focus:border-blue-400 focus:bg-white transition-all shadow-inner appearance-none outline-none"
+                                            className="w-full h-20 pl-16 pr-12 rounded-2xl border-4 border-slate-50 bg-slate-50 text-xl font-black focus:border-blue-400 focus:bg-white transition-all shadow-inner appearance-none outline-none"
                                             required
                                         >
                                             <option value="">Pilih Area</option>
@@ -150,7 +150,7 @@ export default function CheckInPage() {
                             <div className="space-y-8">
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-3">
-                                        <Label className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">Nama Pemilik (opsional)</Label>
+                                        <Label className="text-sm font-black text-slate-700 tracking-widest ml-1">Nama Pemilik (opsional)</Label>
                                         <div className="relative">
                                             <User className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300" />
                                             <Input
@@ -162,7 +162,7 @@ export default function CheckInPage() {
                                         </div>
                                     </div>
                                     <div className="space-y-3">
-                                        <Label className="text-sm font-black text-slate-700 uppercase tracking-widest ml-1">No. Telepon (opsional)</Label>
+                                        <Label className="text-sm font-black text-slate-700 tracking-widest ml-1">No. Telepon (opsional)</Label>
                                         <div className="relative">
                                             <Phone className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300" />
                                             <Input
@@ -182,7 +182,7 @@ export default function CheckInPage() {
                                     </div>
                                     <div className="flex items-center gap-3 mb-4">
                                         <Info className="h-6 w-6 text-cyan-500" />
-                                        <h4 className="text-lg font-black text-black uppercase italic">Info Transaksi</h4>
+                                        <h4 className="text-lg font-black text-black">Info Transaksi</h4>
                                     </div>
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
@@ -191,7 +191,7 @@ export default function CheckInPage() {
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <p className="text-sm font-bold text-slate-800">Nomor Tiket :</p>
-                                            <p className="text-xl font-black text-blue-600 font-mono italic">{success && ticket ? ticket.ticket_number : '---'}</p>
+                                            <p className="text-xl font-black text-blue-600 font-mono">{success && ticket ? ticket.ticket_number : '---'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -204,14 +204,14 @@ export default function CheckInPage() {
                                 type="button"
                                 variant="outline"
                                 onClick={() => setTicket(null)}
-                                className="h-20 flex-1 rounded-2xl border-4 text-xl font-black uppercase italic hover:bg-slate-50 transition-all"
+                                className="h-20 flex-1 rounded-2xl border-4 text-xl font-black hover:bg-slate-50 transition-all"
                             >
                                 Batal
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={loading}
-                                className="h-20 flex-[2] rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xl font-black uppercase italic shadow-2xl shadow-blue-500/30 transition-all active:scale-95 disabled:opacity-50"
+                                className="h-20 flex-[2] rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xl font-black shadow-2xl shadow-blue-500/30 transition-all active:scale-95 disabled:opacity-50"
                             >
                                 {loading ? (
                                     <>

@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {LayoutDashboard,
+import {
+  LayoutDashboard,
   FileText,
   CreditCard,
   MapPin,
   Building2,
   Hospital,
   School,
-  Hotel } from "lucide-react";
+  Hotel
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Home() {
@@ -18,11 +20,11 @@ export default function Home() {
       {/* Navbar */}
       <header className="px-6 lg:px-12 h-20 flex items-center justify-between sticky top-0 bg-[#F0F5FF]/80 backdrop-blur-md z-50">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-2xl font-black text-[#111827] tracking-tighter italic">PARKIRKAN</span>
+          <span className="text-2xl font-black text-[#111827] tracking-tighter">PARKIRKAN</span>
         </Link>
         <nav className="hidden md:flex gap-10">
-          <Link href="#manual" className="text-sm font-black text-black uppercase">Manual</Link>
-          <Link href="#fitur" className="text-sm font-black text-black uppercase">Fitur</Link>
+          <Link href="#manual" className="text-sm font-black text-black">Manual</Link>
+          <Link href="#fitur" className="text-sm font-black text-black">Fitur</Link>
         </nav>
         <Link href="/login">
           <Button className="bg-[#2563EB] hover:bg-blue-700 text-white font-black px-12 rounded-lg text-sm h-11">
@@ -77,7 +79,7 @@ export default function Home() {
         {/* Users Section */}
         <section className="py-24 bg-[#111827] text-white overflow-hidden">
           <div className="container mx-auto px-6 text-center">
-            <h2 className="text-3xl lg:text-4xl font-black mb-16 tracking-tight uppercase italic">Siapa yang Menggunakan PARKIRKAN?</h2>
+            <h2 className="text-3xl lg:text-4xl font-black mb-16 tracking-tight">Siapa yang Menggunakan PARKIRKAN?</h2>
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-12 max-w-6xl mx-auto">
               {[
                 { label: 'Mall & Shopping Center', icon: Building2, desc: 'Kelola ratusan slot dengan mudah' },
@@ -91,8 +93,8 @@ export default function Home() {
                     <s.icon className="h-8 w-8 text-blue-400 group-hover:text-blue-300" />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="font-black text-sm uppercase tracking-tight">{s.label}</h4>
-                    <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">{s.desc}</p>
+                    <h4 className="font-black text-sm tracking-tight">{s.label}</h4>
+                    <p className="text-[10px] font-bold text-slate-700 tracking-widest">{s.desc}</p>
                   </div>
                 </div>
               ))}
@@ -103,7 +105,7 @@ export default function Home() {
         {/* How it Works Section */}
         <section id="manual" className="py-24 bg-white">
           <div className="container mx-auto px-6 text-center max-w-4xl">
-            <h2 className="text-4xl lg:text-5xl font-black text-[#111827] mb-20 tracking-tight leading-none italic uppercase">Cara Kerja Aplikasi</h2>
+            <h2 className="text-4xl lg:text-5xl font-black text-[#111827] mb-20 tracking-tight leading-none">Cara Kerja Aplikasi</h2>
             <div className="space-y-20 relative">
               {/* Decorative line */}
               <div className="absolute left-1/2 top-10 bottom-10 w-1 bg-slate-100 -translate-x-1/2 hidden lg:block" />
@@ -121,7 +123,7 @@ export default function Home() {
                     {idx + 1}
                   </div>
                   <div className="space-y-4 flex-1 text-center lg:text-left">
-                    <h3 className="text-2xl font-black text-[#111827] uppercase italic">{step.title}</h3>
+                    <h3 className="text-2xl font-black text-[#111827]">{step.title}</h3>
                     <p className="text-slate-600 font-bold text-base leading-relaxed">{step.desc}</p>
                   </div>
                 </div>
@@ -133,10 +135,10 @@ export default function Home() {
         {/* Final CTA */}
         <section className="py-24 bg-[#1F2937] text-white text-center">
           <div className="container mx-auto px-6 space-y-10">
-            <h2 className="text-5xl lg:text-7xl font-black tracking-tighter leading-none italic uppercase">Siap Modernisasi Sistem <br /> Parkir Anda?</h2>
+            <h2 className="text-5xl lg:text-7xl font-black tracking-tighter leading-none">Siap Modernisasi Sistem <br /> Parkir Anda?</h2>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-sm font-black text-slate-700 uppercase tracking-widest hover:text-white transition-colors"
+              className="text-sm font-black text-slate-700 tracking-widest hover:text-white transition-colors"
             >
               Bagian Laman teratas
             </button>
@@ -147,8 +149,8 @@ export default function Home() {
       {/* Footer */}
       <footer className="px-6 lg:px-12 py-12 border-t bg-[#EBEDF2]">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <span className="text-2xl font-black text-[#111827] tracking-tighter italic opacity-30">PARKIRKAN</span>
-          <p className="text-xs font-bold text-slate-700 uppercase">
+          <span className="text-2xl font-black text-[#111827] tracking-tighter opacity-30">PARKIRKAN</span>
+          <p className="text-xs font-bold text-slate-700">
             © 2025 Parkirkan. <span className="text-black">Aplikasi Manajemen Parkir Online</span>
           </p>
         </div>

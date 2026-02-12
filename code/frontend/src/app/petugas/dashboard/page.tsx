@@ -82,7 +82,7 @@ export default function PetugasDashboard() {
             {/* Header */}
             <div>
                 <h1 className="text-4xl font-extrabold text-black tracking-tight">Dashboard Petugas</h1>
-                <p className="text-slate-800 mt-2 font-bold uppercase text-xs tracking-widest">Sistem Operasional Parkir v1.0</p>
+                <p className="text-slate-800 mt-2 font-bold text-xs tracking-widest">Sistem Operasional Parkir v1.0</p>
             </div>
 
             {/* Quick Stats */}
@@ -95,8 +95,8 @@ export default function PetugasDashboard() {
                                     <card.icon className={cn("h-10 w-10", card.iconColor)} />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-sm font-black text-slate-700 uppercase tracking-[0.2em]">{card.label}</p>
-                                    <h3 className="text-5xl font-black text-black italic tracking-tighter">{card.value}</h3>
+                                    <p className="text-sm font-black text-slate-700 tracking-[0.2em]">{card.label}</p>
+                                    <h3 className="text-5xl font-black text-black tracking-tighter">{card.value}</h3>
                                 </div>
                             </div>
                         </CardContent>
@@ -112,7 +112,7 @@ export default function PetugasDashboard() {
                             <div className="h-20 w-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
                                 <LogIn className="h-10 w-10" />
                             </div>
-                            <h2 className="text-4xl font-black italic uppercase tracking-tighter">Check-In <br />Kendaraan</h2>
+                            <h2 className="text-4xl font-black tracking-tighter">Check-In <br />Kendaraan</h2>
                             <p className="text-blue-100 font-bold text-lg opacity-80">Catat kendaraan masuk & cetak tiket parkir otomatis.</p>
                         </div>
                         <LogIn className="absolute -right-10 -bottom-10 h-64 w-64 text-white/5 rotate-12 group-hover:rotate-0 transition-transform duration-500" />
@@ -125,7 +125,7 @@ export default function PetugasDashboard() {
                             <div className="h-20 w-20 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md">
                                 <LogOut className="h-10 w-10 text-orange-400" />
                             </div>
-                            <h2 className="text-4xl font-black italic uppercase tracking-tighter">Check-Out <br />Kendaraan</h2>
+                            <h2 className="text-4xl font-black tracking-tighter">Check-Out <br />Kendaraan</h2>
                             <p className="text-slate-700 font-bold text-lg opacity-80">Scan tiket, hitung tarif dan proses pembayaran tunai.</p>
                         </div>
                         <LogOut className="absolute -right-10 -bottom-10 h-64 w-64 text-white/5 -rotate-12 group-hover:rotate-0 transition-transform duration-500" />
@@ -137,7 +137,7 @@ export default function PetugasDashboard() {
                 {/* Search Card */}
                 <div className="lg:col-span-2 bg-white rounded-[3rem] p-12 shadow-sm border border-slate-100 flex flex-col justify-between overflow-hidden relative">
                     <div className="space-y-4 mb-8">
-                        <h3 className="text-2xl font-black text-black uppercase italic">Cari Kendaraan</h3>
+                        <h3 className="text-2xl font-black text-black">Cari Kendaraan</h3>
                         <p className="text-slate-700 font-bold">Temukan posisi kendaraan terparkir berdasarkan plat nomor.</p>
                     </div>
 
@@ -149,12 +149,12 @@ export default function PetugasDashboard() {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                className="h-24 pl-20 pr-40 rounded-[2rem] border-4 border-slate-50 bg-slate-50 text-2xl font-black uppercase focus:border-blue-400 focus:bg-white transition-all shadow-inner"
+                                className="h-24 pl-20 pr-40 rounded-[2rem] border-4 border-slate-50 bg-slate-50 text-2xl font-black focus:border-blue-400 focus:bg-white transition-all shadow-inner"
                             />
                             <Button
                                 onClick={handleSearch}
                                 disabled={isSearching}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 h-16 px-10 rounded-2xl bg-slate-900 hover:bg-slate-800 text-lg font-black uppercase italic shadow-xl disabled:opacity-50"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 h-16 px-10 rounded-2xl bg-slate-900 hover:bg-slate-800 text-lg font-black shadow-xl disabled:opacity-50"
                             >
                                 {isSearching ? '...' : 'Cari'}
                             </Button>
@@ -172,10 +172,10 @@ export default function PetugasDashboard() {
                                             <Car className={cn("h-8 w-8", searchResult.is_currently_parked ? "text-blue-600" : "text-slate-700")} />
                                         </div>
                                         <div>
-                                            <p className="text-xs font-black text-slate-700 uppercase tracking-widest mb-1">
+                                            <p className="text-xs font-black text-slate-700 tracking-widest mb-1">
                                                 {searchResult.is_currently_parked ? 'Kendaraan Terparkir' : 'Terakhir Berkunjung'}
                                             </p>
-                                            <h4 className="text-2xl font-black text-black uppercase italic">{searchResult.vehicle?.license_plate}</h4>
+                                            <h4 className="text-2xl font-black text-black">{searchResult.vehicle?.license_plate}</h4>
                                         </div>
                                     </div>
 
@@ -186,15 +186,15 @@ export default function PetugasDashboard() {
                                             <MapPin className={cn("h-8 w-8", searchResult.is_currently_parked ? "text-emerald-600" : "text-slate-300")} />
                                         </div>
                                         <div>
-                                            <p className="text-xs font-black text-slate-700 uppercase tracking-widest mb-1">Lokasi Area</p>
-                                            <h4 className="text-2xl font-black text-black uppercase italic">
+                                            <p className="text-xs font-black text-slate-700 tracking-widest mb-1">Lokasi Area</p>
+                                            <h4 className="text-2xl font-black text-black">
                                                 {searchResult.latest_transaction?.area?.name || '---'}
                                             </h4>
                                         </div>
                                     </div>
 
                                     <div className={cn(
-                                        "px-6 py-2 rounded-full font-black uppercase italic text-sm tracking-tighter",
+                                        "px-6 py-2 rounded-full font-black text-sm tracking-tighter",
                                         searchResult.is_currently_parked ? "bg-blue-600 text-white" : "bg-slate-200 text-slate-800"
                                     )}>
                                         {searchResult.is_currently_parked ? 'PARKED' : 'OUT'}
@@ -208,7 +208,7 @@ export default function PetugasDashboard() {
                                 <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
                                     <Search className="h-6 w-6" />
                                 </div>
-                                <p className="font-bold uppercase tracking-tight italic">{searchError}</p>
+                                <p className="font-bold tracking-tight">{searchError}</p>
                             </div>
                         )}
                     </div>
@@ -220,14 +220,14 @@ export default function PetugasDashboard() {
                         <div className="h-20 w-20 bg-slate-100 rounded-full mx-auto flex items-center justify-center shadow-sm border border-slate-200">
                             <Clock className="h-10 w-10 text-blue-500" />
                         </div>
-                        <h4 className="text-xl font-black text-black uppercase italic">Kontrol Shift</h4>
+                        <h4 className="text-xl font-black text-black">Kontrol Shift</h4>
                     </div>
 
                     <div className="space-y-6">
                         {!isShiftActive ? (
                             <>
                                 <div className="space-y-3">
-                                    <label className="text-xs font-black text-slate-700 uppercase tracking-widest">Pilih Shift</label>
+                                    <label className="text-xs font-black text-slate-700 tracking-widest">Pilih Shift</label>
                                     <Select value={currentShift} onValueChange={setCurrentShift}>
                                         <SelectTrigger className="h-14 bg-slate-50 border-2 font-bold text-lg rounded-2xl">
                                             <SelectValue />
@@ -241,7 +241,7 @@ export default function PetugasDashboard() {
                                 </div>
                                 <Button
                                     onClick={handleStartShift}
-                                    className="w-full h-16 bg-blue-600 hover:bg-blue-700 font-black uppercase italic text-lg rounded-2xl"
+                                    className="w-full h-16 bg-blue-600 hover:bg-blue-700 font-black text-lg rounded-2xl"
                                 >
                                     Mulai Shift
                                 </Button>
@@ -249,12 +249,12 @@ export default function PetugasDashboard() {
                         ) : (
                             <>
                                 <div className="p-6 bg-emerald-50 rounded-2xl border-2 border-emerald-100">
-                                    <p className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-2">Shift Aktif</p>
-                                    <p className="text-2xl font-black text-black italic">{currentShift}</p>
+                                    <p className="text-xs font-black text-emerald-600 tracking-widest mb-2">Shift Aktif</p>
+                                    <p className="text-2xl font-black text-black">{currentShift}</p>
                                 </div>
                                 <Button
                                     onClick={handleEndShift}
-                                    className="w-full h-16 bg-slate-900 hover:bg-black font-black uppercase italic text-lg rounded-2xl"
+                                    className="w-full h-16 bg-slate-900 hover:bg-black font-black text-lg rounded-2xl"
                                 >
                                     Akhiri Shift
                                 </Button>

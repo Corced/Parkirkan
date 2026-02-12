@@ -129,9 +129,9 @@ function CheckOutContent() {
             {/* Print Only Receipt */}
             <div className="hidden print:block fixed inset-0 bg-white z-[9999] p-8 text-black font-mono">
                 <div className="max-w-[80mm] mx-auto border-b-2 border-dashed border-black pb-4 text-center">
-                    <h2 className="text-2xl font-bold uppercase">PARKIRKAN</h2>
+                    <h2 className="text-2xl font-bold">PARKIRKAN</h2>
                     <p className="text-xs">Sistem Parkir Modern</p>
-                    <p className="text-[10px] mt-1 italic">Terima kasih atas kunjungan Anda</p>
+                    <p className="text-[10px] mt-1">Terima kasih atas kunjungan Anda</p>
                 </div>
 
                 <div className="mt-6 space-y-2 text-sm">
@@ -192,8 +192,8 @@ function CheckOutContent() {
             <div className="print:hidden space-y-10">
                 {/* Header */}
                 <div className="space-y-2">
-                    <h1 className="text-4xl font-black text-black uppercase italic tracking-tighter">Check-out Kendaraan</h1>
-                    <p className="text-slate-700 font-bold uppercase tracking-widest text-xs">Proses pembayaran dan keluar parkir</p>
+                    <h1 className="text-4xl font-black text-black tracking-tighter">Check-out Kendaraan</h1>
+                    <p className="text-slate-700 font-bold tracking-widest text-xs">Proses pembayaran dan keluar parkir</p>
                 </div>
 
                 <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">
@@ -207,13 +207,13 @@ function CheckOutContent() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                    className="h-20 pl-16 pr-6 border-none bg-transparent text-xl font-black uppercase placeholder:text-slate-200 focus-visible:ring-0"
+                                    className="h-20 pl-16 pr-6 border-none bg-transparent text-xl font-black placeholder:text-slate-200 focus-visible:ring-0"
                                 />
                             </div>
                             <Button
                                 onClick={() => handleSearch()}
                                 disabled={loading}
-                                className="h-20 px-12 rounded-[2rem] bg-emerald-400 hover:bg-emerald-500 text-white text-xl font-black uppercase italic shadow-xl shadow-emerald-200/50 transition-all active:scale-95 disabled:opacity-50"
+                                className="h-20 px-12 rounded-[2rem] bg-emerald-400 hover:bg-emerald-500 text-white text-xl font-black shadow-xl shadow-emerald-200/50 transition-all active:scale-95 disabled:opacity-50"
                             >
                                 {loading ? <Loader2 className="h-6 w-6 animate-spin" /> : 'Cari'}
                             </Button>
@@ -224,7 +224,7 @@ function CheckOutContent() {
                             <div className="space-y-10 animate-in fade-in slide-in-from-top-4 duration-500">
                                 <div className="flex items-center gap-4 border-b-4 border-slate-50 pb-4">
                                     <Receipt className="h-6 w-6 text-blue-500" />
-                                    <h3 className="text-2xl font-black text-black uppercase italic">Detail Transaksi</h3>
+                                    <h3 className="text-2xl font-black text-black">Detail Transaksi</h3>
                                 </div>
 
                                 <div className="space-y-6">
@@ -239,10 +239,10 @@ function CheckOutContent() {
                                         { label: 'Tarif per Jam', value: formatCurrency(transaction.rate?.hourly_rate || 0) },
                                     ].map((item, idx) => (
                                         <div key={idx} className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0 group">
-                                            <p className="text-lg font-bold text-slate-700 uppercase tracking-tighter">{item.label}</p>
+                                            <p className="text-lg font-bold text-slate-700 tracking-tighter">{item.label}</p>
                                             <div className="flex items-center">
                                                 {item.isBadge ? (
-                                                    <div className="bg-emerald-400 text-white px-6 py-1 rounded-full font-black text-sm uppercase italic">
+                                                    <div className="bg-emerald-400 text-white px-6 py-1 rounded-full font-black text-sm">
                                                         {item.value}
                                                     </div>
                                                 ) : (
@@ -263,8 +263,8 @@ function CheckOutContent() {
                                 {/* Total Cost */}
                                 <div className="flex justify-between items-center p-10 bg-slate-900 rounded-[2.5rem] text-white shadow-2xl shadow-slate-900/20">
                                     <div className="space-y-1">
-                                        <p className="text-sm font-black text-slate-700 uppercase tracking-[0.2em]">Total Biaya :</p>
-                                        <h2 className="text-5xl font-black italic tracking-tighter">
+                                        <p className="text-sm font-black text-slate-700 tracking-[0.2em]">Total Biaya :</p>
+                                        <h2 className="text-5xl font-black tracking-tighter">
                                             {totalCost ? formatCurrency(totalCost) : 'Mengkalkulasi...'}
                                         </h2>
                                     </div>
@@ -279,7 +279,7 @@ function CheckOutContent() {
                                         type="button"
                                         variant="outline"
                                         onClick={() => setTransaction(null)}
-                                        className="h-20 flex-1 rounded-2xl border-4 text-xl font-black uppercase italic hover:bg-slate-50 transition-all"
+                                        className="h-20 flex-1 rounded-2xl border-4 text-xl font-black hover:bg-slate-50 transition-all"
                                     >
                                         Batal
                                     </Button>
@@ -287,7 +287,7 @@ function CheckOutContent() {
                                         <Button
                                             onClick={handleCheckOut}
                                             disabled={isProcessing}
-                                            className="h-20 flex-[2] rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white text-xl font-black uppercase italic shadow-2xl shadow-emerald-500/30 transition-all active:scale-95 disabled:opacity-50"
+                                            className="h-20 flex-[2] rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white text-xl font-black shadow-2xl shadow-emerald-500/30 transition-all active:scale-95 disabled:opacity-50"
                                         >
                                             {isProcessing ? (
                                                 <>
@@ -302,7 +302,7 @@ function CheckOutContent() {
                                     {checkoutSuccess && (
                                         <Button
                                             onClick={handlePrint}
-                                            className="h-20 flex-[2] rounded-2xl bg-blue-600 hover:bg-blue-700 transition-all flex items-center justify-center text-white text-xl font-black uppercase italic shadow-2xl shadow-blue-500/30"
+                                            className="h-20 flex-[2] rounded-2xl bg-blue-600 hover:bg-blue-700 transition-all flex items-center justify-center text-white text-xl font-black shadow-2xl shadow-blue-500/30"
                                         >
                                             <CheckCircle2 className="mr-3 h-6 w-6" />
                                             Cetak Struk Lagi
@@ -316,7 +316,7 @@ function CheckOutContent() {
                                     <Search className="h-12 w-12 text-slate-200" />
                                 </div>
                                 <div className="max-w-md mx-auto">
-                                    <p className="text-xl font-black text-slate-300 uppercase italic tracking-tight">Cari tiket untuk melihat rincian pembayaran</p>
+                                    <p className="text-xl font-black text-slate-300 tracking-tight">Cari tiket untuk melihat rincian pembayaran</p>
                                 </div>
                             </div>
                         )}

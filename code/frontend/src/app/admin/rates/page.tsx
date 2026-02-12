@@ -105,7 +105,7 @@ export default function RatesPage() {
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <h1 className="text-4xl font-extrabold text-black tracking-tight">Tarif Parkir</h1>
-                    <p className="text-slate-800 font-bold uppercase text-xs tracking-widest leading-none">Pengaturan tarif parkir kendaraan</p>
+                    <p className="text-slate-800 font-bold text-xs tracking-widest leading-none">Pengaturan tarif parkir kendaraan</p>
                 </div>
                 <Button onClick={() => setIsAdding(true)} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
                     <Plus className="h-6 w-6" strokeWidth={3} />
@@ -169,16 +169,16 @@ export default function RatesPage() {
                                         <Input
                                             value={formData.vehicle_type}
                                             onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
-                                            className="h-12 text-2xl font-black text-black border-none bg-slate-50 rounded-lg p-0 italic uppercase"
+                                            className="h-12 text-2xl font-black text-black border-none bg-slate-50 rounded-lg p-0 italic"
                                         />
                                     ) : (
-                                        <h3 className="text-3xl font-black text-black italic uppercase tracking-tighter">{rate.vehicle_type}</h3>
+                                        <h3 className="text-3xl font-black text-black tracking-tighter">{rate.vehicle_type}</h3>
                                     )}
                                 </div>
 
                                 <div className="space-y-4 pt-2">
                                     <div className="flex justify-between items-center group/item">
-                                        <span className="text-sm font-black text-slate-700 uppercase tracking-widest">Tarif per jam</span>
+                                        <span className="text-sm font-black text-slate-700 tracking-widest">Tarif per jam</span>
                                         {isEditing ? (
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xl font-black text-black">Rp.</span>
@@ -196,7 +196,7 @@ export default function RatesPage() {
                                         )}
                                     </div>
                                     <div className="flex justify-between items-center group/item">
-                                        <span className="text-sm font-black text-slate-700 uppercase tracking-widest">Maksimal per hari</span>
+                                        <span className="text-sm font-black text-slate-700 tracking-widest">Maksimal per hari</span>
                                         {isEditing ? (
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xl font-black text-black">Rp.</span>
@@ -256,11 +256,11 @@ export default function RatesPage() {
                                 placeholder="JENIS KENDARAAN"
                                 value={formData.vehicle_type}
                                 onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
-                                className="h-14 text-2xl font-black text-black border-4 border-slate-100 bg-slate-50 rounded-xl px-4 uppercase italic tracking-tighter"
+                                className="h-14 text-2xl font-black text-black border-4 border-slate-100 bg-slate-50 rounded-xl px-4 tracking-tighter"
                             />
                             <div className="space-y-4 pt-2">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-black text-slate-700 uppercase tracking-widest">Tarif per jam</span>
+                                    <span className="text-sm font-black text-slate-700 tracking-widest">Tarif per jam</span>
                                     <Input
                                         type="number"
                                         placeholder="0"
@@ -269,7 +269,7 @@ export default function RatesPage() {
                                     />
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-black text-slate-700 uppercase tracking-widest">Maksimal per hari</span>
+                                    <span className="text-sm font-black text-slate-700 tracking-widest">Maksimal per hari</span>
                                     <Input
                                         type="number"
                                         placeholder="0"
@@ -288,7 +288,7 @@ export default function RatesPage() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md text-black">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-3xl p-20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] space-y-16 text-center animate-in zoom-in-95 duration-200 border border-slate-100">
                         <div className="space-y-4">
-                            <h3 className="text-4xl font-black leading-tight tracking-tighter uppercase italic">
+                            <h3 className="text-4xl font-black leading-tight tracking-tighter ">
                                 Hapus Tarif Parkir?
                             </h3>
                             <p className="text-2xl font-bold text-slate-700 tracking-tight">
@@ -297,12 +297,12 @@ export default function RatesPage() {
                         </div>
 
                         <div className="space-y-6">
-                            <p className="text-lg font-black text-slate-700 uppercase tracking-[0.2em]">Ketik jenis kendaraan untuk konfirmasi</p>
+                            <p className="text-lg font-black text-slate-700 tracking-[0.2em]">Ketik jenis kendaraan untuk konfirmasi</p>
                             <Input
                                 value={confirmVehicleType}
                                 onChange={(e) => setConfirmVehicleType(e.target.value)}
                                 placeholder={rateToDelete.vehicle_type}
-                                className="h-24 rounded-[2rem] border-4 border-slate-100 bg-slate-50 px-12 text-3xl font-black focus:border-red-400 focus:bg-white transition-all text-center shadow-inner tracking-tight uppercase"
+                                className="h-24 rounded-[2rem] border-4 border-slate-100 bg-slate-50 px-12 text-3xl font-black focus:border-red-400 focus:bg-white transition-all text-center shadow-inner tracking-tight"
                             />
                         </div>
 

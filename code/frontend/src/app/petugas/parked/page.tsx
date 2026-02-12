@@ -58,7 +58,7 @@ export default function ParkedVehiclesPage() {
             {/* Header */}
             <div>
                 <h1 className="text-4xl font-extrabold text-black tracking-tight">Kendaraan yang Sedang Parkir</h1>
-                <p className="text-slate-800 mt-2 font-bold uppercase text-xs tracking-widest italic">Daftar kendaraan aktif di semua area</p>
+                <p className="text-slate-800 mt-2 font-bold text-xs tracking-widest">Daftar kendaraan aktif di semua area</p>
             </div>
 
             <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">
@@ -67,13 +67,13 @@ export default function ParkedVehiclesPage() {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-slate-50/50">
-                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest">Nomor Tiket</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest">Plat Nomor</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest">Jenis</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest text-center">Area</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest">Waktu Masuk</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest text-center">Durasi</th>
-                                    <th className="px-10 py-8 text-sm font-black text-slate-700 uppercase tracking-widest text-right">Aksi</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 tracking-widest">Nomor Tiket</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 tracking-widest">Plat Nomor</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 tracking-widest">Jenis</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 tracking-widest text-center">Area</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 tracking-widest">Waktu Masuk</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 tracking-widest text-center">Durasi</th>
+                                    <th className="px-10 py-8 text-sm font-black text-slate-700 tracking-widest text-right">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50">
@@ -81,21 +81,21 @@ export default function ParkedVehiclesPage() {
                                     <tr>
                                         <td colSpan={7} className="px-10 py-32 text-center">
                                             <Loader2 className="h-12 w-12 animate-spin text-blue-500 mx-auto mb-4" />
-                                            <p className="text-xl font-black text-slate-300 uppercase italic">Memuat Data...</p>
+                                            <p className="text-xl font-black text-slate-300">Memuat Data...</p>
                                         </td>
                                     </tr>
                                 ) : parkedVehicles.length > 0 ? (
                                     parkedVehicles.map((transaction) => (
                                         <tr key={transaction.id} className="group hover:bg-slate-50/50 transition-colors">
                                             <td className="px-10 py-8">
-                                                <p className="text-lg font-mono font-black text-slate-800 italic tracking-tighter">{transaction.ticket_number}</p>
+                                                <p className="text-lg font-mono font-black text-slate-800 tracking-tighter">{transaction.ticket_number}</p>
                                             </td>
                                             <td className="px-10 py-8">
-                                                <p className="text-2xl font-black text-black uppercase tracking-tight">{transaction.vehicle?.license_plate}</p>
+                                                <p className="text-2xl font-black text-black tracking-tight">{transaction.vehicle?.license_plate}</p>
                                             </td>
                                             <td className="px-10 py-8">
                                                 <div className={cn(
-                                                    "px-6 py-1.5 rounded-full text-white font-black text-xs uppercase italic inline-block",
+                                                    "px-6 py-1.5 rounded-full text-white font-black text-xs inline-block",
                                                     getVehicleBadgeStyle(transaction.vehicle?.vehicle_type || '')
                                                 )}>
                                                     {transaction.vehicle?.vehicle_type}
@@ -110,13 +110,13 @@ export default function ParkedVehiclesPage() {
                                                 </div>
                                             </td>
                                             <td className="px-10 py-8 text-center">
-                                                <p className="text-lg font-black text-blue-600 italic tracking-tighter">
+                                                <p className="text-lg font-black text-blue-600 tracking-tighter">
                                                     {calculateDuration(transaction.check_in_time)}
                                                 </p>
                                             </td>
                                             <td className="px-10 py-8 text-right">
                                                 <Link href={`/petugas/check-out?ticket=${transaction.ticket_number}`}>
-                                                    <Button className="bg-emerald-400 hover:bg-emerald-500 text-white px-8 h-12 rounded-2xl font-black uppercase italic shadow-lg shadow-emerald-200/50 transition-all active:scale-95">
+                                                    <Button className="bg-emerald-400 hover:bg-emerald-500 text-white px-8 h-12 rounded-2xl font-black shadow-lg shadow-emerald-200/50 transition-all active:scale-95">
                                                         Check-out
                                                     </Button>
                                                 </Link>
@@ -125,7 +125,7 @@ export default function ParkedVehiclesPage() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={7} className="px-10 py-32 text-center text-slate-300 uppercase font-black italic text-xl">
+                                        <td colSpan={7} className="px-10 py-32 text-center text-slate-300 font-black text-xl">
                                             Belum ada kendaraan yang parkir
                                         </td>
                                     </tr>

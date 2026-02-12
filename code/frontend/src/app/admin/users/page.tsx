@@ -130,7 +130,7 @@ export default function UserManagementPage() {
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <h1 className="text-4xl font-extrabold text-black tracking-tight">Kelola User</h1>
-                    <p className="text-slate-800 font-bold uppercase text-xs tracking-widest">Manajemen pengguna sistem</p>
+                    <p className="text-slate-800 font-bold text-xs tracking-widest">Manajemen pengguna sistem</p>
                 </div>
                 {!isAdding && !isEditing && (
                     <Button onClick={handleAddClick} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
@@ -158,7 +158,7 @@ export default function UserManagementPage() {
                                 onClick={() => setShowRoleDropdown(!showRoleDropdown)}
                                 className="w-full h-16 rounded-2xl border-2 border-slate-100 bg-white px-8 flex items-center justify-between font-bold text-lg text-slate-600 hover:border-blue-400 transition-all active:scale-95"
                             >
-                                {roleFilter === 'semua' ? 'Semua Role' : roleFilter.toUpperCase()}
+                                {roleFilter === 'semua' ? 'Semua Role' : (roleFilter.charAt(0).toUpperCase() + roleFilter.slice(1))}
                                 <ChevronDown className={cn("h-6 w-6 transition-transform", showRoleDropdown ? "rotate-180" : "")} />
                             </button>
 
@@ -173,7 +173,7 @@ export default function UserManagementPage() {
                                                 roleFilter === role ? "bg-blue-50 text-blue-600" : "text-slate-600 hover:bg-slate-50"
                                             )}
                                         >
-                                            {role === 'semua' ? 'Semua Role' : role.toUpperCase()}
+                                            {role === 'semua' ? 'Semua Role' : (role.charAt(0).toUpperCase() + role.slice(1))}
                                         </button>
                                     ))}
                                 </div>
@@ -191,11 +191,11 @@ export default function UserManagementPage() {
                         <Table>
                             <TableHeader>
                                 <TableRow className="hover:bg-transparent border-slate-50">
-                                    <TableHead className="text-base font-black text-black uppercase tracking-widest px-8 pb-8">Username</TableHead>
-                                    <TableHead className="text-base font-black text-black uppercase tracking-widest pb-8">Email</TableHead>
-                                    <TableHead className="text-base font-black text-black uppercase tracking-widest pb-8">Role</TableHead>
-                                    <TableHead className="text-base font-black text-black uppercase tracking-widest pb-8">Status</TableHead>
-                                    <TableHead className="text-base font-black text-black uppercase tracking-widest text-right pb-8 pr-8">Aksi</TableHead>
+                                    <TableHead className="text-base font-black text-black tracking-widest px-8 pb-8">Username</TableHead>
+                                    <TableHead className="text-base font-black text-black tracking-widest pb-8">Email</TableHead>
+                                    <TableHead className="text-base font-black text-black tracking-widest pb-8">Role</TableHead>
+                                    <TableHead className="text-base font-black text-black tracking-widest pb-8">Status</TableHead>
+                                    <TableHead className="text-base font-black text-black tracking-widest text-right pb-8 pr-8">Aksi</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -214,7 +214,7 @@ export default function UserManagementPage() {
                                         </TableCell>
                                         <TableCell className="py-6">
                                             <div className={cn(
-                                                "inline-flex px-6 py-2 rounded-xl text-lg font-black uppercase tracking-tighter",
+                                                "inline-flex px-6 py-2 rounded-xl text-lg font-black tracking-tighter",
                                                 user.role === 'admin' ? "bg-pink-300 text-pink-900" :
                                                     user.role === 'petugas' ? "bg-yellow-300 text-yellow-900" :
                                                         "bg-cyan-300 text-cyan-900"
@@ -224,7 +224,7 @@ export default function UserManagementPage() {
                                         </TableCell>
                                         <TableCell className="py-6">
                                             <div className={cn(
-                                                "inline-flex items-center px-6 py-2 rounded-xl text-lg font-black uppercase tracking-tighter",
+                                                "inline-flex items-center px-6 py-2 rounded-xl text-lg font-black tracking-tighter",
                                                 user.is_active ? "bg-green-400 text-green-950" : "bg-red-400 text-red-950"
                                             )}>
                                                 {user.is_active ? 'Aktif' : 'Nonaktif'}
@@ -247,7 +247,7 @@ export default function UserManagementPage() {
                                 ))}
                                 {filteredUsers.length === 0 && (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="text-center h-48 text-2xl font-black text-slate-300 italic uppercase">
+                                        <TableCell colSpan={5} className="text-center h-48 text-2xl font-black text-slate-300">
                                             Tidak ada user yang cocok.
                                         </TableCell>
                                     </TableRow>
@@ -281,7 +281,7 @@ export default function UserManagementPage() {
                                 <X className="h-8 w-8 text-slate-800" />
                             </button>
                             {(isEditing || isAdding) && (
-                                <h2 className="text-3xl font-black text-black uppercase italic">
+                                <h2 className="text-3xl font-black text-black">
                                     {isAdding ? 'Tambah User Baru' : 'Edit Profil User'}
                                 </h2>
                             )}
@@ -306,7 +306,7 @@ export default function UserManagementPage() {
                                 { label: 'Password', key: 'password', type: 'password', placeholder: isEditing ? 'Kosongkan jika tidak diubah' : '********' },
                             ].map((field, idx) => (
                                 <div key={idx} className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                    <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">{field.label}</label>
+                                    <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">{field.label}</label>
                                     <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                     <div className="flex-1">
                                         {isEditing || isAdding ? (
@@ -316,7 +316,7 @@ export default function UserManagementPage() {
                                                     onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
                                                     className="w-full h-20 rounded-[1.5rem] border-4 border-slate-100 bg-slate-50 px-10 text-2xl font-black text-black focus:border-blue-400 focus:bg-white transition-all appearance-none tracking-tight"
                                                 >
-                                                    {field.options?.map(opt => <option key={opt} value={opt}>{opt.toUpperCase()}</option>)}
+                                                    {field.options?.map(opt => <option key={opt} value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>)}
                                                 </select>
                                             ) : (
                                                 <Input
@@ -341,28 +341,28 @@ export default function UserManagementPage() {
                             {!isEditing && !isAdding && (
                                 <>
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Status</label>
+                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Status</label>
                                         <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                         <div className="flex-1">
                                             <span className="text-2xl font-medium text-slate-800 tracking-tight">Aktif</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Jadwal Shift</label>
+                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Jadwal Shift</label>
                                         <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                         <div className="flex-1">
                                             <span className="text-2xl font-medium text-slate-800 tracking-tight">ID-001 : Shift Siang</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Jam Masuk</label>
+                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Jam Masuk</label>
                                         <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                         <div className="flex-1">
                                             <span className="text-2xl font-medium text-slate-800 tracking-tight">12:00</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Jam Keluar</label>
+                                        <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Jam Keluar</label>
                                         <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                         <div className="flex-1">
                                             <span className="text-2xl font-medium text-slate-800 tracking-tight">18:00</span>
@@ -374,7 +374,7 @@ export default function UserManagementPage() {
                             {/* Status Switch if editing */}
                             {(isEditing || isAdding) && (
                                 <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 pt-4">
-                                    <label className="lg:w-64 text-2xl font-bold text-black tracking-tight uppercase italic">Status</label>
+                                    <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Status</label>
                                     <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                     <div className="flex items-center gap-6">
                                         <button
@@ -390,7 +390,7 @@ export default function UserManagementPage() {
                                                 formData.is_active ? "translate-x-13 border-green-500" : "translate-x-1 border-slate-300 shadow-sm"
                                             )} />
                                         </button>
-                                        <span className="text-xl font-black text-black uppercase">
+                                        <span className="text-xl font-black text-black">
                                             {formData.is_active ? 'Aktif' : 'Non-aktif'}
                                         </span>
                                     </div>
@@ -425,7 +425,7 @@ export default function UserManagementPage() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-3xl p-20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] space-y-16 text-center animate-in zoom-in-95 duration-200 border border-slate-100">
                         <div className="space-y-4">
-                            <h3 className="text-4xl font-black text-black leading-tight tracking-tighter uppercase italic">
+                            <h3 className="text-4xl font-black text-black leading-tight tracking-tighter">
                                 Hapus Akun User?
                             </h3>
                             <p className="text-2xl font-bold text-slate-700 tracking-tight">
@@ -434,7 +434,7 @@ export default function UserManagementPage() {
                         </div>
 
                         <div className="space-y-6">
-                            <p className="text-lg font-black text-slate-700 uppercase tracking-[0.2em]">Ketik username untuk konfirmasi</p>
+                            <p className="text-lg font-black text-slate-700 tracking-[0.2em]">Ketik username untuk konfirmasi</p>
                             <Input
                                 value={confirmUsername}
                                 onChange={(e) => setConfirmUsername(e.target.value)}

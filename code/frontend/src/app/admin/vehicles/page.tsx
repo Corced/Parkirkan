@@ -108,7 +108,7 @@ export default function VehiclesPage() {
         };
         const color = types[type.toLowerCase()] || 'bg-slate-100 text-black border-slate-200';
         return (
-            <Badge className={cn("px-4 py-1 rounded-lg border uppercase font-black text-[10px] tracking-widest", color)}>
+            <Badge className={cn("px-4 py-1 rounded-lg border font-black text-[10px] tracking-widest", color)}>
                 {type}
             </Badge>
         );
@@ -119,7 +119,7 @@ export default function VehiclesPage() {
             {/* Header */}
             <div className="flex items-end justify-between">
                 <div className="space-y-1">
-                    <h1 className="text-5xl font-black text-black tracking-tighter italic uppercase leading-tight">Data Kendaraan</h1>
+                    <h1 className="text-5xl font-black text-black tracking-tighter leading-tight">Data Kendaraan</h1>
                 </div>
                 <div className="flex gap-4">
                     <div className="relative group">
@@ -143,18 +143,18 @@ export default function VehiclesPage() {
                 <table className="w-full border-collapse">
                     <thead>
                         <tr className="bg-slate-50/50">
-                            <th className="px-10 py-8 text-left text-xs font-black text-slate-700 uppercase tracking-[0.2em] border-b border-slate-100">Plat Nomor</th>
-                            <th className="px-10 py-8 text-left text-xs font-black text-slate-700 uppercase tracking-[0.2em] border-b border-slate-100">Jenis</th>
-                            <th className="px-10 py-8 text-left text-xs font-black text-slate-700 uppercase tracking-[0.2em] border-b border-slate-100">Nama Pemilik</th>
-                            <th className="px-10 py-8 text-center text-xs font-black text-slate-700 uppercase tracking-[0.2em] border-b border-slate-100">Total Kunjungan</th>
-                            <th className="px-10 py-8 text-right text-xs font-black text-slate-700 uppercase tracking-[0.2em] border-b border-slate-100">Aksi</th>
+                            <th className="px-10 py-8 text-left text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Plat Nomor</th>
+                            <th className="px-10 py-8 text-left text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Jenis</th>
+                            <th className="px-10 py-8 text-left text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Nama Pemilik</th>
+                            <th className="px-10 py-8 text-center text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Total Kunjungan</th>
+                            <th className="px-10 py-8 text-right text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Aksi</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-50">
                         {filteredVehicles.map((vehicle) => (
                             <tr key={vehicle.id} className="group hover:bg-slate-50/50 transition-colors">
                                 <td className="px-10 py-8">
-                                    <span className="text-xl font-black text-black tracking-tighter italic uppercase">{vehicle.license_plate}</span>
+                                    <span className="text-xl font-black text-black tracking-tighter">{vehicle.license_plate}</span>
                                 </td>
                                 <td className="px-10 py-8">
                                     {getVehicleTypeBadge(vehicle.vehicle_type)}
@@ -163,7 +163,7 @@ export default function VehiclesPage() {
                                     <span className="text-lg font-bold text-slate-800 tracking-tight">{vehicle.owner_name || '-'}</span>
                                 </td>
                                 <td className="px-10 py-8 text-center">
-                                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-pink-100 text-pink-600 text-sm font-black italic shadow-inner">
+                                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-pink-100 text-pink-600 text-sm font-black shadow-inner">
                                         {vehicle.total_visits}x
                                     </span>
                                 </td>
@@ -201,7 +201,7 @@ export default function VehiclesPage() {
                         <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
                             <Search className="h-10 w-10 text-slate-200" />
                         </div>
-                        <p className="text-slate-700 font-bold italic">Tidak ada data kendaraan ditemukan</p>
+                        <p className="text-slate-700 font-bold">Tidak ada data kendaraan ditemukan</p>
                     </div>
                 )}
             </div>
@@ -214,7 +214,7 @@ export default function VehiclesPage() {
                         <div className="p-10 border-b border-slate-100 bg-slate-50">
                             <div className="flex justify-between items-start">
                                 <div className="space-y-2">
-                                    <h3 className="text-3xl font-black text-black italic uppercase tracking-tighter">
+                                    <h3 className="text-3xl font-black text-black tracking-tighter">
                                         {viewVehicle.license_plate}
                                     </h3>
                                     {getVehicleTypeBadge(viewVehicle.vehicle_type)}
@@ -232,28 +232,28 @@ export default function VehiclesPage() {
                                 <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
                                     <User className="h-6 w-6 text-blue-500" />
                                     <div>
-                                        <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Pemilik</p>
+                                        <p className="text-xs font-bold text-slate-700 tracking-wider">Pemilik</p>
                                         <p className="text-lg font-bold text-black">{viewVehicle.owner_name || '-'}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
                                     <Phone className="h-6 w-6 text-emerald-500" />
                                     <div>
-                                        <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Telepon</p>
+                                        <p className="text-xs font-bold text-slate-700 tracking-wider">Telepon</p>
                                         <p className="text-lg font-bold text-black">{viewVehicle.owner_phone || '-'}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
                                     <Hash className="h-6 w-6 text-purple-500" />
                                     <div>
-                                        <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Total Kunjungan</p>
+                                        <p className="text-xs font-bold text-slate-700 tracking-wider">Total Kunjungan</p>
                                         <p className="text-lg font-bold text-black">{viewVehicle.total_visits}x</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
                                     <Calendar className="h-6 w-6 text-orange-500" />
                                     <div>
-                                        <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Kunjungan Terakhir</p>
+                                        <p className="text-xs font-bold text-slate-700 tracking-wider">Kunjungan Terakhir</p>
                                         <p className="text-lg font-bold text-black">
                                             {viewVehicle.last_visit ? new Date(viewVehicle.last_visit).toLocaleDateString('id-ID') : '-'}
                                         </p>
@@ -263,7 +263,7 @@ export default function VehiclesPage() {
 
                             {/* Transaction History */}
                             <div className="space-y-4">
-                                <h4 className="text-lg font-black text-black uppercase tracking-wide">Riwayat Transaksi</h4>
+                                <h4 className="text-lg font-black text-black tracking-wide">Riwayat Transaksi</h4>
                                 {loadingTransactions ? (
                                     <p className="text-slate-700 text-center py-8">Loading...</p>
                                 ) : vehicleTransactions.length === 0 ? (
@@ -312,7 +312,7 @@ export default function VehiclesPage() {
                     <div className="relative bg-white rounded-[3rem] w-full max-w-xl p-12 shadow-2xl space-y-8 animate-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-start">
                             <div className="space-y-2">
-                                <h3 className="text-3xl font-black text-black italic uppercase tracking-tighter">
+                                <h3 className="text-3xl font-black text-black tracking-tighter">
                                     Edit Kendaraan
                                 </h3>
                                 <p className="text-xl font-bold text-blue-500">{editVehicle.license_plate}</p>
@@ -324,7 +324,7 @@ export default function VehiclesPage() {
 
                         <div className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-black text-slate-700 uppercase tracking-widest">Jenis Kendaraan</label>
+                                <label className="text-xs font-black text-slate-700 tracking-widest">Jenis Kendaraan</label>
                                 <Select value={editForm.vehicle_type} onValueChange={(v) => setEditForm({ ...editForm, vehicle_type: v })}>
                                     <SelectTrigger className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold">
                                         <SelectValue />
@@ -338,7 +338,7 @@ export default function VehiclesPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-black text-slate-700 uppercase tracking-widest">Nama Pemilik</label>
+                                <label className="text-xs font-black text-slate-700 tracking-widest">Nama Pemilik</label>
                                 <Input
                                     value={editForm.owner_name}
                                     onChange={(e) => setEditForm({ ...editForm, owner_name: e.target.value })}
@@ -348,7 +348,7 @@ export default function VehiclesPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-black text-slate-700 uppercase tracking-widest">No. Telepon</label>
+                                <label className="text-xs font-black text-slate-700 tracking-widest">No. Telepon</label>
                                 <Input
                                     value={editForm.owner_phone}
                                     onChange={(e) => setEditForm({ ...editForm, owner_phone: e.target.value })}
@@ -383,19 +383,19 @@ export default function VehiclesPage() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-2xl p-20 shadow-2xl space-y-16 text-center animate-in zoom-in-95 duration-200">
                         <div className="space-y-4">
-                            <h3 className="text-4xl font-black text-black italic uppercase tracking-tighter">Hapus Kendaraan?</h3>
+                            <h3 className="text-4xl font-black text-black tracking-tighter">Hapus Kendaraan?</h3>
                             <p className="text-2xl font-bold text-slate-700 tracking-tight">
                                 Apakah anda yakin untuk menghapus kendaraan <br /><span className="text-red-500">"{vehicleToDelete.license_plate}"</span>?
                             </p>
                         </div>
 
                         <div className="space-y-6">
-                            <p className="text-xs font-black text-slate-700 uppercase tracking-[0.3em]">Ketik Plat Nomor untuk Konfirmasi</p>
+                            <p className="text-xs font-black text-slate-700 tracking-[0.3em]">Ketik Plat Nomor untuk Konfirmasi</p>
                             <Input
                                 value={confirmPlate}
                                 onChange={(e) => setConfirmPlate(e.target.value)}
                                 placeholder={vehicleToDelete.license_plate}
-                                className="h-24 rounded-[2rem] border-4 border-slate-50 bg-slate-50 px-8 text-3xl font-black text-center focus:border-red-400 focus:bg-white transition-all uppercase"
+                                className="h-24 rounded-[2rem] border-4 border-slate-50 bg-slate-50 px-8 text-3xl font-black text-center focus:border-red-400 focus:bg-white transition-all"
                             />
                         </div>
 
@@ -404,7 +404,7 @@ export default function VehiclesPage() {
                                 onClick={handleDelete}
                                 disabled={confirmPlate !== vehicleToDelete.license_plate}
                                 className={cn(
-                                    "flex-1 h-24 rounded-[2.5rem] text-3xl font-black italic shadow-2xl transition-all active:scale-95",
+                                    "flex-1 h-24 rounded-[2.5rem] text-3xl font-black shadow-2xl transition-all active:scale-95",
                                     confirmPlate === vehicleToDelete.license_plate
                                         ? "bg-[#4ADE80] hover:bg-green-500 text-white shadow-green-500/40"
                                         : "bg-slate-100 text-slate-300 cursor-not-allowed border-4 border-slate-200"
@@ -414,7 +414,7 @@ export default function VehiclesPage() {
                             </Button>
                             <Button
                                 onClick={() => { setVehicleToDelete(null); setConfirmPlate(''); }}
-                                className="flex-1 h-24 rounded-[2.5rem] bg-[#EF4444] hover:bg-red-600 text-white text-3xl font-black italic shadow-2xl shadow-red-500/40 transition-all active:scale-95"
+                                className="flex-1 h-24 rounded-[2.5rem] bg-[#EF4444] hover:bg-red-600 text-white text-3xl font-black shadow-2xl shadow-red-500/40 transition-all active:scale-95"
                             >
                                 Tidak
                             </Button>

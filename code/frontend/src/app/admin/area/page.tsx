@@ -77,7 +77,7 @@ export default function AreaPage() {
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <h1 className="text-4xl font-extrabold text-black tracking-tight">Area Parkir</h1>
-                    <p className="text-slate-800 font-bold uppercase text-xs tracking-widest leading-none">Manajemen area dan kapasitas parkir</p>
+                    <p className="text-slate-800 font-bold text-xs tracking-widest leading-none">Manajemen area dan kapasitas parkir</p>
                 </div>
                 <Button onClick={() => setIsAdding(true)} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
                     <Plus className="h-6 w-6" strokeWidth={3} />
@@ -96,8 +96,8 @@ export default function AreaPage() {
                         <div key={parkingArea.id} className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 space-y-8 group hover:shadow-xl transition-all duration-300">
                             <div className="flex justify-between items-start">
                                 <div className="space-y-1">
-                                    <h3 className="text-3xl font-black text-black italic uppercase tracking-tighter">{parkingArea.name}</h3>
-                                    <p className="text-slate-700 font-bold text-sm uppercase tracking-widest">{parkingArea.code}</p>
+                                    <h3 className="text-3xl font-black text-black tracking-tighter">{parkingArea.name}</h3>
+                                    <p className="text-slate-700 font-bold text-sm tracking-widest">{parkingArea.code}</p>
                                 </div>
                                 <div className="flex gap-4">
                                     <button
@@ -120,8 +120,8 @@ export default function AreaPage() {
 
                             <div className="space-y-4">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-sm font-black text-slate-700 uppercase tracking-widest">Kapasitas</span>
-                                    <span className="text-lg font-bold text-slate-600 italic">{parkingArea.occupied_slots}/{parkingArea.total_capacity}</span>
+                                    <span className="text-sm font-black text-slate-700 tracking-widest">Kapasitas</span>
+                                    <span className="text-lg font-bold text-slate-600">{parkingArea.occupied_slots}/{parkingArea.total_capacity}</span>
                                 </div>
                                 <div className="h-4 bg-slate-100 rounded-full overflow-hidden shadow-inner">
                                     <div
@@ -133,14 +133,14 @@ export default function AreaPage() {
 
                             <div className="flex justify-between items-center pt-2">
                                 <span className={cn(
-                                    "px-6 py-2 rounded-xl text-xs font-black text-white uppercase tracking-widest italic shadow-sm",
+                                    "px-6 py-2 rounded-xl text-xs font-black text-white tracking-widest shadow-sm",
                                     status.color
                                 )}>
                                     {status.label}
                                 </span>
                                 <div className="text-right">
                                     <p className="text-4xl font-black text-black tracking-tighter leading-none">{remaining}</p>
-                                    <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Slot Tersisa</p>
+                                    <p className="text-[10px] font-black text-slate-700 tracking-widest">Slot Tersisa</p>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +153,7 @@ export default function AreaPage() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-2xl p-16 shadow-2xl space-y-12 animate-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-4xl font-black text-black italic uppercase tracking-tighter">
+                            <h3 className="text-4xl font-black text-black tracking-tighter">
                                 {editingArea ? 'Edit Area' : 'Tambah Area'}
                             </h3>
                             <button onClick={() => { setIsAdding(false); setEditingArea(null); }} className="p-4 hover:bg-slate-50 rounded-2xl transition-all">
@@ -163,26 +163,26 @@ export default function AreaPage() {
 
                         <div className="space-y-8">
                             <div className="space-y-4">
-                                <label className="text-sm font-black text-slate-700 uppercase tracking-[0.2em] ml-2">Nama Area</label>
+                                <label className="text-sm font-black text-slate-700 tracking-[0.2em] ml-2">Nama Area</label>
                                 <Input
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     placeholder="CONTOH: AREA A"
-                                    className="h-20 rounded-[1.5rem] border-4 border-slate-50 bg-slate-50 px-8 text-2xl font-black focus:border-blue-400 focus:bg-white transition-all uppercase"
+                                    className="h-20 rounded-[1.5rem] border-4 border-slate-50 bg-slate-50 px-8 text-2xl font-black focus:border-blue-400 focus:bg-white transition-all"
                                 />
                             </div>
                             <div className="space-y-4">
-                                <label className="text-sm font-black text-slate-700 uppercase tracking-[0.2em] ml-2">Kode Area</label>
+                                <label className="text-sm font-black text-slate-700 tracking-[0.2em] ml-2">Kode Area</label>
                                 <Input
                                     value={formData.code}
                                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
                                     placeholder="CONTOH: A1"
-                                    className="h-20 rounded-[1.5rem] border-4 border-slate-50 bg-slate-50 px-8 text-2xl font-black focus:border-blue-400 focus:bg-white transition-all uppercase"
+                                    className="h-20 rounded-[1.5rem] border-4 border-slate-50 bg-slate-50 px-8 text-2xl font-black focus:border-blue-400 focus:bg-white transition-all"
                                     disabled={!!editingArea}
                                 />
                             </div>
                             <div className="space-y-4">
-                                <label className="text-sm font-black text-slate-700 uppercase tracking-[0.2em] ml-2">Total Kapasitas</label>
+                                <label className="text-sm font-black text-slate-700 tracking-[0.2em] ml-2">Total Kapasitas</label>
                                 <Input
                                     type="number"
                                     value={formData.total_capacity}
@@ -194,7 +194,7 @@ export default function AreaPage() {
                         </div>
 
                         <div className="flex gap-6 pt-4">
-                            <Button onClick={handleSave} className="flex-1 h-20 rounded-[2rem] bg-[#2563EB] hover:bg-blue-700 text-white text-2xl font-black italic shadow-xl shadow-blue-500/20 transition-all active:scale-95 gap-4">
+                            <Button onClick={handleSave} className="flex-1 h-20 rounded-[2rem] bg-[#2563EB] hover:bg-blue-700 text-white text-2xl font-black shadow-xl shadow-blue-500/20 transition-all active:scale-95 gap-4">
                                 <Save className="h-8 w-8" /> SIMPAN AREA
                             </Button>
                         </div>
@@ -207,19 +207,19 @@ export default function AreaPage() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
                     <div className="relative bg-white rounded-[4rem] w-full max-w-2xl p-20 shadow-2xl space-y-16 text-center animate-in zoom-in-95 duration-200">
                         <div className="space-y-4">
-                            <h3 className="text-4xl font-black text-black italic uppercase tracking-tighter">Hapus Area Parkir?</h3>
+                            <h3 className="text-4xl font-black text-black tracking-tighter">Hapus Area Parkir?</h3>
                             <p className="text-2xl font-bold text-slate-700 tracking-tight">
                                 Apakah anda yakin untuk menghapus <br /><span className="text-red-500">"{areaToDelete.name}"</span>?
                             </p>
                         </div>
 
                         <div className="space-y-6">
-                            <p className="text-xs font-black text-slate-700 uppercase tracking-[0.3em]">Ketik Kode Area untuk Konfirmasi</p>
+                            <p className="text-xs font-black text-slate-700 tracking-[0.3em]">Ketik Kode Area untuk Konfirmasi</p>
                             <Input
                                 value={confirmCode}
                                 onChange={(e) => setConfirmCode(e.target.value)}
                                 placeholder={areaToDelete.code}
-                                className="h-24 rounded-[2rem] border-4 border-slate-50 bg-slate-50 px-8 text-3xl font-black text-center focus:border-red-400 focus:bg-white transition-all uppercase"
+                                className="h-24 rounded-[2rem] border-4 border-slate-50 bg-slate-50 px-8 text-3xl font-black text-center focus:border-red-400 focus:bg-white transition-all"
                             />
                         </div>
 
@@ -228,7 +228,7 @@ export default function AreaPage() {
                                 onClick={handleDelete}
                                 disabled={confirmCode !== areaToDelete.code}
                                 className={cn(
-                                    "flex-1 h-24 rounded-[2.5rem] text-3xl font-black italic shadow-2xl transition-all active:scale-95",
+                                    "flex-1 h-24 rounded-[2.5rem] text-3xl font-black shadow-2xl transition-all active:scale-95",
                                     confirmCode === areaToDelete.code
                                         ? "bg-[#4ADE80] hover:bg-green-500 text-white shadow-green-500/40"
                                         : "bg-slate-100 text-slate-300 cursor-not-allowed border-4 border-slate-200"
@@ -238,7 +238,7 @@ export default function AreaPage() {
                             </Button>
                             <Button
                                 onClick={() => { setAreaToDelete(null); setConfirmCode(''); }}
-                                className="flex-1 h-24 rounded-[2.5rem] bg-[#EF4444] hover:bg-red-600 text-white text-3xl font-black italic shadow-2xl shadow-red-500/40 transition-all active:scale-95"
+                                className="flex-1 h-24 rounded-[2.5rem] bg-[#EF4444] hover:bg-red-600 text-white text-3xl font-black shadow-2xl shadow-red-500/40 transition-all active:scale-95"
                             >
                                 Tidak
                             </Button>

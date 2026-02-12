@@ -26,19 +26,19 @@ export default function LogsPage() {
     };
 
     const getActionType = (action: string) => {
-        const a = action.toUpperCase();
-        if (a.includes('CREATE')) return { label: 'CREATE', color: 'bg-emerald-500', icon: Plus, iconBg: 'bg-emerald-100 text-emerald-600', border: 'border-emerald-200' };
-        if (a.includes('UPDATE')) return { label: 'UPDATE', color: 'bg-sky-500', icon: Edit, iconBg: 'bg-sky-100 text-sky-600', border: 'border-sky-200' };
-        if (a.includes('DELETE')) return { label: 'DELETE', color: 'bg-red-500', icon: Trash2, iconBg: 'bg-red-100 text-red-600', border: 'border-red-200' };
-        if (a.includes('TRANSACTION') || a.includes('CHECK')) return { label: 'TRANSACTION', color: 'bg-amber-500', icon: DollarSign, iconBg: 'bg-amber-100 text-amber-600', border: 'border-amber-200' };
-        return { label: 'INFO', color: 'bg-slate-500', icon: Clock, iconBg: 'bg-slate-100 text-slate-600', border: 'border-slate-200' };
+        const a = action.toLowerCase();
+        if (a.includes('create')) return { label: 'Create', color: 'bg-emerald-500', icon: Plus, iconBg: 'bg-emerald-100 text-emerald-600', border: 'border-emerald-200' };
+        if (a.includes('update')) return { label: 'Update', color: 'bg-sky-500', icon: Edit, iconBg: 'bg-sky-100 text-sky-600', border: 'border-sky-200' };
+        if (a.includes('delete')) return { label: 'Delete', color: 'bg-red-500', icon: Trash2, iconBg: 'bg-red-100 text-red-600', border: 'border-red-200' };
+        if (a.includes('transaction') || a.includes('check')) return { label: 'Transaction', color: 'bg-amber-500', icon: DollarSign, iconBg: 'bg-amber-100 text-amber-600', border: 'border-amber-200' };
+        return { label: 'Info', color: 'bg-slate-500', icon: Clock, iconBg: 'bg-slate-100 text-slate-600', border: 'border-slate-200' };
     };
 
     return (
         <div className="space-y-12 pb-20 max-w-5xl mx-auto">
             {/* Header */}
             <div className="space-y-1">
-                <h1 className="text-5xl font-black text-black tracking-tighter italic uppercase leading-tight">Log Aktivitas</h1>
+                <h1 className="text-5xl font-black text-black tracking-tighter leading-tight">Log Aktivitas</h1>
             </div>
 
             {/* Logs List Container */}
@@ -46,7 +46,7 @@ export default function LogsPage() {
                 {loading ? (
                     <div className="flex flex-col items-center justify-center h-96 space-y-4">
                         <div className="h-12 w-12 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin" />
-                        <p className="text-slate-700 font-bold italic">Memuat aktivitas...</p>
+                        <p className="text-slate-700 font-bold">Memuat aktivitas...</p>
                     </div>
                 ) : logs.length > 0 ? (
                     logs.map((log) => {
@@ -73,7 +73,7 @@ export default function LogsPage() {
                                             {log.user?.username || log.userName || 'system'}
                                         </span>
                                         <span className={cn(
-                                            "px-4 py-1 rounded-lg text-[10px] font-black text-white italic tracking-[0.1em] uppercase shadow-sm",
+                                            "px-4 py-1 rounded-lg text-[10px] font-black text-white tracking-[0.1em] shadow-sm",
                                             type.color
                                         )}>
                                             {type.label}
@@ -83,7 +83,7 @@ export default function LogsPage() {
                                         <p className="text-2xl font-bold text-slate-800 tracking-tight leading-snug">
                                             {log.description}
                                         </p>
-                                        <p className="text-sm font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
+                                        <p className="text-sm font-black text-slate-300 tracking-widest flex items-center gap-2">
                                             <Clock className="h-4 w-4" />
                                             {new Date(log.created_at).toLocaleString('id-ID', {
                                                 year: 'numeric',
@@ -104,7 +104,7 @@ export default function LogsPage() {
                         <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
                             <Clock className="h-10 w-10 text-slate-200" />
                         </div>
-                        <p className="text-slate-700 font-bold italic">Belum ada aktivitas tercatat</p>
+                        <p className="text-slate-700 font-bold">Belum ada aktivitas tercatat</p>
                     </div>
                 )}
             </div>

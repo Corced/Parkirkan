@@ -71,7 +71,7 @@ export default function OwnerDashboard() {
                 });
 
                 setVehicleStats({
-                    labels: Object.keys(vehicleCounts).map(typeKey => typeKey.toUpperCase()),
+                    labels: Object.keys(vehicleCounts).map(typeKey => typeKey.charAt(0).toUpperCase() + typeKey.slice(1)),
                     data: Object.values(vehicleCounts)
                 });
             })
