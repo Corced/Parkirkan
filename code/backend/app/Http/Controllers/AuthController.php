@@ -30,7 +30,17 @@ class AuthController extends Controller
                 return response()->json(['message' => 'Account is inactive'], 403);
             }
 
+
             $token = $user->createToken('auth_token')->plainTextToken;
+
+            // Log Activity
+            \App\Models\ActivityLog::create([
+                'user_id' => $user->id,
+                'action' => 'LOGIN',
+                'description' => "User {$user->username} logged in.",
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
 
             return response()->json([
                 'access_token' => $token,
@@ -44,7 +54,18 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
+        
+        // Log Activity
+        \App\Models\ActivityLog::create([
+            'user_id' => $user->id,
+            'action' => 'LOGOUT',
+            'description' => "User {$user->username} logged out.",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
+        $user->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out successfully']);
     }
 

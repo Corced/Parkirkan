@@ -42,9 +42,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/shifts/end', [App\Http\Controllers\ShiftController::class, 'end']);
 
     // Resources
-    Route::apiResource('users', UserController::class);
+    Route::middleware('role:admin')->group(function () {
+        Route::apiResource('users', UserController::class);
+        Route::apiResource('rates', ParkingRateController::class);
+        Route::apiResource('areas', ParkingAreaController::class);
+    });
+
     Route::apiResource('vehicles', VehicleController::class);
     Route::apiResource('transactions', TransactionController::class);
-    Route::apiResource('rates', ParkingRateController::class);
-    Route::apiResource('areas', ParkingAreaController::class);
 });
