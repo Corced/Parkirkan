@@ -169,7 +169,10 @@ export default function RatesPage() {
                             <div className="space-y-6">
                                 <div className="space-y-1">
                                     {isEditing ? (
-                                        className = "h-12 text-2xl font-black text-black border-none bg-slate-50 rounded-lg p-0"
+                                        <Input
+                                            value={formData.vehicle_type}
+                                            onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
+                                            className="h-12 text-2xl font-black text-black border-none bg-slate-50 rounded-lg p-0"
                                         />
                                     ) : (
                                         <h3 className="text-3xl font-black text-black tracking-tighter">{rate.vehicle_type}</h3>
