@@ -48,6 +48,15 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
 
     const currentLinks = links[role];
 
+    const handleLogout = () => {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('role');
+            window.location.href = '/login';
+        }
+    };
+
     return (
         <div className={cn(
             "flex h-screen flex-col bg-[#0F172A] text-white shadow-xl transition-all duration-300 ease-in-out relative z-50",
@@ -116,10 +125,10 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
                 "border-t border-slate-800 bg-[#0B1120] transition-all duration-300",
                 isCollapsed ? "p-4" : "p-6"
             )}>
-                <Link
-                    href="/login"
+                <button
+                    onClick={handleLogout}
                     className={cn(
-                        "flex items-center gap-4 rounded-xl transition-all hover:bg-red-500/10 active:scale-95 group relative",
+                        "w-full flex items-center gap-4 rounded-xl transition-all hover:bg-red-500/10 active:scale-95 group relative",
                         isCollapsed ? "justify-center p-0 h-14 w-full" : "px-4 py-3 text-sm font-bold text-red-500"
                     )}
                 >
@@ -134,7 +143,7 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
                             Keluar
                         </div>
                     )}
-                </Link>
+                </button>
             </div>
         </div>
     );
