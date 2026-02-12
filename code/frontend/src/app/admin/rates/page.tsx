@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState, SVGProps } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { rateService } from "@/lib/api";
 import { ParkingRate } from "@/types";
-import { Edit, Trash2, Plus, Save, Car, X, Check } from "lucide-react";
+import { Edit, Trash2, Plus, Save, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { vehicleIcons, VehicleIcon } from "@/components/vehicle-icons";
 
 export default function RatesPage() {
     const [rates, setRates] = useState<ParkingRate[]>([]);
@@ -30,13 +31,7 @@ export default function RatesPage() {
         daily_max_rate: 0
     });
 
-    const icons = [
-        { id: 'bike', icon: BikeIcon },
-        { id: 'car', icon: Car },
-        { id: 'truck', icon: TruckIcon },
-        { id: 'bus', icon: BusIcon },
-        { id: 'van', icon: BuildingIcon },
-    ];
+    const icons = vehicleIcons;
 
     useEffect(() => {
         fetchRates();
@@ -92,15 +87,7 @@ export default function RatesPage() {
         }
     };
 
-    const VehicleIcon = ({ id, type, className }: { id?: string, type?: string, className?: string }) => {
-        const iconId = id || (type?.toLowerCase().includes('motor') ? 'bike' : type?.toLowerCase().includes('truck') ? 'truck' : type?.toLowerCase().includes('bus') ? 'bus' : 'car');
 
-        if (iconId === 'bike') return <BikeIcon className={cn("h-10 w-10 text-slate-600", className)} />;
-        if (iconId === 'truck') return <TruckIcon className={cn("h-10 w-10 text-slate-600", className)} />;
-        if (iconId === 'bus') return <BusIcon className={cn("h-10 w-10 text-slate-600", className)} />;
-        if (iconId === 'van') return <BuildingIcon className={cn("h-10 w-10 text-slate-600", className)} />;
-        return <Car className={cn("h-10 w-10 text-slate-600", className)} />;
-    };
 
     return (
         <div className="space-y-12 pb-20">
@@ -131,20 +118,24 @@ export default function RatesPage() {
                             <div className="flex justify-between items-start mb-8">
                                 <div className="space-y-4">
                                     <div className="h-20 w-20 rounded-[1.5rem] border-2 border-slate-900 flex items-center justify-center bg-white shadow-inner">
-                                        <VehicleIcon id={isEditing ? formData.icon : rate.icon} type={rate.vehicle_type} />
+                                        <VehicleIcon iconId={isEditing ? formData.icon : rate.icon} vehicleType={rate.vehicle_type} />
                                     </div>
                                     {isEditing && (
-                                        <div className="flex gap-2 p-2 bg-slate-50 rounded-xl border-2 border-slate-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="flex gap-2 p-2 bg-slate-50 rounded-xl border-2 border-slate-100 animate-in fade-in slide-in-from-top-2 duration-200 flex-wrap max-w-[320px]">
                                             {icons.map((item) => (
                                                 <button
                                                     key={item.id}
                                                     onClick={() => setFormData({ ...formData, icon: item.id })}
                                                     className={cn(
-                                                        "p-2 rounded-lg transition-all",
+                                                        "p-2 rounded-lg transition-all relative group/icon",
                                                         formData.icon === item.id ? "bg-white shadow-md text-blue-600 scale-110" : "text-slate-700 hover:text-slate-600"
                                                     )}
+                                                    title={item.label}
                                                 >
                                                     <item.icon className="h-5 w-5" />
+                                                    <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-400 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity">
+                                                        {item.label}
+                                                    </span>
                                                 </button>
                                             ))}
                                         </div>
@@ -241,19 +232,23 @@ export default function RatesPage() {
                         <div className="flex justify-between items-start mb-8">
                             <div className="space-y-4">
                                 <div className="h-20 w-20 rounded-[1.5rem] border-2 border-slate-900 flex items-center justify-center bg-white shadow-inner">
-                                    <VehicleIcon id={formData.icon} />
+                                    <VehicleIcon iconId={formData.icon} />
                                 </div>
-                                <div className="flex gap-2 p-2 bg-slate-50 rounded-xl border-2 border-slate-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                                <div className="flex gap-2 p-2 bg-slate-50 rounded-xl border-2 border-slate-100 animate-in fade-in slide-in-from-top-2 duration-200 flex-wrap max-w-[420px]">
                                     {icons.map((item) => (
                                         <button
                                             key={item.id}
                                             onClick={() => setFormData({ ...formData, icon: item.id })}
                                             className={cn(
-                                                "p-2 rounded-lg transition-all",
+                                                "p-2 rounded-lg transition-all relative group/icon",
                                                 formData.icon === item.id ? "bg-white shadow-md text-blue-600 scale-110" : "text-slate-700 hover:text-slate-600"
                                             )}
+                                            title={item.label}
                                         >
                                             <item.icon className="h-5 w-5" />
+                                            <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-400 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity">
+                                                {item.label}
+                                            </span>
                                         </button>
                                     ))}
                                 </div>
@@ -355,27 +350,3 @@ export default function RatesPage() {
     );
 }
 
-// Custom Icons
-function BikeIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="5.5" cy="17.5" r="3.5" /><circle cx="18.5" cy="17.5" r="3.5" /><path d="M15 10l-3.5 3h3.5" /><path d="M12 13v-5l-4-3h4" /><path d="M18.5 14l-1.5-4h3l1.5 4" /><path d="M5.5 14l1.5-4h-3l-1.5 4" /></svg>
-    )
-}
-
-function TruckIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18h3a1 1 0 0 0 1-1V9l-3-3" /><circle cx="7" cy="18" r="2" /><circle cx="17" cy="18" r="2" /></svg>
-    )
-}
-
-function BusIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 6v6" /><path d="M15 6v6" /><path d="M2 12h20v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5Z" /><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5H2V7Z" /><path d="M6 19v2" /><path d="M18 19v2" /></svg>
-    )
-}
-
-function BuildingIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2" /><path d="M9 22v-4h6v4" /><path d="M8 6h.01" /><path d="M16 6h.01" /><path d="M8 10h.01" /><path d="M16 10h.01" /><path d="M8 14h.01" /><path d="M16 14h.01" /></svg>
-    )
-}
