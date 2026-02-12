@@ -6,7 +6,7 @@ export default function PetugasLayout({
     children: React.ReactNode;
 }) {
     return (
-        <DashboardLayout role="petugas" userName="Budi Santoso">
+        <DashboardLayout role="petugas" userName="Petugas Parkir">
             {children}
         </DashboardLayout>
     );

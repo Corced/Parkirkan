@@ -106,7 +106,7 @@ export default function UserManagementPage() {
         if (!userToDelete) return;
         try {
             await userService.delete(userToDelete.id);
-            setUsers(users.filter(u => u.id !== userToDelete.id));
+            setUsers(users.filter(user => user.id !== userToDelete.id));
             setUserToDelete(null);
             setSelectedUser(null);
             setConfirmUsername('');

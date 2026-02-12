@@ -55,9 +55,9 @@ export default function OwnerDashboard() {
                 // Calculate Today's Stats
                 const today = new Date();
                 const todayStr = today.toDateString();
-                const todayTransactions = transactions.filter(t => new Date(t.check_in_time).toDateString() === todayStr);
+                const todayTransactions = transactions.filter(transaction => new Date(transaction.check_in_time).toDateString() === todayStr);
 
-                const revenueToday = todayTransactions.reduce((acc, t) => acc + (Number(t.total_cost) || 0), 0);
+                const revenueToday = todayTransactions.reduce((acc, transaction) => acc + (Number(transaction.total_cost) || 0), 0);
                 setTodayStats({
                     revenue: revenueToday,
                     transactions: todayTransactions.length
@@ -65,13 +65,13 @@ export default function OwnerDashboard() {
 
                 // Calculate Vehicle Type Stats
                 const vehicleCounts: Record<string, number> = {};
-                transactions.forEach(t => {
-                    const type = t.vehicle?.vehicle_type || 'Unknown';
+                transactions.forEach(transaction => {
+                    const type = transaction.vehicle?.vehicle_type || 'Unknown';
                     vehicleCounts[type] = (vehicleCounts[type] || 0) + 1;
                 });
 
                 setVehicleStats({
-                    labels: Object.keys(vehicleCounts).map(k => k.toUpperCase()),
+                    labels: Object.keys(vehicleCounts).map(typeKey => typeKey.toUpperCase()),
                     data: Object.values(vehicleCounts)
                 });
             })

@@ -134,8 +134,11 @@ export default function CheckInPage() {
                                             className="w-full h-20 pl-16 pr-12 rounded-2xl border-4 border-slate-50 bg-slate-50 text-xl font-black uppercase focus:border-blue-400 focus:bg-white transition-all shadow-inner appearance-none outline-none"
                                             required
                                         >
-                                            {areas.map(area => (
-                                                <option key={area.id} value={area.id}>{area.name} (Tersedia: {area.total_capacity - area.occupied_slots})</option>
+                                            <option value="">Pilih Area</option>
+                                            {areas.map((parkingArea) => (
+                                                <option key={parkingArea.id} value={parkingArea.id}>
+                                                    {parkingArea.name} ({parkingArea.total_capacity - parkingArea.occupied_slots} slot)
+                                                </option>
                                             ))}
                                         </select>
                                         <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-700 pointer-events-none" />

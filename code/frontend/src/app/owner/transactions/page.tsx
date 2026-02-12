@@ -263,30 +263,30 @@ export default function TransactionsPage() {
                                     <TableCell colSpan={10} className="h-24 text-center text-slate-800">Tidak ada data transaksi</TableCell>
                                 </TableRow>
                             ) : (
-                                filteredTransactions.map((tr) => (
-                                    <TableRow key={tr.id} className="hover:bg-slate-50/50">
+                                filteredTransactions.map((transaction) => (
+                                    <TableRow key={transaction.id} className="hover:bg-slate-50/50">
                                         <TableCell className="font-medium text-slate-600">
-                                            {new Date(tr.check_in_time).toLocaleDateString()}
+                                            {new Date(transaction.check_in_time).toLocaleDateString()}
                                         </TableCell>
-                                        <TableCell className="font-medium text-black">{tr.ticket_number}</TableCell>
-                                        <TableCell className="font-mono text-slate-600">{tr.vehicle?.license_plate}</TableCell>
+                                        <TableCell className="font-medium text-black">{transaction.ticket_number}</TableCell>
+                                        <TableCell className="font-mono text-slate-600">{transaction.vehicle?.license_plate}</TableCell>
                                         <TableCell>
-                                            <span className={`px-2 py-1 rounded text-xs font-bold font-mono uppercase ${tr.vehicle?.vehicle_type === 'motor' ? 'bg-emerald-100 text-emerald-700' :
-                                                tr.vehicle?.vehicle_type === 'mobil' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-black'
+                                            <span className={`px-2 py-1 rounded text-xs font-bold font-mono uppercase ${transaction.vehicle?.vehicle_type === 'motor' ? 'bg-emerald-100 text-emerald-700' :
+                                                transaction.vehicle?.vehicle_type === 'mobil' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-black'
                                                 }`}>
-                                                {tr.vehicle?.vehicle_type || '-'}
+                                                {transaction.vehicle?.vehicle_type || '-'}
                                             </span>
                                         </TableCell>
-                                        <TableCell className="text-slate-600">{tr.area?.name || '-'}</TableCell>
+                                        <TableCell className="text-slate-600">{transaction.area?.name || '-'}</TableCell>
                                         <TableCell className="text-slate-600">
-                                            {new Date(tr.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            {new Date(transaction.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </TableCell>
                                         <TableCell className="text-slate-600">
-                                            {tr.check_out_time ? new Date(tr.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
+                                            {transaction.check_out_time ? new Date(transaction.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
                                         </TableCell>
                                         <TableCell className="text-slate-600">2j 30m</TableCell> {/* Mock Duration */}
                                         <TableCell className="text-right font-bold text-black">
-                                            {tr.total_cost ? `Rp ${Number(tr.total_cost).toLocaleString('id-ID')}` : '-'}
+                                            {transaction.total_cost ? `Rp ${Number(transaction.total_cost).toLocaleString('id-ID')}` : '-'}
                                         </TableCell>
                                         <TableCell className="text-center text-slate-600">petugas01</TableCell> {/* Mock Petugas */}
                                     </TableRow>

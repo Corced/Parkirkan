@@ -37,12 +37,12 @@ export default function VehicleHistoryPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {vehicles.map((v) => (
-                            <TableRow key={v.id}>
-                                <TableCell className="font-bold">{v.license_plate}</TableCell>
-                                <TableCell className="capitalize">{v.vehicle_type}</TableCell>
-                                <TableCell>{v.total_visits}</TableCell>
-                                <TableCell>{new Date(v.last_visit).toLocaleString()}</TableCell>
+                        {vehicles.map((vehicle) => (
+                            <TableRow key={vehicle.id}>
+                                <TableCell className="font-bold">{vehicle.license_plate}</TableCell>
+                                <TableCell className="capitalize">{vehicle.vehicle_type}</TableCell>
+                                <TableCell>{vehicle.total_visits}</TableCell>
+                                <TableCell>{new Date(vehicle.last_visit).toLocaleString()}</TableCell>
                             </TableRow>
                         ))}
                         {vehicles.length === 0 && (

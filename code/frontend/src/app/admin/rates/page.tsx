@@ -63,7 +63,7 @@ export default function RatesPage() {
         try {
             if (id) {
                 const updated = await rateService.update(id, formData as Partial<ParkingRate>);
-                setRates(rates.map(r => r.id === id ? updated : r));
+                setRates(rates.map(rate => rate.id === id ? updated : rate));
                 setEditingId(null);
             } else {
                 const created = await rateService.create(formData as Partial<ParkingRate>);
@@ -81,7 +81,7 @@ export default function RatesPage() {
         if (!rateToDelete) return;
         try {
             await rateService.delete(rateToDelete.id);
-            setRates(rates.filter(r => r.id !== rateToDelete.id));
+            setRates(rates.filter(rate => rate.id !== rateToDelete.id));
             setRateToDelete(null);
             setConfirmVehicleType('');
         } catch (error) {

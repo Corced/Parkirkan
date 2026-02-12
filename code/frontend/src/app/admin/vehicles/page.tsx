@@ -83,8 +83,8 @@ export default function VehiclesPage() {
         try {
             await vehicleService.update(editVehicle.id, editForm);
             // Update local state
-            setVehicles(vehicles.map(v =>
-                v.id === editVehicle.id ? { ...v, ...editForm } : v
+            setVehicles(vehicles.map(vehicle =>
+                vehicle.id === editVehicle.id ? { ...vehicle, ...editForm } : vehicle
             ));
             setEditVehicle(null);
         } catch (error) {
@@ -94,9 +94,9 @@ export default function VehiclesPage() {
         }
     };
 
-    const filteredVehicles = vehicles.filter(v =>
-        v.license_plate.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        v.owner_name?.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredVehicles = vehicles.filter(vehicle =>
+        vehicle.license_plate.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        vehicle.owner_name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const getVehicleTypeBadge = (type: string) => {

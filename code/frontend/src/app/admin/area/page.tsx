@@ -87,30 +87,30 @@ export default function AreaPage() {
 
             {/* Grid */}
             <div className="grid gap-10 md:grid-cols-2">
-                {areas.map((area) => {
-                    const status = getStatusInfo(area.occupied_slots, area.total_capacity);
-                    const remaining = area.total_capacity - area.occupied_slots;
-                    const progressWidth = Math.min((area.occupied_slots / area.total_capacity) * 100, 100);
+                {areas.map((parkingArea) => {
+                    const status = getStatusInfo(parkingArea.occupied_slots, parkingArea.total_capacity);
+                    const remaining = parkingArea.total_capacity - parkingArea.occupied_slots;
+                    const progressWidth = Math.min((parkingArea.occupied_slots / parkingArea.total_capacity) * 100, 100);
 
                     return (
-                        <div key={area.id} className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 space-y-8 group hover:shadow-xl transition-all duration-300">
+                        <div key={parkingArea.id} className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 space-y-8 group hover:shadow-xl transition-all duration-300">
                             <div className="flex justify-between items-start">
                                 <div className="space-y-1">
-                                    <h3 className="text-3xl font-black text-black italic uppercase tracking-tighter">{area.name}</h3>
-                                    <p className="text-slate-700 font-bold text-sm uppercase tracking-widest">{area.code}</p>
+                                    <h3 className="text-3xl font-black text-black italic uppercase tracking-tighter">{parkingArea.name}</h3>
+                                    <p className="text-slate-700 font-bold text-sm uppercase tracking-widest">{parkingArea.code}</p>
                                 </div>
                                 <div className="flex gap-4">
                                     <button
                                         onClick={() => {
-                                            setEditingArea(area);
-                                            setFormData({ name: area.name, code: area.code, total_capacity: area.total_capacity });
+                                            setEditingArea(parkingArea);
+                                            setFormData({ name: parkingArea.name, code: parkingArea.code, total_capacity: parkingArea.total_capacity });
                                         }}
                                         className="p-3 text-slate-300 hover:text-blue-500 transition-colors"
                                     >
                                         <Edit className="h-7 w-7" />
                                     </button>
                                     <button
-                                        onClick={() => setAreaToDelete(area)}
+                                        onClick={() => setAreaToDelete(parkingArea)}
                                         className="p-3 text-slate-300 hover:text-red-500 transition-colors"
                                     >
                                         <Trash2 className="h-7 w-7" />
@@ -121,7 +121,7 @@ export default function AreaPage() {
                             <div className="space-y-4">
                                 <div className="flex justify-between items-end">
                                     <span className="text-sm font-black text-slate-700 uppercase tracking-widest">Kapasitas</span>
-                                    <span className="text-lg font-bold text-slate-600 italic">{area.occupied_slots}/{area.total_capacity}</span>
+                                    <span className="text-lg font-bold text-slate-600 italic">{parkingArea.occupied_slots}/{parkingArea.total_capacity}</span>
                                 </div>
                                 <div className="h-4 bg-slate-100 rounded-full overflow-hidden shadow-inner">
                                     <div

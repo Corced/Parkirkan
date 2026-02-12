@@ -6,7 +6,7 @@ export default function OwnerLayout({
     children: React.ReactNode;
 }) {
     return (
-        <DashboardLayout role="owner" userName="Owner Parkir">
+        <DashboardLayout role="owner" userName="Owner">
             {children}
         </DashboardLayout>
     );

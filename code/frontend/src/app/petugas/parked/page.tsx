@@ -85,37 +85,37 @@ export default function ParkedVehiclesPage() {
                                         </td>
                                     </tr>
                                 ) : parkedVehicles.length > 0 ? (
-                                    parkedVehicles.map((t) => (
-                                        <tr key={t.id} className="group hover:bg-slate-50/50 transition-colors">
+                                    parkedVehicles.map((transaction) => (
+                                        <tr key={transaction.id} className="group hover:bg-slate-50/50 transition-colors">
                                             <td className="px-10 py-8">
-                                                <p className="text-lg font-mono font-black text-slate-800 italic tracking-tighter">{t.ticket_number}</p>
+                                                <p className="text-lg font-mono font-black text-slate-800 italic tracking-tighter">{transaction.ticket_number}</p>
                                             </td>
                                             <td className="px-10 py-8">
-                                                <p className="text-2xl font-black text-black uppercase tracking-tight">{t.vehicle?.license_plate}</p>
+                                                <p className="text-2xl font-black text-black uppercase tracking-tight">{transaction.vehicle?.license_plate}</p>
                                             </td>
                                             <td className="px-10 py-8">
                                                 <div className={cn(
                                                     "px-6 py-1.5 rounded-full text-white font-black text-xs uppercase italic inline-block",
-                                                    getVehicleBadgeStyle(t.vehicle?.vehicle_type || '')
+                                                    getVehicleBadgeStyle(transaction.vehicle?.vehicle_type || '')
                                                 )}>
-                                                    {t.vehicle?.vehicle_type}
+                                                    {transaction.vehicle?.vehicle_type}
                                                 </div>
                                             </td>
-                                            <td className="px-10 py-8 text-center text-xl font-bold text-black">{t.area?.name || '---'}</td>
+                                            <td className="px-10 py-8 text-center text-xl font-bold text-black">{transaction.area?.name || '---'}</td>
                                             <td className="px-10 py-8">
                                                 <div className="flex items-center gap-2 text-slate-800 font-bold">
                                                     <Clock className="h-4 w-4" />
-                                                    {new Date(t.check_in_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
-                                                    <span className="text-xs opacity-50 ml-1">({new Date(t.check_in_time).toLocaleDateString('id-ID')})</span>
+                                                    {new Date(transaction.check_in_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                                                    <span className="text-xs opacity-50 ml-1">({new Date(transaction.check_in_time).toLocaleDateString('id-ID')})</span>
                                                 </div>
                                             </td>
                                             <td className="px-10 py-8 text-center">
                                                 <p className="text-lg font-black text-blue-600 italic tracking-tighter">
-                                                    {calculateDuration(t.check_in_time)}
+                                                    {calculateDuration(transaction.check_in_time)}
                                                 </p>
                                             </td>
                                             <td className="px-10 py-8 text-right">
-                                                <Link href={`/petugas/check-out?ticket=${t.ticket_number}`}>
+                                                <Link href={`/petugas/check-out?ticket=${transaction.ticket_number}`}>
                                                     <Button className="bg-emerald-400 hover:bg-emerald-500 text-white px-8 h-12 rounded-2xl font-black uppercase italic shadow-lg shadow-emerald-200/50 transition-all active:scale-95">
                                                         Check-out
                                                     </Button>
