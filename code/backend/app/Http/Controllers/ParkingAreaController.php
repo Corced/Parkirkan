@@ -18,6 +18,7 @@ class ParkingAreaController extends Controller
             'name' => 'required|string',
             'code' => 'required|string|unique:parking_areas',
             'total_capacity' => 'required|integer',
+            'description' => 'nullable|string',
         ]);
 
         $area = ParkingArea::create($validated);
@@ -30,6 +31,7 @@ class ParkingAreaController extends Controller
             'name' => 'sometimes|string',
             'total_capacity' => 'sometimes|integer',
             'is_active' => 'sometimes|boolean',
+            'description' => 'nullable|string',
         ]);
 
         $area->update($validated);

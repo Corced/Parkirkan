@@ -18,7 +18,8 @@ export default function AreaPage() {
     const [formData, setFormData] = useState({
         name: '',
         code: '',
-        total_capacity: 0
+        total_capacity: 0,
+        description: ''
     });
 
     useEffect(() => {
@@ -45,7 +46,7 @@ export default function AreaPage() {
                 setAreas([...areas, created]);
                 setIsAdding(false);
             }
-            setFormData({ name: '', code: '', total_capacity: 0 });
+            setFormData({ name: '', code: '', total_capacity: 0, description: '' });
         } catch (error: unknown) {
             const msg = error instanceof Error ? error.message : 'Error';
             alert('Gagal menyimpan: ' + msg);
@@ -97,13 +98,25 @@ export default function AreaPage() {
                             <div className="flex justify-between items-start">
                                 <div className="space-y-1">
                                     <h3 className="text-3xl font-black text-black tracking-tighter">{parkingArea.name}</h3>
-                                    <p className="text-slate-700 font-bold text-sm tracking-widest">{parkingArea.code}</p>
+                                    <div className="flex gap-2 items-center">
+                                        <p className="text-slate-700 font-bold text-sm tracking-widest">{parkingArea.code}</p>
+                                        {parkingArea.description && (
+                                            <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-bold">
+                                                {parkingArea.description}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="flex gap-4">
                                     <button
                                         onClick={() => {
                                             setEditingArea(parkingArea);
-                                            setFormData({ name: parkingArea.name, code: parkingArea.code, total_capacity: parkingArea.total_capacity });
+                                            setFormData({
+                                                name: parkingArea.name,
+                                                code: parkingArea.code,
+                                                total_capacity: parkingArea.total_capacity,
+                                                description: parkingArea.description || ''
+                                            });
                                         }}
                                         className="p-3 text-slate-300 hover:text-blue-500 transition-colors"
                                     >
@@ -189,6 +202,15 @@ export default function AreaPage() {
                                     onChange={(e) => setFormData({ ...formData, total_capacity: Number(e.target.value) })}
                                     placeholder="0"
                                     className="h-20 rounded-[1.5rem] border-4 border-slate-50 bg-slate-50 px-8 text-2xl font-black focus:border-blue-400 focus:bg-white transition-all"
+                                />
+                            </div>
+                            <div className="space-y-4">
+                                <label className="text-sm font-black text-slate-700 tracking-[0.2em] ml-2">Deskripsi (Opsional)</label>
+                                <textarea
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    placeholder="CONTOH: KHUSUS MOTOR VARIO & BEAT"
+                                    className="w-full min-h-32 rounded-[1.5rem] border-4 border-slate-50 bg-slate-50 p-8 text-xl font-black focus:border-blue-400 focus:bg-white transition-all outline-none resize-none"
                                 />
                             </div>
                         </div>

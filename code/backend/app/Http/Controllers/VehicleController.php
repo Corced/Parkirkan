@@ -31,7 +31,7 @@ class VehicleController extends Controller
     public function checkIn(Request $request)
     {
         $validated = $request->validate([
-            'license_plate' => 'required|string|uppercase',
+            'license_plate' => 'required|string',
             'vehicle_type' => 'required|string', // motor, mobil, truck
             'area_id' => 'required|exists:parking_areas,id',
             'owner_name' => 'nullable|string|max:255',
@@ -172,7 +172,7 @@ class VehicleController extends Controller
             'license_plate' => 'required|string',
         ]);
 
-        $licensePlate = strtoupper($validated['license_plate']);
+        $licensePlate = $validated['license_plate'];
 
         // Find the vehicle first
         $vehicle = Vehicle::where('license_plate', $licensePlate)->first();

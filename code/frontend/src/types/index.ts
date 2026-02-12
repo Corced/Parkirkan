@@ -55,6 +55,7 @@ export interface Transaction {
 export interface ParkingRate {
     id: number;
     vehicle_type: string;
+    description?: string;
     icon?: string;
     hourly_rate: number;
     daily_max_rate: number;
@@ -66,6 +67,7 @@ export interface ParkingArea {
     id: number;
     name: string;
     code: string;
+    description?: string;
     total_capacity: number;
     occupied_slots: number;
     is_active: boolean;

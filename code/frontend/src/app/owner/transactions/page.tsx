@@ -179,7 +179,7 @@ export default function TransactionsPage() {
                         <SelectContent className="bg-white text-black">
                             <SelectItem value="all">Semua</SelectItem>
                             {vehicleTypes.map(type => (
-                                <SelectItem key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</SelectItem>
+                                <SelectItem key={type} value={type}>{type}</SelectItem>
                             ))}
                         </SelectContent>
                     </Select>

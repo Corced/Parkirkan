@@ -18,11 +18,13 @@ export default function RatesPage() {
     // Form State
     const [formData, setFormData] = useState<{
         vehicle_type: string;
+        description: string;
         icon: string;
         hourly_rate: number;
         daily_max_rate: number;
     }>({
         vehicle_type: '',
+        description: '',
         icon: 'car',
         hourly_rate: 0,
         daily_max_rate: 0
@@ -53,6 +55,7 @@ export default function RatesPage() {
         setEditingId(rate.id);
         setFormData({
             vehicle_type: rate.vehicle_type,
+            description: rate.description || '',
             icon: rate.icon || 'car',
             hourly_rate: rate.hourly_rate,
             daily_max_rate: rate.daily_max_rate || 0
@@ -70,7 +73,7 @@ export default function RatesPage() {
                 setRates([...rates, created]);
                 setIsAdding(false);
             }
-            setFormData({ vehicle_type: '', icon: 'car', hourly_rate: 0, daily_max_rate: 0 });
+            setFormData({ vehicle_type: '', description: '', icon: 'car', hourly_rate: 0, daily_max_rate: 0 });
         } catch (error: unknown) {
             const msg = error instanceof Error ? error.message : 'Error';
             alert('Gagal menyimpan: ' + msg);
@@ -166,13 +169,23 @@ export default function RatesPage() {
                             <div className="space-y-6">
                                 <div className="space-y-1">
                                     {isEditing ? (
-                                        <Input
-                                            value={formData.vehicle_type}
-                                            onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
-                                            className="h-12 text-2xl font-black text-black border-none bg-slate-50 rounded-lg p-0 italic"
+                                        className = "h-12 text-2xl font-black text-black border-none bg-slate-50 rounded-lg p-0"
                                         />
                                     ) : (
                                         <h3 className="text-3xl font-black text-black tracking-tighter">{rate.vehicle_type}</h3>
+                                    )}
+                                    {!isEditing && rate.description && (
+                                        <p className="text-xs font-bold text-slate-400 leading-relaxed mt-1">
+                                            {rate.description}
+                                        </p>
+                                    )}
+                                    {isEditing && (
+                                        <textarea
+                                            value={formData.description}
+                                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                            placeholder="Deskripsi (Misal: Alphard, Fortuner)"
+                                            className="w-full mt-2 p-3 text-sm font-bold text-slate-600 bg-slate-50 rounded-xl border-none outline-none resize-none min-h-[80px]"
+                                        />
                                     )}
                                 </div>
 
@@ -257,6 +270,12 @@ export default function RatesPage() {
                                 value={formData.vehicle_type}
                                 onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
                                 className="h-14 text-2xl font-black text-black border-4 border-slate-100 bg-slate-50 rounded-xl px-4 tracking-tighter"
+                            />
+                            <textarea
+                                placeholder="DESKRIPSI VARIAN (OPSIONAL)"
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                className="w-full min-h-[100px] text-lg font-black text-slate-800 border-4 border-slate-100 bg-slate-50 rounded-xl p-4 outline-none focus:border-blue-400 transition-all resize-none"
                             />
                             <div className="space-y-4 pt-2">
                                 <div className="flex justify-between items-center">

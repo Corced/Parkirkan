@@ -158,7 +158,7 @@ export default function UserManagementPage() {
                                 onClick={() => setShowRoleDropdown(!showRoleDropdown)}
                                 className="w-full h-16 rounded-2xl border-2 border-slate-100 bg-white px-8 flex items-center justify-between font-bold text-lg text-slate-600 hover:border-blue-400 transition-all active:scale-95"
                             >
-                                {roleFilter === 'semua' ? 'Semua Role' : (roleFilter.charAt(0).toUpperCase() + roleFilter.slice(1))}
+                                {roleFilter === 'semua' ? 'Semua Role' : roleFilter}
                                 <ChevronDown className={cn("h-6 w-6 transition-transform", showRoleDropdown ? "rotate-180" : "")} />
                             </button>
 
@@ -173,7 +173,7 @@ export default function UserManagementPage() {
                                                 roleFilter === role ? "bg-blue-50 text-blue-600" : "text-slate-600 hover:bg-slate-50"
                                             )}
                                         >
-                                            {role === 'semua' ? 'Semua Role' : (role.charAt(0).toUpperCase() + role.slice(1))}
+                                            {role === 'semua' ? 'Semua Role' : role}
                                         </button>
                                     ))}
                                 </div>
@@ -316,7 +316,7 @@ export default function UserManagementPage() {
                                                     onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
                                                     className="w-full h-20 rounded-[1.5rem] border-4 border-slate-100 bg-slate-50 px-10 text-2xl font-black text-black focus:border-blue-400 focus:bg-white transition-all appearance-none tracking-tight"
                                                 >
-                                                    {field.options?.map(opt => <option key={opt} value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>)}
+                                                    {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                                                 </select>
                                             ) : (
                                                 <Input

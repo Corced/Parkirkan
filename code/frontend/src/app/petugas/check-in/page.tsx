@@ -45,7 +45,7 @@ export default function CheckInPage() {
         setSuccess(false);
         try {
             const res = await vehicleService.checkIn({
-                license_plate: formData.license_plate.toUpperCase(),
+                license_plate: formData.license_plate,
                 vehicle_type: formData.vehicle_type,
                 area_id: parseInt(formData.area_id),
                 owner_name: formData.owner_name,
@@ -122,6 +122,11 @@ export default function CheckInPage() {
                                         </select>
                                         <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-700 pointer-events-none" />
                                     </div>
+                                    {rates.find(r => r.vehicle_type === formData.vehicle_type)?.description && (
+                                        <p className="text-[10px] font-black text-blue-500 tracking-widest mt-2 ml-1">
+                                            Varian: {rates.find(r => r.vehicle_type === formData.vehicle_type)?.description}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="space-y-3">
@@ -143,6 +148,11 @@ export default function CheckInPage() {
                                         </select>
                                         <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-700 pointer-events-none" />
                                     </div>
+                                    {areas.find(a => a.id.toString() === formData.area_id)?.description && (
+                                        <p className="text-[10px] font-black text-emerald-500 tracking-widest mt-2 ml-1">
+                                            Petunjuk: {areas.find(a => a.id.toString() === formData.area_id)?.description}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
@@ -230,7 +240,7 @@ export default function CheckInPage() {
                         </div>
                     </form>
                 </CardContent>
-            </Card>
-        </div>
+            </Card >
+        </div >
     );
 }

@@ -13,6 +13,7 @@ class ParkingArea extends Model
         'name',
         'code',
         'total_capacity',
+        'description',
         'occupied_slots',
         'is_active',
     ];

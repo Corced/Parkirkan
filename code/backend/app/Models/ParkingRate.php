@@ -11,6 +11,7 @@ class ParkingRate extends Model
 
     protected $fillable = [
         'vehicle_type',
+        'description',
         'icon',
         'hourly_rate',
         'daily_max_rate',

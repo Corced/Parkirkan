@@ -18,6 +18,8 @@ class ParkingRateController extends Controller
             'vehicle_type' => 'required|string|unique:parking_rates',
             'hourly_rate' => 'required|integer',
             'daily_max_rate' => 'required|integer',
+            'icon' => 'nullable|string',
+            'description' => 'nullable|string',
         ]);
 
         $rate = ParkingRate::create($validated);
@@ -27,8 +29,11 @@ class ParkingRateController extends Controller
     public function update(Request $request, ParkingRate $rate)
     {
         $validated = $request->validate([
+            'vehicle_type' => 'sometimes|string',
             'hourly_rate' => 'sometimes|integer',
             'daily_max_rate' => 'sometimes|integer',
+            'icon' => 'nullable|string',
+            'description' => 'nullable|string',
         ]);
 
         $rate->update($validated);
