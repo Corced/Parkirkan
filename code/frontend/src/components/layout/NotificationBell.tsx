@@ -68,13 +68,13 @@ export function NotificationBell() {
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                     {loading ? (
-                        <div className="p-8 text-center text-slate-800">Loading...</div>
+                        <div className="p-8 text-center bg-slate-50 text-slate-800">Loading...</div>
                     ) : notifications.length === 0 ? (
-                        <div className="p-8 text-center text-slate-800">Tidak ada notifikasi</div>
+                        <div className="p-8 text-center bg-slate-50 text-slate-800">Tidak ada notifikasi</div>
                     ) : (
                         <div className="divide-y">
                             {notifications.map((notif) => (
-                                <div key={notif.id} className="p-4 hover:bg-slate-50 transition-colors">
+                                <div key={notif.id} className="p-4 bg-slate-50 hover:bg-slate-200 transition-colors">
                                     <div className="flex items-start gap-3">
                                         <div className={cn(
                                             "px-2 py-1 rounded-md text-[10px] font-bold uppercase shrink-0",
