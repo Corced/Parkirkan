@@ -15,10 +15,14 @@ class CheckRole
      * @param  string  $role
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string $roles): Response
     {
-        if (!$request->user() || $request->user()->role !== $role) {
-            return response()->json(['message' => 'Unauthorized. Only ' . $role . ' can access this resource.'], 403);
+        $allowedRoles = explode('|', str_replace(',', '|', $roles));
+        
+        if (!$request->user() || !in_array($request->user()->role, $allowedRoles)) {
+            return response()->json([
+                'message' => 'Unauthorized. Only ' . $roles . ' can access this resource.'
+            ], 403);
         }
 
         return $next($request);

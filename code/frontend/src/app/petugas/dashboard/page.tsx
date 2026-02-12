@@ -154,7 +154,7 @@ export default function PetugasDashboard() {
                             <Button
                                 onClick={handleSearch}
                                 disabled={isSearching}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 h-16 px-10 rounded-2xl bg-slate-900 hover:bg-black text-lg font-black uppercase italic shadow-xl disabled:opacity-50"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 h-16 px-10 rounded-2xl bg-slate-900 hover:bg-slate-800 text-lg font-black uppercase italic shadow-xl disabled:opacity-50"
                             >
                                 {isSearching ? '...' : 'Cari'}
                             </Button>
@@ -232,7 +232,7 @@ export default function PetugasDashboard() {
                                         <SelectTrigger className="h-14 bg-slate-50 border-2 font-bold text-lg rounded-2xl">
                                             <SelectValue />
                                         </SelectTrigger>
-                                        <SelectContent>
+                                        <SelectContent className="bg-zinc-600">
                                             <SelectItem value="Pagi">Pagi (07:00 - 15:00)</SelectItem>
                                             <SelectItem value="Siang">Siang (15:00 - 23:00)</SelectItem>
                                             <SelectItem value="Malam">Malam (23:00 - 07:00)</SelectItem>
