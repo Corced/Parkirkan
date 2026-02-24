@@ -86,7 +86,10 @@ export default function UserManagementPage() {
         e.preventDefault();
         try {
             if (isEditing && selectedUser) {
-                const updated = await userService.update(selectedUser.id, formData);
+                // Only include password in payload if it was actually changed
+                const { password, ...rest } = formData;
+                const payload = password ? { ...rest, password } : rest;
+                const updated = await userService.update(selectedUser.id, payload);
                 setUsers(users.map(u => u.id === selectedUser.id ? updated : u));
                 setSelectedUser(updated);
                 setIsEditing(false);

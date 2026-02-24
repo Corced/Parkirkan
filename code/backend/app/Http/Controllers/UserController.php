@@ -53,16 +53,27 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
+            'username' => 'sometimes|string|max:255|unique:users,username,' . $user->id,
             'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'sometimes|nullable|string|min:8',
             'role' => 'sometimes|in:admin,petugas,owner',
-            'status' => 'sometimes|in:active,inactive', // Map to is_active boolean if needed
+            'status' => 'sometimes|in:active,inactive',
         ]);
 
+        // Handle status -> is_active mapping
         if (isset($validated['status'])) {
             $user->is_active = $validated['status'] === 'active';
+            unset($validated['status']);
         }
-        
-        $user->update($request->except('status')); // Update other fields
+
+        // Only hash and include password if it was actually provided and non-empty
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
 
         // Log Activity
         ActivityLog::create([

@@ -12,7 +12,9 @@ export function Navbar({ userName, userRole }: { userName: string, userRole?: st
             </div>
 
             <div className="flex items-center gap-6">
-                <NotificationBell />
+                {!['owner', 'petugas'].includes(userRole?.toLowerCase() || '') && (
+                    <NotificationBell />
+                )}
                 <div className="flex items-center gap-4 pl-4 border-l border-slate-300">
                     <div className="flex flex-col items-end">
                         <span className="text-sm font-black text-black leading-none">{userName}</span>
