@@ -117,8 +117,8 @@ export const shiftService = {
         method: 'POST',
         body: JSON.stringify({ shift_type })
     }),
-    end: (shift_type: string, transaction_count?: number) => fetchAPI<{ message: string; transaction_count: number }>('/shifts/end', {
+    end: (shift_type: string, transaction_count?: number, notes?: string) => fetchAPI<{ message: string; transaction_count: number }>('/shifts/end', {
         method: 'POST',
-        body: JSON.stringify({ shift_type, transaction_count })
+        body: JSON.stringify({ shift_type, transaction_count, notes })
     }),
 };

@@ -36,16 +36,23 @@ class ShiftController extends Controller
         $validated = $request->validate([
             'shift_type' => 'required|in:Pagi,Siang,Malam',
             'transaction_count' => 'nullable|integer',
+            'notes' => 'nullable|string'
         ]);
 
         $user = $request->user();
         $count = $validated['transaction_count'] ?? 0;
+        $notes = $validated['notes'] ?? '';
+
+        $description = "Shift {$validated['shift_type']} berakhir. Total Transaksi: {$count}.";
+        if (!empty($notes)) {
+            $description .= " Catatan Tambahan: {$notes}";
+        }
 
         // Log Shift End
         ActivityLog::create([
             'user_id' => $user->id,
             'action' => 'SHIFT_END',
-            'description' => "Shift {$validated['shift_type']} berakhir. Total Transaksi: {$count}.",
+            'description' => $description,
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);

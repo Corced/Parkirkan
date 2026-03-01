@@ -5,6 +5,7 @@ import { logService } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Plus, Edit, Trash2, DollarSign, Clock, User as UserIcon } from "lucide-react";
 import { ActivityLog } from "@/types";
+import FadeIn from '@/components/motion/FadeIn';
 
 export default function LogsPage() {
     const [logs, setLogs] = useState<ActivityLog[]>([]);
@@ -35,79 +36,81 @@ export default function LogsPage() {
     };
 
     return (
-        <div className="space-y-12 pb-20 max-w-5xl mx-auto">
-            {/* Header */}
-            <div className="space-y-1">
-                <h1 className="text-5xl font-black text-black tracking-tighter leading-tight">Log Aktivitas</h1>
-            </div>
+        <FadeIn duration={0.5}>
+            <div className="space-y-12 pb-20 max-w-5xl mx-auto">
+                {/* Header */}
+                <div className="space-y-1">
+                    <h1 className="text-5xl font-black text-black tracking-tighter leading-tight">Log Aktivitas</h1>
+                </div>
 
-            {/* Logs List Container */}
-            <div className="bg-white rounded-[3rem] shadow-sm border border-slate-100 p-12 lg:p-16 space-y-12 min-h-[600px]">
-                {loading ? (
-                    <div className="flex flex-col items-center justify-center h-96 space-y-4">
-                        <div className="h-12 w-12 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin" />
-                        <p className="text-slate-700 font-bold">Memuat aktivitas...</p>
-                    </div>
-                ) : logs.length > 0 ? (
-                    logs.map((log) => {
-                        const type = getActionType(log.action);
-                        const Icon = type.icon;
-
-                        return (
-                            <div key={log.id} className="flex gap-8 group relative">
-                                {/* Connector Line (Optional, for timeline feel) */}
-                                <div className="absolute left-6 top-16 bottom-[-3rem] w-1 bg-slate-50 group-last:hidden" />
-
-                                {/* Icon Column */}
-                                <div className={cn(
-                                    "flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center shadow-md z-10 transition-transform group-hover:scale-110",
-                                    type.iconBg
-                                )}>
-                                    <Icon className="h-6 w-6" strokeWidth={2.5} />
-                                </div>
-
-                                {/* Content Column */}
-                                <div className="space-y-3 pt-1 flex-1">
-                                    <div className="flex items-center gap-4">
-                                        <span className="text-xl font-black text-black tracking-tight lowercase">
-                                            {log.user?.username || log.userName || 'system'}
-                                        </span>
-                                        <span className={cn(
-                                            "px-4 py-1 rounded-lg text-[10px] font-black text-white tracking-[0.1em] shadow-sm",
-                                            type.color
-                                        )}>
-                                            {type.label}
-                                        </span>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-2xl font-bold text-slate-800 tracking-tight leading-snug">
-                                            {log.description}
-                                        </p>
-                                        <p className="text-sm font-black text-slate-300 tracking-widest flex items-center gap-2">
-                                            <Clock className="h-4 w-4" />
-                                            {new Date(log.created_at).toLocaleString('id-ID', {
-                                                year: 'numeric',
-                                                month: '2-digit',
-                                                day: '2-digit',
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                                second: '2-digit'
-                                            })}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })
-                ) : (
-                    <div className="flex flex-col items-center justify-center h-96 space-y-4">
-                        <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
-                            <Clock className="h-10 w-10 text-slate-200" />
+                {/* Logs List Container */}
+                <div className="bg-white rounded-[3rem] shadow-sm border border-slate-100 p-12 lg:p-16 space-y-12 min-h-[600px]">
+                    {loading ? (
+                        <div className="flex flex-col items-center justify-center h-96 space-y-4">
+                            <div className="h-12 w-12 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin" />
+                            <p className="text-slate-700 font-bold">Memuat aktivitas...</p>
                         </div>
-                        <p className="text-slate-700 font-bold">Belum ada aktivitas tercatat</p>
-                    </div>
-                )}
+                    ) : logs.length > 0 ? (
+                        logs.map((log) => {
+                            const type = getActionType(log.action);
+                            const Icon = type.icon;
+
+                            return (
+                                <div key={log.id} className="flex gap-8 group relative">
+                                    {/* Connector Line (Optional, for timeline feel) */}
+                                    <div className="absolute left-6 top-16 bottom-[-3rem] w-1 bg-slate-50 group-last:hidden" />
+
+                                    {/* Icon Column */}
+                                    <div className={cn(
+                                        "flex-shrink-0 h-14 w-14 rounded-full flex items-center justify-center shadow-md z-10 transition-transform group-hover:scale-110",
+                                        type.iconBg
+                                    )}>
+                                        <Icon className="h-6 w-6" strokeWidth={2.5} />
+                                    </div>
+
+                                    {/* Content Column */}
+                                    <div className="space-y-3 pt-1 flex-1">
+                                        <div className="flex items-center gap-4">
+                                            <span className="text-xl font-black text-black tracking-tight lowercase">
+                                                {log.user?.username || log.userName || 'system'}
+                                            </span>
+                                            <span className={cn(
+                                                "px-4 py-1 rounded-lg text-[10px] font-black text-white tracking-[0.1em] shadow-sm",
+                                                type.color
+                                            )}>
+                                                {type.label}
+                                            </span>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-2xl font-bold text-slate-800 tracking-tight leading-snug">
+                                                {log.description}
+                                            </p>
+                                            <p className="text-sm font-black text-slate-300 tracking-widest flex items-center gap-2">
+                                                <Clock className="h-4 w-4" />
+                                                {new Date(log.created_at).toLocaleString('id-ID', {
+                                                    year: 'numeric',
+                                                    month: '2-digit',
+                                                    day: '2-digit',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    second: '2-digit'
+                                                })}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-96 space-y-4">
+                            <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
+                                <Clock className="h-10 w-10 text-slate-200" />
+                            </div>
+                            <p className="text-slate-700 font-bold">Belum ada aktivitas tercatat</p>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </FadeIn>
     );
 }
