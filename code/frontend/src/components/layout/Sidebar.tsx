@@ -15,6 +15,7 @@ import {
     LogIn,
     Menu,
 } from 'lucide-react';
+import Cookies from 'js-cookie';
 
 interface SidebarProps {
     role: 'admin' | 'petugas' | 'owner';
@@ -53,6 +54,11 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.removeItem('role');
+            
+            // Remove cookies
+            Cookies.remove('token');
+            Cookies.remove('role');
+            
             window.location.href = '/login';
         }
     };

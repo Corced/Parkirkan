@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import { authService } from '@/lib/api';
 import FadeIn from '@/components/motion/FadeIn';
+import Cookies from 'js-cookie';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -32,6 +33,10 @@ export default function LoginPage() {
                 localStorage.setItem('token', data.access_token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 localStorage.setItem('role', data.user.role);
+                
+                // Set cookies for middleware
+                Cookies.set('token', data.access_token, { expires: 1 }); // 1 day
+                Cookies.set('role', data.user.role, { expires: 1 });
             }
 
             // Redirect based on role
