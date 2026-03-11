@@ -133,10 +133,6 @@ export default function VehiclesPage() {
                                 className="h-14 w-80 pl-16 rounded-2xl border-none bg-white shadow-sm font-bold text-slate-600 focus:ring-4 focus:ring-blue-100 transition-all"
                             />
                         </div>
-                        <Button className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
-                            <Plus className="h-6 w-6" strokeWidth={3} />
-                            Tambah Kendaraan
-                        </Button>
                     </div>
                 </div>
 

@@ -27,6 +27,8 @@ export default function PetugasDashboard() {
     const [isShiftActive, setIsShiftActive] = useState(false);
     const [currentShift, setCurrentShift] = useState<string>('Pagi');
     const [shiftMessage, setShiftMessage] = useState<string | null>(null);
+    const [shiftTransactionCount, setShiftTransactionCount] = useState(0);
+    const [shiftRevenue, setShiftRevenue] = useState(0);
 
     // End Shift Dialog States
     const [isEndShiftDialogOpen, setIsEndShiftDialogOpen] = useState(false);
@@ -36,10 +38,20 @@ export default function PetugasDashboard() {
         // Load shift state from local storage securely on mount
         const storedActive = localStorage.getItem('petugas_shift_active');
         const storedShiftType = localStorage.getItem('petugas_shift_type');
+        const storedRevenue = localStorage.getItem('petugas_shift_revenue');
+        const storedCount = localStorage.getItem('petugas_shift_count');
 
         if (storedActive === 'true' && storedShiftType) {
             setIsShiftActive(true);
             setCurrentShift(storedShiftType);
+            if (storedRevenue) {
+                const parsedRev = parseInt(storedRevenue);
+                setShiftRevenue(isNaN(parsedRev) ? 0 : parsedRev);
+            }
+            if (storedCount) {
+                const parsedCount = parseInt(storedCount);
+                setShiftTransactionCount(isNaN(parsedCount) ? 0 : parsedCount);
+            }
         }
 
         dashboardService.getPetugasStats().then(setStats).catch(console.error);
@@ -71,6 +83,10 @@ export default function PetugasDashboard() {
             // Simpan status shift
             localStorage.setItem('petugas_shift_active', 'true');
             localStorage.setItem('petugas_shift_type', currentShift);
+            localStorage.setItem('petugas_shift_revenue', '0');
+            localStorage.setItem('petugas_shift_count', '0');
+            setShiftRevenue(0);
+            setShiftTransactionCount(0);
 
             setShiftMessage(result.message);
             setTimeout(() => setShiftMessage(null), 3000);
@@ -86,12 +102,15 @@ export default function PetugasDashboard() {
 
     const confirmEndShift = async () => {
         try {
-            const result = await shiftService.end(currentShift, stats.today_transactions, endShiftNotes);
+            const finalNotes = `Pendapatan Shift: Rp ${shiftRevenue.toLocaleString('id-ID')}` + (endShiftNotes ? ` | ${endShiftNotes}` : '');
+            const result = await shiftService.end(currentShift, shiftTransactionCount, finalNotes);
             setIsShiftActive(false);
 
             // Hapus dari local storage
             localStorage.removeItem('petugas_shift_active');
             localStorage.removeItem('petugas_shift_type');
+            localStorage.removeItem('petugas_shift_revenue');
+            localStorage.removeItem('petugas_shift_count');
 
             setIsEndShiftDialogOpen(false);
             setEndShiftNotes('');
@@ -292,9 +311,21 @@ export default function PetugasDashboard() {
                                 </>
                             ) : (
                                 <>
-                                    <div className="p-6 bg-emerald-50 rounded-2xl border-2 border-emerald-100">
-                                        <p className="text-xs font-black text-emerald-600 tracking-widest mb-2">Shift Aktif</p>
-                                        <p className="text-2xl font-black text-black">{currentShift}</p>
+                                    <div className="p-6 bg-emerald-50 rounded-2xl border-2 border-emerald-100 space-y-4">
+                                        <div>
+                                            <p className="text-xs font-black text-emerald-600 tracking-widest mb-2">Shift Aktif</p>
+                                            <p className="text-2xl font-black text-black">{currentShift}</p>
+                                        </div>
+                                        <div className="pt-4 border-t-2 border-emerald-100 flex justify-between items-center">
+                                            <div>
+                                                <p className="text-xs font-bold text-slate-500">Kendaraan Keluar</p>
+                                                <p className="text-lg font-black text-slate-800">{isNaN(shiftTransactionCount) ? 0 : shiftTransactionCount}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-xs font-bold text-slate-500">Pendapatan</p>
+                                                <p className="text-xl font-black text-emerald-600">Rp {isNaN(shiftRevenue) ? '0' : shiftRevenue.toLocaleString('id-ID')}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <Button
                                         onClick={handleEndShiftClick}

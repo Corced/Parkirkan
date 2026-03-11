@@ -68,6 +68,18 @@ function CheckOutContent() {
             const res = await vehicleService.checkOut({ ticket_number: transaction.ticket_number });
             setTransaction(res);
             setCheckoutSuccess(true);
+            
+            // --- Shift Tracking Logic ---
+            if (localStorage.getItem('petugas_shift_active') === 'true') {
+                const currentRevenue = parseInt(localStorage.getItem('petugas_shift_revenue') || '0');
+                const currentCount = parseInt(localStorage.getItem('petugas_shift_count') || '0');
+                
+                const addedRevenue = res.total_cost ? Number(res.total_cost) : totalCost;
+                
+                localStorage.setItem('petugas_shift_revenue', (currentRevenue + addedRevenue).toString());
+                localStorage.setItem('petugas_shift_count', (currentCount + 1).toString());
+            }
+
             // Auto-print receipt on success
             setTimeout(() => window.print(), 500);
         } catch (error: unknown) {
