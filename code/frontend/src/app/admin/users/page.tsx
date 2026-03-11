@@ -309,7 +309,7 @@ export default function UserManagementPage() {
                                     { label: 'Email', key: 'email', type: 'email', placeholder: 'petugas@parkirkan.id' },
                                     { label: 'Role', key: 'role', type: 'select', options: ['admin', 'petugas', 'owner'] },
                                     { label: 'Password', key: 'password', type: 'password', placeholder: isEditing ? 'Kosongkan jika tidak diubah' : '********' },
-                                ].map((field, idx) => (
+                                ].filter(f => (isEditing || isAdding) || f.key !== 'password').map((field, idx) => (
                                     <div key={idx} className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
                                         <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">{field.label}</label>
                                         <span className="hidden lg:block text-2xl font-bold text-black">:</span>
@@ -350,27 +350,6 @@ export default function UserManagementPage() {
                                             <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                             <div className="flex-1">
                                                 <span className="text-2xl font-medium text-slate-800 tracking-tight">Aktif</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                            <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Jadwal Shift</label>
-                                            <span className="hidden lg:block text-2xl font-bold text-black">:</span>
-                                            <div className="flex-1">
-                                                <span className="text-2xl font-medium text-slate-800 tracking-tight">ID-001 : Shift Siang</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                            <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Jam Masuk</label>
-                                            <span className="hidden lg:block text-2xl font-bold text-black">:</span>
-                                            <div className="flex-1">
-                                                <span className="text-2xl font-medium text-slate-800 tracking-tight">12:00</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
-                                            <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Jam Keluar</label>
-                                            <span className="hidden lg:block text-2xl font-bold text-black">:</span>
-                                            <div className="flex-1">
-                                                <span className="text-2xl font-medium text-slate-800 tracking-tight">18:00</span>
                                             </div>
                                         </div>
                                     </>
