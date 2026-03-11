@@ -60,12 +60,19 @@ export default function RatesPage() {
 
     const handleSave = async (id?: number) => {
         try {
+            // Ensure rates are safely cast to integers to satisfy Laravel validation
+            const payload = {
+                ...formData,
+                hourly_rate: parseInt(formData.hourly_rate.toString()) || 0,
+                daily_max_rate: parseInt(formData.daily_max_rate.toString()) || 0
+            };
+
             if (id) {
-                const updated = await rateService.update(id, formData as Partial<ParkingRate>);
+                const updated = await rateService.update(id, payload as Partial<ParkingRate>);
                 setRates(rates.map(rate => rate.id === id ? updated : rate));
                 setEditingId(null);
             } else {
-                const created = await rateService.create(formData as Partial<ParkingRate>);
+                const created = await rateService.create(payload as Partial<ParkingRate>);
                 setRates([...rates, created]);
                 setIsAdding(false);
             }
