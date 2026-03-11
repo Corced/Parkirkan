@@ -131,10 +131,29 @@ export default function TransactionsPage() {
 
     // Calculate Summary Stats from FILTERED data
     const totalRevenue = filteredTransactions.reduce((acc, curr) => acc + (Number(curr.total_cost) || 0), 0);
+
+    const averageDurationText = (() => {
+        if (filteredTransactions.length === 0) return '0 Jam';
+        let totalMs = 0;
+        let count = 0;
+        filteredTransactions.forEach(t => {
+            if (t.check_out_time) {
+                totalMs += new Date(t.check_out_time).getTime() - new Date(t.check_in_time).getTime();
+                count++;
+            }
+        });
+        if (count === 0) return 'Belum ada';
+        const avgSecs = Math.floor((totalMs / count) / 1000);
+        const hours = Math.floor(avgSecs / 3600);
+        const mins = Math.floor((avgSecs % 3600) / 60);
+        if (hours === 0) return `${mins} Menit`;
+        return `${hours} Jam ${mins} Menit`;
+    })();
+
     const summaryStats = [
         { label: 'Total Transaksi', value: filteredTransactions.length.toString(), color: 'bg-cyan-100/50', border: 'border-cyan-200' },
         { label: 'Total Pendapatan', value: `Rp ${totalRevenue.toLocaleString('id-ID')}`, color: 'bg-emerald-100/50', border: 'border-emerald-200' },
-        { label: 'Rata-rata Durasi', value: '2 Hari 5.2 Jam', color: 'bg-fuchsia-100/50', border: 'border-fuchsia-200' }, // Hard to calc without duration_hours being consistent
+        { label: 'Rata-rata Durasi', value: averageDurationText, color: 'bg-fuchsia-100/50', border: 'border-fuchsia-200' },
         { label: 'Rata-rata Biaya', value: filteredTransactions.length ? `Rp ${(totalRevenue / filteredTransactions.length).toFixed(0)}` : 'Rp 0', color: 'bg-amber-100/50', border: 'border-amber-200' },
     ];
 
@@ -286,11 +305,21 @@ export default function TransactionsPage() {
                                             <TableCell className="text-slate-600">
                                                 {transaction.check_out_time ? new Date(transaction.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
                                             </TableCell>
-                                            <TableCell className="text-slate-600">2j 30m</TableCell> {/* Mock Duration */}
+                                            <TableCell className="text-slate-600">
+                                                {(() => {
+                                                    if (!transaction.check_out_time) return '-';
+                                                    const diffMs = new Date(transaction.check_out_time).getTime() - new Date(transaction.check_in_time).getTime();
+                                                    const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
+                                                    const hours = Math.floor(diffSecs / 3600);
+                                                    const mins = Math.floor((diffSecs % 3600) / 60);
+                                                    if (hours > 0) return `${hours}j ${mins}m`;
+                                                    return `${mins}m`;
+                                                })()}
+                                            </TableCell>
                                             <TableCell className="text-right font-bold text-black">
                                                 {transaction.total_cost ? `Rp ${Number(transaction.total_cost).toLocaleString('id-ID')}` : '-'}
                                             </TableCell>
-                                            <TableCell className="text-center text-slate-600">petugas01</TableCell> {/* Mock Petugas */}
+                                            <TableCell className="text-center text-slate-600">-</TableCell>
                                         </TableRow>
                                     ))
                                 )}

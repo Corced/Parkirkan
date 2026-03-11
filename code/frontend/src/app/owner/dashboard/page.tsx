@@ -3,8 +3,8 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, TrendingUp, DollarSign, Car, ChevronDown, Filter } from "lucide-react";
-import { dashboardService, transactionService } from '@/lib/api';
-import { OwnerStats, Transaction } from '@/types';
+import { dashboardService, transactionService, areaService } from '@/lib/api';
+import { OwnerStats, Transaction, ParkingArea } from '@/types';
 import { cn } from '@/lib/utils';
 import { ShiftSimulator } from '@/components/dev/ShiftSimulator';
 import FadeIn from '@/components/motion/FadeIn';
@@ -63,6 +63,7 @@ export default function OwnerDashboard() {
         revenue_data: []
     });
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [areas, setAreas] = useState<ParkingArea[]>([]);
     const [todayStats, setTodayStats] = useState({ revenue: 0, transactions: 0 });
     const [loading, setLoading] = useState(true);
 
@@ -77,11 +78,13 @@ export default function OwnerDashboard() {
         setLoading(true);
         Promise.all([
             dashboardService.getOwnerStats(),
-            transactionService.getAll()
+            transactionService.getAll(),
+            areaService.getAll()
         ])
-            .then(([ownerStats, txns]) => {
+            .then(([ownerStats, txns, areasData]) => {
                 setStats(ownerStats);
                 setTransactions(txns);
+                setAreas(areasData);
 
                 // Calculate Today's Stats
                 const today = new Date();
@@ -188,7 +191,7 @@ export default function OwnerDashboard() {
         },
         {
             label: 'Kendaraan Aktif',
-            value: stats.occupancy_rate ? Math.round((stats.occupancy_rate / 100) * 120).toString() : "3",
+            value: transactions.filter(t => t.status === 'active').length.toString(),
             subtext: "Sedang parkir",
             icon: Car,
             iconBg: 'bg-white',
@@ -197,7 +200,12 @@ export default function OwnerDashboard() {
         {
             label: 'Tingkat Okupansi',
             value: `${Math.round(stats.occupancy_rate || 0)}%`,
-            subtext: `${Math.round(((stats.occupancy_rate || 0) / 100) * 120)}/120 slot terisi`,
+            subtext: (() => {
+                const totalCap = areas.reduce((sum, a) => sum + (a.total_capacity || 0), 0);
+                const occupied = areas.reduce((sum, a) => sum + (a.occupied_slots || 0), 0);
+                if (totalCap === 0) return 'Memuat data...';
+                return `${occupied}/${totalCap} slot terisi`;
+            })(),
             icon: MapPin,
             iconBg: 'bg-white',
             iconColor: 'text-black',
