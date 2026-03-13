@@ -31,6 +31,22 @@ export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(true);
+    const [currentTime] = useState(new Date());
+
+    const parseUTC = (dateStr: string) => {
+        if (!dateStr) return new Date();
+        const utcStr = dateStr.endsWith('Z') ? dateStr : dateStr.replace(' ', 'T') + 'Z';
+        return new Date(utcStr);
+    };
+
+    const formatWIB = (dateStr: string | undefined, includeDate = false) => {
+        if (!dateStr) return '-';
+        const d = parseUTC(dateStr);
+        if (includeDate) {
+            return d.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + ' WIB';
+        }
+        return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) + ' WIB';
+    };
 
     // Dynamic Dropdown Data
     const [vehicleTypes, setVehicleTypes] = useState<string[]>([]);
@@ -66,14 +82,14 @@ export default function TransactionsPage() {
         let filtered = [...transactions];
 
         if (startDate) {
-            filtered = filtered.filter(t => new Date(t.check_in_time) >= new Date(startDate));
+            filtered = filtered.filter(t => parseUTC(t.check_in_time) >= new Date(startDate));
         }
 
         if (endDate) {
             // Set end date to end of day
             const end = new Date(endDate);
             end.setHours(23, 59, 59, 999);
-            filtered = filtered.filter(t => new Date(t.check_in_time) <= end);
+            filtered = filtered.filter(t => parseUTC(t.check_in_time) <= end);
         }
 
         if (vehicleType !== 'all') {
@@ -94,13 +110,13 @@ export default function TransactionsPage() {
 
         const tableColumn = ["Tanggal", "No. Tiket", "Plat Nomor", "Jenis", "Area", "Masuk", "Keluar", "Biaya"];
         const tableRows = filteredTransactions.map(t => [
-            new Date(t.check_in_time).toLocaleDateString(),
+            parseUTC(t.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }),
             t.ticket_number,
             t.vehicle?.license_plate || '-',
             t.vehicle?.vehicle_type || '-',
             t.area?.name || '-',
-            new Date(t.check_in_time).toLocaleTimeString(),
-            t.check_out_time ? new Date(t.check_out_time).toLocaleTimeString() : '-',
+            formatWIB(t.check_in_time),
+            t.check_out_time ? formatWIB(t.check_out_time) : '-',
             t.total_cost ? `Rp ${Number(t.total_cost).toLocaleString('id-ID')}` : '-'
         ]);
 
@@ -115,13 +131,13 @@ export default function TransactionsPage() {
 
     const handleExportExcel = () => {
         const worksheet = XLSX.utils.json_to_sheet(filteredTransactions.map(t => ({
-            Tanggal: new Date(t.check_in_time).toLocaleDateString(),
+            Tanggal: parseUTC(t.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }),
             No_Tiket: t.ticket_number,
             Plat_Nomor: t.vehicle?.license_plate,
             Jenis: t.vehicle?.vehicle_type,
             Area: t.area?.name || '-',
-            Masuk: new Date(t.check_in_time).toLocaleTimeString(),
-            Keluar: t.check_out_time ? new Date(t.check_out_time).toLocaleTimeString() : '-',
+            Masuk: formatWIB(t.check_in_time),
+            Keluar: t.check_out_time ? formatWIB(t.check_out_time) : '-',
             Biaya: t.total_cost
         })));
         const workbook = XLSX.utils.book_new();
@@ -138,7 +154,7 @@ export default function TransactionsPage() {
         let count = 0;
         filteredTransactions.forEach(t => {
             if (t.check_out_time) {
-                totalMs += new Date(t.check_out_time).getTime() - new Date(t.check_in_time).getTime();
+                totalMs += parseUTC(t.check_out_time).getTime() - parseUTC(t.check_in_time).getTime();
                 count++;
             }
         });
@@ -287,7 +303,7 @@ export default function TransactionsPage() {
                                     filteredTransactions.map((transaction) => (
                                         <TableRow key={transaction.id} className="hover:bg-slate-50/50">
                                             <TableCell className="font-medium text-slate-600">
-                                                {new Date(transaction.check_in_time).toLocaleDateString()}
+                                                {parseUTC(transaction.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' })}
                                             </TableCell>
                                             <TableCell className="font-medium text-black">{transaction.ticket_number}</TableCell>
                                             <TableCell className="font-mono text-slate-600">{transaction.vehicle?.license_plate}</TableCell>
@@ -300,15 +316,16 @@ export default function TransactionsPage() {
                                             </TableCell>
                                             <TableCell className="text-slate-600">{transaction.area?.name || '-'}</TableCell>
                                             <TableCell className="text-slate-600">
-                                                {new Date(transaction.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                {formatWIB(transaction.check_in_time)}
                                             </TableCell>
                                             <TableCell className="text-slate-600">
-                                                {transaction.check_out_time ? new Date(transaction.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
+                                                {transaction.check_out_time ? formatWIB(transaction.check_out_time) : '-'}
                                             </TableCell>
                                             <TableCell className="text-slate-600">
                                                 {(() => {
-                                                    if (!transaction.check_out_time) return '-';
-                                                    const diffMs = new Date(transaction.check_out_time).getTime() - new Date(transaction.check_in_time).getTime();
+                                                    const checkIn = parseUTC(transaction.check_in_time);
+                                                    const checkOut = transaction.check_out_time ? parseUTC(transaction.check_out_time) : currentTime;
+                                                    const diffMs = checkOut.getTime() - checkIn.getTime();
                                                     const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
                                                     const hours = Math.floor(diffSecs / 3600);
                                                     const mins = Math.floor((diffSecs % 3600) / 60);

@@ -74,6 +74,12 @@ export default function OwnerDashboard() {
     const [showYearDropdown, setShowYearDropdown] = useState(false);
     const [showVehicleDropdown, setShowVehicleDropdown] = useState(false);
 
+    const parseUTC = (dateStr: string) => {
+        if (!dateStr) return new Date();
+        const utcStr = dateStr.endsWith('Z') ? dateStr : dateStr.replace(' ', 'T') + 'Z';
+        return new Date(utcStr);
+    };
+
     const fetchDashboardData = () => {
         setLoading(true);
         Promise.all([
@@ -88,8 +94,10 @@ export default function OwnerDashboard() {
 
                 // Calculate Today's Stats
                 const today = new Date();
-                const todayStr = today.toDateString();
-                const todayTransactions = txns.filter((t: Transaction) => new Date(t.check_in_time).toDateString() === todayStr);
+                const todayStr = today.toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' });
+                const todayTransactions = txns.filter((t: Transaction) => 
+                    parseUTC(t.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }) === todayStr
+                );
                 const revenueToday = todayTransactions.reduce((acc: number, t: Transaction) => acc + (Number(t.total_cost) || 0), 0);
                 setTodayStats({
                     revenue: revenueToday,
@@ -108,7 +116,8 @@ export default function OwnerDashboard() {
     const availableYears = useMemo(() => {
         const years = new Set<number>();
         transactions.forEach(t => {
-            const year = new Date(t.check_in_time).getFullYear();
+            const date = parseUTC(t.check_in_time);
+            const year = date.getFullYear();
             if (!isNaN(year)) years.add(year);
         });
         if (years.size === 0) years.add(currentYear);
@@ -131,7 +140,7 @@ export default function OwnerDashboard() {
         const monthlyCount = new Array(12).fill(0);
 
         transactions.forEach(t => {
-            const date = new Date(t.check_in_time);
+            const date = parseUTC(t.check_in_time);
             if (date.getFullYear() === selectedYear && t.total_cost) {
                 monthlyRevenue[date.getMonth()] += Number(t.total_cost);
                 monthlyCount[date.getMonth()] += 1;
@@ -146,7 +155,7 @@ export default function OwnerDashboard() {
         const typeCounts: Record<string, number[]> = {};
 
         transactions.forEach(t => {
-            const date = new Date(t.check_in_time);
+            const date = parseUTC(t.check_in_time);
             if (date.getFullYear() !== selectedYear) return;
             const type = t.vehicle?.vehicle_type || 'Unknown';
             if (selectedVehicleType !== 'semua' && type.toLowerCase() !== selectedVehicleType.toLowerCase()) return;
@@ -162,7 +171,7 @@ export default function OwnerDashboard() {
     const vehicleDonutData = useMemo(() => {
         const counts: Record<string, number> = {};
         transactions.forEach(t => {
-            const date = new Date(t.check_in_time);
+            const date = parseUTC(t.check_in_time);
             if (date.getFullYear() !== selectedYear) return;
             const type = t.vehicle?.vehicle_type || 'Unknown';
             counts[type] = (counts[type] || 0) + 1;
