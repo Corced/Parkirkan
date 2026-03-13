@@ -33,12 +33,25 @@ function CheckOutContent() {
         setLoading(true);
         setCheckoutSuccess(false);
         try {
-            const res = await vehicleService.searchParked(query);
-            if (!res.latest_transaction || res.latest_transaction.status !== 'active') {
-                alert('Kendaraan tidak sedang terparkir');
-                setTransaction(null);
+            // If the query looks like a ticket number, search by ticket
+            if (query.trim().toUpperCase().startsWith('T-')) {
+                const res = await vehicleService.getParked();
+                const found = res.find((t) => t.ticket_number.toLowerCase() === query.trim().toLowerCase());
+                if (!found || found.status !== 'active') {
+                    alert('Tiket tidak ditemukan atau kendaraan sudah check-out');
+                    setTransaction(null);
+                } else {
+                    setTransaction(found);
+                }
             } else {
-                setTransaction(res.latest_transaction);
+                // Search by license plate
+                const res = await vehicleService.searchParked(query);
+                if (!res.latest_transaction || res.latest_transaction.status !== 'active') {
+                    alert('Kendaraan tidak sedang terparkir');
+                    setTransaction(null);
+                } else {
+                    setTransaction(res.latest_transaction);
+                }
             }
         } catch (error: unknown) {
             const msg = error instanceof Error ? error.message : 'Kendaraan tidak ditemukan';

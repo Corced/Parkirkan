@@ -200,8 +200,9 @@ export default function RatesPage() {
                                                     <span className="text-xl font-black text-black">Rp.</span>
                                                     <Input
                                                         type="number"
+                                                        min={0}
                                                         value={formData.hourly_rate}
-                                                        onChange={(e) => setFormData({ ...formData, hourly_rate: Number(e.target.value) })}
+                                                        onChange={(e) => setFormData({ ...formData, hourly_rate: Math.max(0, parseInt(e.target.value) || 0) })}
                                                         className="w-32 h-10 text-xl font-black text-right border-none bg-slate-50 px-2"
                                                     />
                                                 </div>
@@ -218,8 +219,9 @@ export default function RatesPage() {
                                                     <span className="text-xl font-black text-black">Rp.</span>
                                                     <Input
                                                         type="number"
+                                                        min={0}
                                                         value={formData.daily_max_rate}
-                                                        onChange={(e) => setFormData({ ...formData, daily_max_rate: Number(e.target.value) })}
+                                                        onChange={(e) => setFormData({ ...formData, daily_max_rate: Math.max(0, parseInt(e.target.value) || 0) })}
                                                         className="w-32 h-10 text-xl font-black text-right border-none bg-slate-50 px-2"
                                                     />
                                                 </div>
@@ -289,8 +291,9 @@ export default function RatesPage() {
                                         <span className="text-sm font-black text-slate-700 tracking-widest">Tarif per jam</span>
                                         <Input
                                             type="number"
+                                            min={0}
                                             placeholder="0"
-                                            onChange={(e) => setFormData({ ...formData, hourly_rate: Number(e.target.value) })}
+                                            onChange={(e) => setFormData({ ...formData, hourly_rate: Math.max(0, parseInt(e.target.value) || 0) })}
                                             className="w-40 h-12 text-xl font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
                                         />
                                     </div>
@@ -298,8 +301,9 @@ export default function RatesPage() {
                                         <span className="text-sm font-black text-slate-700 tracking-widest">Maksimal per hari</span>
                                         <Input
                                             type="number"
+                                            min={0}
                                             placeholder="0"
-                                            onChange={(e) => setFormData({ ...formData, daily_max_rate: Number(e.target.value) })}
+                                            onChange={(e) => setFormData({ ...formData, daily_max_rate: Math.max(0, parseInt(e.target.value) || 0) })}
                                             className="w-40 h-12 text-xl font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
                                         />
                                     </div>

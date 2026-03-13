@@ -34,7 +34,9 @@ export default function ParkedVehiclesPage() {
     };
 
     const calculateDuration = (checkInTime: string) => {
-        const start = new Date(checkInTime);
+        // Ensure the timestamp is parsed as UTC by Laravel (strip any offset info and re-add Z)
+        const utcStr = checkInTime.endsWith('Z') ? checkInTime : checkInTime.replace(' ', 'T') + 'Z';
+        const start = new Date(utcStr);
         const diffMs = currentTime.getTime() - start.getTime();
         const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
         const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));

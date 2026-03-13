@@ -91,9 +91,11 @@ export default function AreaPage() {
                 {/* Grid */}
                 <div className="grid gap-10 md:grid-cols-2">
                     {areas.map((parkingArea) => {
-                        const status = getStatusInfo(parkingArea.occupied_slots, parkingArea.total_capacity);
-                        const remaining = parkingArea.total_capacity - parkingArea.occupied_slots;
-                        const progressWidth = Math.min((parkingArea.occupied_slots / parkingArea.total_capacity) * 100, 100);
+                        const totalCap = parkingArea.total_capacity || 0;
+                        const occupied = parkingArea.occupied_slots || 0;
+                        const status = getStatusInfo(occupied, totalCap || 1);
+                        const remaining = totalCap - occupied;
+                        const progressWidth = totalCap > 0 ? Math.min((occupied / totalCap) * 100, 100) : 0;
 
                         return (
                             <div key={parkingArea.id} className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 space-y-8 group hover:shadow-xl transition-all duration-300">
@@ -136,7 +138,7 @@ export default function AreaPage() {
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-end">
                                         <span className="text-sm font-black text-slate-700 tracking-widest">Kapasitas</span>
-                                        <span className="text-lg font-bold text-slate-600">{parkingArea.occupied_slots}/{parkingArea.total_capacity}</span>
+                                        <span className="text-lg font-bold text-slate-600">{occupied}/{totalCap}</span>
                                     </div>
                                     <div className="h-4 bg-slate-100 rounded-full overflow-hidden shadow-inner">
                                         <div
@@ -154,7 +156,7 @@ export default function AreaPage() {
                                         {status.label}
                                     </span>
                                     <div className="text-right">
-                                        <p className="text-4xl font-black text-black tracking-tighter leading-none">{remaining}</p>
+                                        <p className="text-4xl font-black text-black tracking-tighter leading-none">{isNaN(remaining) ? 0 : remaining}</p>
                                         <p className="text-[10px] font-black text-slate-700 tracking-widest">Slot Tersisa</p>
                                     </div>
                                 </div>
@@ -200,8 +202,9 @@ export default function AreaPage() {
                                     <label className="text-sm font-black text-slate-700 tracking-[0.2em] ml-2">Total Kapasitas</label>
                                     <Input
                                         type="number"
+                                        min={0}
                                         value={formData.total_capacity}
-                                        onChange={(e) => setFormData({ ...formData, total_capacity: Number(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, total_capacity: Math.max(0, parseInt(e.target.value) || 0) })}
                                         placeholder="0"
                                         className="h-20 rounded-[1.5rem] border-4 border-slate-50 bg-slate-50 px-8 text-2xl font-black focus:border-blue-400 focus:bg-white transition-all"
                                     />
