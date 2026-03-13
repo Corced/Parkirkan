@@ -111,11 +111,21 @@ function CheckOutContent() {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
     };
 
+    const parseUTC = (dateStr: string) => {
+        const utcStr = dateStr.endsWith('Z') ? dateStr : dateStr.replace(' ', 'T') + 'Z';
+        return new Date(utcStr);
+    };
+
+    const formatWIB = (dateStr: string) => {
+        const d = parseUTC(dateStr);
+        return d.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + ' WIB';
+    };
+
     const calculateFairLogic = (checkInStr: string) => {
         if (!transaction?.rate) return { durationText: '...', totalCost: 0, days: 0, hours: 0, mins: 0, secs: 0 };
 
-        const checkIn = new Date(checkInStr);
-        const now = checkoutSuccess && transaction.check_out_time ? new Date(transaction.check_out_time) : currentTime;
+        const checkIn = parseUTC(checkInStr);
+        const now = checkoutSuccess && transaction.check_out_time ? parseUTC(transaction.check_out_time) : currentTime;
 
         const diffMs = now.getTime() - checkIn.getTime();
         const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
@@ -179,11 +189,11 @@ function CheckOutContent() {
                     <div className="mt-4 pt-4 border-t-2 border-dotted border-gray-300 space-y-1 text-[11px]">
                         <div className="flex justify-between">
                             <span>Masuk:</span>
-                            <span>{transaction ? new Date(transaction.check_in_time).toLocaleString('id-ID') : '-'}</span>
+                            <span>{transaction ? formatWIB(transaction.check_in_time) : '-'}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Keluar:</span>
-                            <span>{checkoutSuccess && transaction?.check_out_time ? new Date(transaction.check_out_time).toLocaleString('id-ID') : currentTime.toLocaleString('id-ID')}</span>
+                            <span>{checkoutSuccess && transaction?.check_out_time ? formatWIB(transaction.check_out_time) : currentTime.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + ' WIB'}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Durasi:</span>
@@ -260,8 +270,8 @@ function CheckOutContent() {
                                             { label: 'Plat Nomor', value: transaction.vehicle?.license_plate, isBold: true },
                                             { label: 'Jenis Kendaraan', value: transaction.vehicle?.vehicle_type, isBadge: true },
                                             { label: 'Area Parkir', value: transaction.area?.name },
-                                            { label: 'Waktu Masuk', value: new Date(transaction.check_in_time).toLocaleString('id-ID') },
-                                            { label: 'Waktu Keluar', value: transaction.check_out_time ? new Date(transaction.check_out_time).toLocaleString('id-ID') : currentTime.toLocaleString('id-ID'), isFuture: !transaction.check_out_time },
+                                            { label: 'Waktu Masuk', value: formatWIB(transaction.check_in_time) },
+                                            { label: 'Waktu Keluar', value: transaction.check_out_time ? formatWIB(transaction.check_out_time) : currentTime.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + ' WIB', isFuture: !transaction.check_out_time },
                                             { label: 'Durasi Parkir', value: durationText },
                                             { label: 'Tarif per Jam', value: formatCurrency(transaction.rate?.hourly_rate || 0) },
                                         ].map((item, idx) => (
@@ -292,7 +302,7 @@ function CheckOutContent() {
                                         <div className="space-y-1">
                                             <p className="text-sm font-black text-slate-700 tracking-[0.2em]">Total Biaya :</p>
                                             <h2 className="text-5xl font-black tracking-tighter">
-                                                {totalCost ? formatCurrency(totalCost) : 'Mengkalkulasi...'}
+                                                {transaction.rate ? formatCurrency(totalCost) : 'Mengkalkulasi...'}
                                             </h2>
                                         </div>
                                         <div className="h-20 w-20 bg-white/10 rounded-3xl flex items-center justify-center backdrop-blur-md">

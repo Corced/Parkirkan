@@ -21,7 +21,7 @@ class VehicleController extends Controller
     public function parked()
     {
         // Get vehicles that have an active transaction
-        $activeTransactions = Transaction::with('vehicle', 'area')
+        $activeTransactions = Transaction::with('vehicle', 'area', 'rate')
             ->where('status', 'active')
             ->get();
         

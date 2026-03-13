@@ -109,8 +109,8 @@ export default function ParkedVehiclesPage() {
                                                 <td className="px-10 py-8">
                                                     <div className="flex items-center gap-2 text-slate-800 font-bold">
                                                         <Clock className="h-4 w-4" />
-                                                        {new Date(transaction.check_in_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
-                                                        <span className="text-xs opacity-50 ml-1">({new Date(transaction.check_in_time).toLocaleDateString('id-ID')})</span>
+                                                        {new Date(transaction.check_in_time.endsWith('Z') ? transaction.check_in_time : transaction.check_in_time.replace(' ', 'T') + 'Z').toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })}
+                                                        <span className="text-xs opacity-50 ml-1">({new Date(transaction.check_in_time.endsWith('Z') ? transaction.check_in_time : transaction.check_in_time.replace(' ', 'T') + 'Z').toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' })})</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-10 py-8 text-center">
