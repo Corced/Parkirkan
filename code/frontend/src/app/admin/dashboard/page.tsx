@@ -67,7 +67,7 @@ export default function AdminDashboard() {
         { label: 'Total User', value: stats.total_users, icon: Users, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', borderColor: 'border-blue-200' },
         { label: 'Total Area', value: areas.length, icon: MapPin, iconBg: 'bg-green-50', iconColor: 'text-green-600', borderColor: 'border-green-200' },
         { label: 'Kendaraan Aktif', value: stats.active_parked_count || stats.parked_vehicles, icon: Car, iconBg: 'bg-orange-50', iconColor: 'text-orange-600', borderColor: 'border-orange-200' },
-        { label: 'Total Pendapatan', value: `Rp ${(stats.total_revenue / 1000000).toFixed(1)}jt`, icon: CreditCard, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', borderColor: 'border-purple-200' },
+        { label: 'Total Pendapatan', value: new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(stats.total_revenue || 0), icon: CreditCard, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', borderColor: 'border-purple-200' },
     ];
 
     const quickActions = [
