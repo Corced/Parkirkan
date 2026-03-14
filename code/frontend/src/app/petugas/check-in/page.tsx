@@ -84,7 +84,7 @@ export default function CheckInPage() {
             <div className="max-w-4xl mx-auto space-y-10 pb-20">
                 {/* Header */}
                 <div className="space-y-2">
-                    <h1 className="text-4xl font-black text-black tracking-tighter">Check-in Kendaraan</h1>
+                    <h1 className="text-4xl font-black text-black tracking-tighter">Lapor Masuk Kendaraan</h1>
                     <p className="text-slate-700 font-bold tracking-widest text-xs">Masukkan data kendaraan yang akan parkir</p>
                 </div>
 
@@ -233,10 +233,10 @@ export default function CheckInPage() {
                                     ) : success ? (
                                         <>
                                             <CheckCircle2 className="mr-3 h-6 w-6" />
-                                            Berhasil Check-in
+                                            Berhasil Lapor Masuk
                                         </>
                                     ) : (
-                                        'Proses Check-in'
+                                        'Proses Lapor Masuk'
                                     )}
                                 </Button>
                             </div>

@@ -23,6 +23,13 @@ class Transaction extends Model
         'status',
     ];
 
+    protected $casts = [
+        'check_in_time' => 'datetime',
+        'check_out_time' => 'datetime',
+        'total_cost' => 'integer',
+        'duration_hours' => 'integer',
+    ];
+
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);

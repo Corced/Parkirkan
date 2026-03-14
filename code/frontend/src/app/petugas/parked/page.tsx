@@ -33,10 +33,19 @@ export default function ParkedVehiclesPage() {
         }
     };
 
+    const parseUTC = (dateStr: string) => {
+        if (!dateStr) return new Date();
+        if (dateStr.includes('Z') || (dateStr.includes('T') && !dateStr.includes(' '))) {
+            return new Date(dateStr);
+        }
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(dateStr)) {
+            return new Date(dateStr.replace(' ', 'T'));
+        }
+        return new Date(dateStr);
+    };
+
     const calculateDuration = (checkInTime: string) => {
-        // Ensure the timestamp is parsed as UTC by Laravel (strip any offset info and re-add Z)
-        const utcStr = checkInTime.endsWith('Z') ? checkInTime : checkInTime.replace(' ', 'T') + 'Z';
-        const start = new Date(utcStr);
+        const start = parseUTC(checkInTime);
         const diffMs = currentTime.getTime() - start.getTime();
         const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
         const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
@@ -109,8 +118,8 @@ export default function ParkedVehiclesPage() {
                                                 <td className="px-10 py-8">
                                                     <div className="flex items-center gap-2 text-slate-800 font-bold">
                                                         <Clock className="h-4 w-4" />
-                                                        {new Date(transaction.check_in_time.endsWith('Z') ? transaction.check_in_time : transaction.check_in_time.replace(' ', 'T') + 'Z').toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })}
-                                                        <span className="text-xs opacity-50 ml-1">({new Date(transaction.check_in_time.endsWith('Z') ? transaction.check_in_time : transaction.check_in_time.replace(' ', 'T') + 'Z').toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' })})</span>
+                                                        {parseUTC(transaction.check_in_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })}
+                                                        <span className="text-xs opacity-50 ml-1">({parseUTC(transaction.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' })})</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-10 py-8 text-center">

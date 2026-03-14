@@ -35,8 +35,20 @@ export default function TransactionsPage() {
 
     const parseUTC = (dateStr: string) => {
         if (!dateStr) return new Date();
-        const utcStr = dateStr.endsWith('Z') ? dateStr : dateStr.replace(' ', 'T') + 'Z';
-        return new Date(utcStr);
+        // If it already has Z or T, let the browser parse it
+        if (dateStr.includes('Z') || (dateStr.includes('T') && !dateStr.includes(' '))) {
+            return new Date(dateStr);
+        }
+        // If it's the space-separated format from DB without Z, 
+        // and we know it's coming from a backend with Asia/Jakarta,
+        // we should parse it as is (local time).
+        // However, to be safe with my previous 'Z' hack, 
+        // let's check if it looks like the local string "YYYY-MM-DD HH:mm:ss"
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(dateStr)) {
+            // Simple space-separated usually means local for browsers
+            return new Date(dateStr.replace(' ', 'T'));
+        }
+        return new Date(dateStr);
     };
 
     const formatWIB = (dateStr: string | undefined, includeDate = false) => {
@@ -154,7 +166,10 @@ export default function TransactionsPage() {
         let count = 0;
         filteredTransactions.forEach(t => {
             if (t.check_out_time) {
-                totalMs += parseUTC(t.check_out_time).getTime() - parseUTC(t.check_in_time).getTime();
+                const checkInMs = parseUTC(t.check_in_time).getTime();
+                const checkOutMs = parseUTC(t.check_out_time).getTime();
+                const diffMs = checkOutMs - checkInMs;
+                totalMs += Math.max(0, diffMs);
                 count++;
             }
         });

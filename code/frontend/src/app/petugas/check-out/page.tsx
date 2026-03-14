@@ -38,7 +38,7 @@ function CheckOutContent() {
                 const res = await vehicleService.getParked();
                 const found = res.find((t) => t.ticket_number.toLowerCase() === query.trim().toLowerCase());
                 if (!found || found.status !== 'active') {
-                    alert('Tiket tidak ditemukan atau kendaraan sudah check-out');
+                    alert('Tiket tidak ditemukan atau kendaraan sudah Lapor Keluar');
                     setTransaction(null);
                 } else {
                     setTransaction(found);
@@ -112,8 +112,18 @@ function CheckOutContent() {
     };
 
     const parseUTC = (dateStr: string) => {
-        const utcStr = dateStr.endsWith('Z') ? dateStr : dateStr.replace(' ', 'T') + 'Z';
-        return new Date(utcStr);
+        if (!dateStr) return new Date();
+        // If it already has Z or T, let the browser parse it
+        if (dateStr.includes('Z') || (dateStr.includes('T') && !dateStr.includes(' '))) {
+            return new Date(dateStr);
+        }
+        // If it's the space-separated format from DB without Z, 
+        // and we know it's coming from a backend with Asia/Jakarta,
+        // we should parse it as is (local time).
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(dateStr)) {
+            return new Date(dateStr.replace(' ', 'T'));
+        }
+        return new Date(dateStr);
     };
 
     const formatWIB = (dateStr: string) => {
@@ -229,7 +239,7 @@ function CheckOutContent() {
                 <div className="print:hidden space-y-10">
                     {/* Header */}
                     <div className="space-y-2">
-                        <h1 className="text-4xl font-black text-black tracking-tighter">Check-out Kendaraan</h1>
+                        <h1 className="text-4xl font-black text-black tracking-tighter">Lapor Keluar Kendaraan</h1>
                         <p className="text-slate-700 font-bold tracking-widest text-xs">Proses pembayaran dan keluar parkir</p>
                     </div>
 
@@ -332,7 +342,7 @@ function CheckOutContent() {
                                                         Memproses...
                                                     </>
                                                 ) : (
-                                                    'Proses Check-out & Cetak Struk'
+                                                    'Proses Lapor Keluar & Cetak Struk'
                                                 )}
                                             </Button>
                                         )}

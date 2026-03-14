@@ -76,8 +76,17 @@ export default function OwnerDashboard() {
 
     const parseUTC = (dateStr: string) => {
         if (!dateStr) return new Date();
-        const utcStr = dateStr.endsWith('Z') ? dateStr : dateStr.replace(' ', 'T') + 'Z';
-        return new Date(utcStr);
+        // If it already has Z or T, let the browser parse it
+        if (dateStr.includes('Z') || (dateStr.includes('T') && !dateStr.includes(' '))) {
+            return new Date(dateStr);
+        }
+        // If it's the space-separated format from DB without Z, 
+        // and we know it's coming from a backend with Asia/Jakarta,
+        // we should parse it as is (local time).
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(dateStr)) {
+            return new Date(dateStr.replace(' ', 'T'));
+        }
+        return new Date(dateStr);
     };
 
     const fetchDashboardData = () => {

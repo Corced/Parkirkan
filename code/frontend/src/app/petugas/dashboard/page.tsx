@@ -173,7 +173,7 @@ export default function PetugasDashboard() {
                                 <div className="h-20 w-20 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
                                     <LogIn className="h-10 w-10" />
                                 </div>
-                                <h2 className="text-4xl font-black tracking-tighter">Check-In <br />Kendaraan</h2>
+                                <h2 className="text-4xl font-black tracking-tighter">Lapor Masuk <br />Kendaraan</h2>
                                 <p className="text-blue-100 font-bold text-lg opacity-80">Catat kendaraan masuk & cetak tiket parkir otomatis.</p>
                             </div>
                             <LogIn className="absolute -right-10 -bottom-10 h-64 w-64 text-white/5 rotate-12 group-hover:rotate-0 transition-transform duration-500" />
@@ -186,7 +186,7 @@ export default function PetugasDashboard() {
                                 <div className="h-20 w-20 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md">
                                     <LogOut className="h-10 w-10 text-orange-400" />
                                 </div>
-                                <h2 className="text-4xl font-black tracking-tighter">Check-Out <br />Kendaraan</h2>
+                                <h2 className="text-4xl font-black tracking-tighter">Lapor Keluar <br />Kendaraan</h2>
                                 <p className="text-slate-700 font-bold text-lg opacity-80">Scan tiket, hitung tarif dan proses pembayaran tunai.</p>
                             </div>
                             <LogOut className="absolute -right-10 -bottom-10 h-64 w-64 text-white/5 -rotate-12 group-hover:rotate-0 transition-transform duration-500" />

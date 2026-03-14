@@ -37,8 +37,8 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
         ],
         petugas: [
             { href: '/petugas/dashboard', label: 'Beranda', icon: LayoutDashboard },
-            { href: '/petugas/check-in', label: 'Check-In', icon: LogIn },
-            { href: '/petugas/check-out', label: 'Check-Out', icon: LogOut },
+            { href: '/petugas/check-in', label: 'Lapor Masuk', icon: LogIn },
+            { href: '/petugas/check-out', label: 'Lapor Keluar', icon: LogOut },
             { href: '/petugas/parked', label: 'Kendaraan Terparkir', icon: Car },
         ],
         owner: [
