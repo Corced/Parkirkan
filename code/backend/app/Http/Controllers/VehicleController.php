@@ -115,6 +115,7 @@ class VehicleController extends Controller
             $transaction = Transaction::where('ticket_number', $validated['ticket_number'])
                 ->where('status', 'active')
                 ->with('rate', 'area')
+                ->lockForUpdate()
                 ->firstOrFail();
 
             $checkOutTime = now();
