@@ -61,7 +61,7 @@ export function NotificationBell() {
                     )}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-96 p-0" align="end">
+            <PopoverContent className="w-96 p-0 z-50 bg-white shadow-2xl rounded-3xl border border-slate-100 overflow-hidden mt-4" align="end">
                 <div className="p-4 border-b bg-slate-50">
                     <h4 className="font-bold text-black">Notifikasi Aktivitas</h4>
                     <p className="text-xs text-slate-800 mt-1">Riwayat aktivitas terbaru</p>

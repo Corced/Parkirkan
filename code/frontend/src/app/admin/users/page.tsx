@@ -40,7 +40,11 @@ export default function UserManagementPage() {
         is_active: true
     });
 
+    const [currentUserRole, setCurrentUserRole] = useState<string>('petugas');
+
     useEffect(() => {
+        const storedRole = localStorage.getItem('role');
+        if (storedRole) setCurrentUserRole(storedRole);
         fetchUsers();
     }, []);
 
@@ -180,7 +184,7 @@ export default function UserManagementPage() {
 
                                 {showRoleDropdown && (
                                     <div className="absolute top-20 left-0 w-full bg-white border border-slate-100 rounded-2xl shadow-2xl p-2 z-50 animate-in slide-in-from-top-2 duration-200">
-                                        {['semua', 'admin', 'petugas', 'owner'].map((role) => (
+                                        {['semua', 'superadmin', 'admin', 'petugas', 'owner'].map((role) => (
                                             <button
                                                 key={role}
                                                 onClick={() => { setRoleFilter(role); setShowRoleDropdown(false); }}
@@ -231,6 +235,7 @@ export default function UserManagementPage() {
                                             <TableCell className="py-6">
                                                 <div className={cn(
                                                     "inline-flex px-6 py-2 rounded-xl text-lg font-black tracking-tighter",
+                                                    user.role === 'superadmin' ? "bg-amber-400 text-amber-950 shadow-md shadow-amber-400/20" :
                                                     user.role === 'admin' ? "bg-pink-300 text-pink-900" :
                                                         user.role === 'petugas' ? "bg-yellow-300 text-yellow-900" :
                                                             "bg-cyan-300 text-cyan-900"
@@ -251,12 +256,16 @@ export default function UserManagementPage() {
                                                     <button className="h-10 w-10 flex items-center justify-center text-blue-400 hover:text-blue-600 transition-colors" onClick={() => setSelectedUser(user)}>
                                                         <Eye className="h-6 w-6" />
                                                     </button>
-                                                    <button className="h-10 w-10 flex items-center justify-center text-orange-400 hover:text-orange-600 transition-colors" onClick={() => handleEditClick(user)}>
-                                                        <Edit className="h-6 w-6" />
-                                                    </button>
-                                                    <button className="h-10 w-10 flex items-center justify-center text-red-300 hover:text-red-500 transition-colors" onClick={() => setUserToDelete(user)}>
-                                                        <Trash2 className="h-6 w-6" />
-                                                    </button>
+                                                    {!(currentUserRole === 'admin' && (user.role === 'admin' || user.role === 'superadmin')) && (
+                                                        <>
+                                                        <button className="h-10 w-10 flex items-center justify-center text-orange-400 hover:text-orange-600 transition-colors" onClick={() => handleEditClick(user)}>
+                                                            <Edit className="h-6 w-6" />
+                                                        </button>
+                                                        <button className="h-10 w-10 flex items-center justify-center text-red-300 hover:text-red-500 transition-colors" onClick={() => setUserToDelete(user)}>
+                                                            <Trash2 className="h-6 w-6" />
+                                                        </button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>
@@ -303,12 +312,16 @@ export default function UserManagementPage() {
                                 )}
                                 {selectedUser && !isEditing && (
                                     <div className="flex gap-4">
-                                        <button className="p-3 bg-orange-50 text-orange-500 rounded-2xl hover:bg-orange-100 transition-all font-black flex items-center gap-2" onClick={() => handleEditClick(selectedUser)}>
-                                            <Edit className="h-8 w-8" />
-                                        </button>
-                                        <button className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all font-black flex items-center gap-2" onClick={() => setUserToDelete(selectedUser)}>
-                                            <Trash2 className="h-8 w-8" />
-                                        </button>
+                                        {!(currentUserRole === 'admin' && (selectedUser.role === 'admin' || selectedUser.role === 'superadmin')) && (
+                                            <>
+                                            <button className="p-3 bg-orange-50 text-orange-500 rounded-2xl hover:bg-orange-100 transition-all font-black flex items-center gap-2" onClick={() => handleEditClick(selectedUser)}>
+                                                <Edit className="h-8 w-8" />
+                                            </button>
+                                            <button className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all font-black flex items-center gap-2" onClick={() => setUserToDelete(selectedUser)}>
+                                                <Trash2 className="h-8 w-8" />
+                                            </button>
+                                            </>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -318,7 +331,7 @@ export default function UserManagementPage() {
                                     { label: 'Nama Pengguna', key: 'username', type: 'text', placeholder: 'petugas01' },
                                     { label: 'Nama Lengkap', key: 'name', type: 'text', placeholder: 'Budi Santoso' },
                                     { label: 'Alamat Email', key: 'email', type: 'email', placeholder: 'petugas@parkirkan.id' },
-                                    { label: 'Peran', key: 'role', type: 'select', options: ['admin', 'petugas', 'owner'] },
+                                    { label: 'Peran', key: 'role', type: 'select', options: currentUserRole === 'admin' ? ['petugas', 'owner'] : ['superadmin', 'admin', 'petugas', 'owner'] },
                                     { label: 'Kata Sandi', key: 'password', type: 'password', placeholder: isEditing ? 'Kosongkan jika tidak diubah' : '********' },
                                 ].filter(f => (isEditing || isAdding) || f.key !== 'password').map((field, idx) => (
                                     <div key={idx} className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">

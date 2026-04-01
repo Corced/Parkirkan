@@ -9,7 +9,8 @@ export function middleware(request: NextRequest) {
 
     // 1. If trying to access login page, but already logged in -> redirect to respective dashboard
     if (pathname === '/login' && token && role) {
-        return NextResponse.redirect(new URL(`/${role}/dashboard`, request.url));
+        const dashboardRole = role === 'superadmin' ? 'admin' : role;
+        return NextResponse.redirect(new URL(`/${dashboardRole}/dashboard`, request.url));
     }
 
     // 2. Protect specific routes based on role
@@ -25,7 +26,7 @@ export function middleware(request: NextRequest) {
         
         // Role check setup:
         // Admin gets unrestricted access to all routes for management if needed.
-        if (role === 'admin') {
+        if (role === 'admin' || role === 'superadmin') {
              return NextResponse.next();
         }
 

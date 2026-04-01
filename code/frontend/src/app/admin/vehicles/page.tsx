@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus, Edit, Trash2, Eye, Search, X, Car, User, Phone, Calendar, Hash } from "lucide-react";
-import { vehicleService, transactionService } from "@/lib/api";
-import { Vehicle, Transaction } from "@/types";
+import { vehicleService, transactionService, rateService } from "@/lib/api";
+import { Vehicle, Transaction, ParkingRate } from "@/types";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -27,9 +27,26 @@ export default function VehiclesPage() {
     const [editForm, setEditForm] = useState({ owner_name: '', owner_phone: '', vehicle_type: '' });
     const [saving, setSaving] = useState(false);
 
+    // Rates State
+    const [parkingRates, setParkingRates] = useState<ParkingRate[]>([]);
+
+    // Add Modal State
+    const [isAdding, setIsAdding] = useState(false);
+    const [addForm, setAddForm] = useState({ license_plate: '', owner_name: '', owner_phone: '', vehicle_type: 'motor' });
+
     useEffect(() => {
         fetchVehicles();
+        fetchRates();
     }, []);
+
+    const fetchRates = async () => {
+        try {
+            const data = await rateService.getAll();
+            setParkingRates(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const fetchVehicles = async () => {
         try {
@@ -95,6 +112,21 @@ export default function VehiclesPage() {
         }
     };
 
+    // Save Add
+    const handleSaveAdd = async () => {
+        setSaving(true);
+        try {
+            const newVehicle = await vehicleService.create(addForm);
+            setVehicles([newVehicle, ...vehicles]);
+            setIsAdding(false);
+            setAddForm({ license_plate: '', owner_name: '', owner_phone: '', vehicle_type: 'motor' });
+        } catch (error) {
+            alert('Gagal menambah kendaraan. Pastikan plat nomor belum terdaftar.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const filteredVehicles = vehicles.filter(vehicle =>
         vehicle.license_plate.toLowerCase().includes(searchQuery.toLowerCase()) ||
         vehicle.owner_name?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -123,7 +155,7 @@ export default function VehiclesPage() {
                     <div className="space-y-1">
                         <h1 className="text-5xl font-black text-black tracking-tighter leading-tight">Data Kendaraan</h1>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 items-center">
                         <div className="relative group">
                             <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-300 group-focus-within:text-blue-500 transition-colors" />
                             <Input
@@ -133,6 +165,10 @@ export default function VehiclesPage() {
                                 className="h-14 w-80 pl-16 rounded-2xl border-none bg-white shadow-sm font-bold text-slate-600 focus:ring-4 focus:ring-blue-100 transition-all"
                             />
                         </div>
+                        <Button onClick={() => setIsAdding(true)} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95 text-white">
+                            <Plus className="h-6 w-6" />
+                            Tambah Kendaraan
+                        </Button>
                     </div>
                 </div>
 
@@ -322,15 +358,17 @@ export default function VehiclesPage() {
 
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-700 tracking-widest">Jenis Kendaraan</label>
+                                    <label className="text-base font-black text-slate-700 tracking-widest">Jenis Kendaraan</label>
                                     <Select value={editForm.vehicle_type} onValueChange={(v) => setEditForm({ ...editForm, vehicle_type: v })}>
                                         <SelectTrigger className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold">
                                             <SelectValue />
                                         </SelectTrigger>
-                                        <SelectContent className="z-[200]">
-                                            <SelectItem value="motor">Motor</SelectItem>
-                                            <SelectItem value="mobil">Mobil</SelectItem>
-                                            <SelectItem value="truck">Truck</SelectItem>
+                                        <SelectContent className="z-[200] text-black font-bold bg-slate-50">
+                                            {parkingRates.map((rate) => (
+                                                <SelectItem key={rate.id} value={rate.vehicle_type.toLowerCase()}>
+                                                    {rate.vehicle_type.charAt(0).toUpperCase() + rate.vehicle_type.slice(1)}
+                                                </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -370,6 +408,89 @@ export default function VehiclesPage() {
                                     className="flex-1 h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 font-bold"
                                 >
                                     {saving ? 'Menyimpan...' : 'Simpan'}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* ADD MODAL */}
+                {isAdding && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md">
+                        <div className="relative bg-white rounded-[3rem] w-full max-w-xl p-12 shadow-2xl space-y-8 animate-in zoom-in-95 duration-200">
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-2">
+                                    <h3 className="text-3xl font-black text-black tracking-tighter">
+                                        Tambah Kendaraan
+                                    </h3>
+                                </div>
+                                <button onClick={() => setIsAdding(false)} className="p-2 hover:bg-slate-100 rounded-xl transition-colors">
+                                    <X className="h-6 w-6 text-slate-700" />
+                                </button>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-slate-700 tracking-widest">Plat Nomor</label>
+                                    <Input
+                                        value={addForm.license_plate}
+                                        onChange={(e) => setAddForm({ ...addForm, license_plate: e.target.value.toUpperCase() })}
+                                        placeholder="B 1234 ABC"
+                                        className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold uppercase"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-slate-700 tracking-widest">Jenis Kendaraan</label>
+                                    <Select value={addForm.vehicle_type} onValueChange={(v) => setAddForm({ ...addForm, vehicle_type: v })}>
+                                        <SelectTrigger className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent className="z-[200] text-black font-bold bg-slate-50">
+                                            {parkingRates.map((rate) => (
+                                                <SelectItem key={rate.id} value={rate.vehicle_type.toLowerCase()}>
+                                                    {rate.vehicle_type.charAt(0).toUpperCase() + rate.vehicle_type.slice(1)}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-slate-700 tracking-widest">Nama Pemilik</label>
+                                    <Input
+                                        value={addForm.owner_name}
+                                        onChange={(e) => setAddForm({ ...addForm, owner_name: e.target.value })}
+                                        placeholder="Nama pemilik kendaraan"
+                                        className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-slate-700 tracking-widest">No. Telepon</label>
+                                    <Input
+                                        value={addForm.owner_phone}
+                                        onChange={(e) => setAddForm({ ...addForm, owner_phone: e.target.value })}
+                                        placeholder="08xxxxxxxxxx"
+                                        className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex gap-4 pt-4">
+                                <Button
+                                    onClick={() => setIsAdding(false)}
+                                    variant="outline"
+                                    className="flex-1 h-14 rounded-2xl font-bold"
+                                >
+                                    Batal
+                                </Button>
+                                <Button
+                                    onClick={handleSaveAdd}
+                                    disabled={saving || !addForm.license_plate}
+                                    className="flex-1 h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 font-bold"
+                                >
+                                    {saving ? 'Menyimpan...' : 'Tambah'}
                                 </Button>
                             </div>
                         </div>

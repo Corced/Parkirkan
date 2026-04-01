@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('role', ['admin', 'petugas', 'owner'])->default('petugas');
+            $table->enum('role', ['superadmin', 'admin', 'petugas', 'owner'])->default('petugas');
             $table->boolean('is_active')->default(true);
             $table->timestamps(); // created_at & updated_at
         });

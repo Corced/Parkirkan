@@ -18,6 +18,30 @@ class VehicleController extends Controller
         return Vehicle::all();
     }
 
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'license_plate' => 'required|string|unique:vehicles',
+            'vehicle_type' => 'required|string',
+            'owner_name' => 'nullable|string|max:255',
+            'owner_phone' => 'nullable|string|max:20',
+        ]);
+
+        $validated['total_visits'] = 0;
+
+        $vehicle = Vehicle::create($validated);
+
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'VEHICLE_CREATED',
+            'description' => "Kendaraan {$vehicle->license_plate} didaftarkan manual.",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
+        return response()->json($vehicle, 201);
+    }
+
     public function parked()
     {
         // Get vehicles that have an active transaction

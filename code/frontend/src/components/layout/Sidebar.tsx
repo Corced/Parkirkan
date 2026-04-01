@@ -18,7 +18,7 @@ import {
 import Cookies from 'js-cookie';
 
 interface SidebarProps {
-    role: 'admin' | 'petugas' | 'owner';
+    role: 'superadmin' | 'admin' | 'petugas' | 'owner';
     isCollapsed: boolean;
     onToggle: () => void;
 }
@@ -47,7 +47,7 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
         ],
     };
 
-    const currentLinks = links[role];
+    const currentLinks = links[role === 'superadmin' ? 'admin' : role];
 
     const handleLogout = () => {
         if (typeof window !== 'undefined') {

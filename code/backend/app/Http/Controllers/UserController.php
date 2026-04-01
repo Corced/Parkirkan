@@ -21,9 +21,14 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'role' => 'required|in:admin,petugas,owner',
+            'role' => 'required|in:superadmin,admin,petugas,owner',
             'status' => 'sometimes|in:active,inactive',
         ]);
+
+        $authUser = auth()->user();
+        if ($authUser->role === 'admin' && in_array($validated['role'], ['admin', 'superadmin'])) {
+            return response()->json(['message' => 'Admin cannot create a user with admin or superadmin role.'], 403);
+        }
 
         $user = User::create([
             'name' => $validated['name'],
@@ -58,9 +63,19 @@ class UserController extends Controller
             'username' => 'sometimes|string|max:255|unique:users,username,' . $user->id,
             'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'sometimes|nullable|string|min:8',
-            'role' => 'sometimes|in:admin,petugas,owner',
+            'role' => 'sometimes|in:superadmin,admin,petugas,owner',
             'status' => 'sometimes|in:active,inactive',
         ]);
+
+        $authUser = auth()->user();
+        if ($authUser->role === 'admin') {
+            if ($user->role === 'superadmin' || ($user->role === 'admin' && $authUser->id !== $user->id)) {
+                return response()->json(['message' => 'Admin cannot modify other admin or superadmin accounts.'], 403);
+            }
+            if (isset($validated['role']) && in_array($validated['role'], ['superadmin', 'admin']) && ($validated['role'] !== $user->role || $authUser->id !== $user->id)) {
+                return response()->json(['message' => 'Admin cannot assign admin or superadmin roles.'], 403);
+            }
+        }
 
         // Handle status -> is_active mapping
         if (isset($validated['status'])) {
@@ -91,6 +106,11 @@ class UserController extends Controller
 
     public function destroy(Request $request, User $user)
     {
+        $authUser = auth()->user();
+        if ($authUser->role === 'admin' && in_array($user->role, ['superadmin', 'admin'])) {
+            return response()->json(['message' => 'Admin cannot delete an admin or superadmin account.'], 403);
+        }
+
         $username = $user->username;
         $user->delete();
 

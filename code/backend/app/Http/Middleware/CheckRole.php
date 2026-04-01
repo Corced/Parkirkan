@@ -17,9 +17,17 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $roles): Response
     {
+        if (!$request->user()) {
+            return response()->json(['message' => 'Unauthorized.'], 401);
+        }
+
+        if ($request->user()->role === 'superadmin') {
+            return $next($request);
+        }
+
         $allowedRoles = explode('|', str_replace(',', '|', $roles));
         
-        if (!$request->user() || !in_array($request->user()->role, $allowedRoles)) {
+        if (!in_array($request->user()->role, $allowedRoles)) {
             return response()->json([
                 'message' => 'Unauthorized. Only ' . $roles . ' can access this resource.'
             ], 403);
