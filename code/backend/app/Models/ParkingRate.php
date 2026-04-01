@@ -15,6 +15,8 @@ class ParkingRate extends Model
         'icon',
         'hourly_rate',
         'daily_max_rate',
+        'grace_period_minutes',
+        'initial_rate',
     ];
 
     public function transactions()

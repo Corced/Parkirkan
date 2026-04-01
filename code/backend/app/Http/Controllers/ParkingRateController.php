@@ -18,6 +18,8 @@ class ParkingRateController extends Controller
             'vehicle_type' => 'required|string|unique:parking_rates',
             'hourly_rate' => 'required|integer',
             'daily_max_rate' => 'required|integer',
+            'grace_period_minutes' => 'nullable|integer',
+            'initial_rate' => 'nullable|integer',
             'icon' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
@@ -32,6 +34,8 @@ class ParkingRateController extends Controller
             'vehicle_type' => 'sometimes|string',
             'hourly_rate' => 'sometimes|integer',
             'daily_max_rate' => 'sometimes|integer',
+            'grace_period_minutes' => 'sometimes|integer',
+            'initial_rate' => 'sometimes|integer',
             'icon' => 'nullable|string',
             'description' => 'nullable|string',
         ]);

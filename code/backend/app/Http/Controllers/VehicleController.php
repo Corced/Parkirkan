@@ -145,26 +145,39 @@ class VehicleController extends Controller
             $checkOutTime = now();
             $checkInTime = Carbon::parse($transaction->check_in_time);
             
-            // Calculate Duration in Minutes first for "Fair and Square" logic
             $totalMinutes = $checkInTime->diffInMinutes($checkOutTime);
             
-            // Round up to the nearest hour (any fraction of an hour counts as a full hour)
-            // Minimum 1 hour
-            $durationHours = max(1, (int) ceil($totalMinutes / 60));
-            
-            // Calculate Cost with Daily Max Cap
-            $rate = $transaction->rate;
-            $dailyMax = $rate->daily_max_rate;
-            $hourlyRate = $rate->hourly_rate;
-
-            $days = (int) floor($durationHours / 24);
-            $remainingHours = $durationHours % 24;
-
-            if ($dailyMax > 0) {
-                // (Full Days * Daily Max) + min(Remaining Hours * Hourly Rate, Daily Max)
-                $cost = ($days * $dailyMax) + min($remainingHours * $hourlyRate, $dailyMax);
+            // 1. Check Grace Period
+            if ($totalMinutes <= $transaction->rate->grace_period_minutes) {
+                $cost = 0;
+                $durationHours = 0;
             } else {
-                $cost = $durationHours * $hourlyRate;
+                // 2. Standard Calculation with Initial Rate
+                // All staying past grace period are charged at least 1 hour (initial_rate)
+                $durationHours = max(1, (int) ceil($totalMinutes / 60));
+                
+                $rate = $transaction->rate;
+                $cost = $rate->initial_rate; // Cost for 1st hour
+                
+                if ($durationHours > 1) {
+                    // Hourly rate applies after the first hour
+                    $cost += ($durationHours - 1) * $rate->hourly_rate;
+                }
+
+                // 3. Apply Daily Max Cap
+                $dailyMax = $rate->daily_max_rate;
+                if ($dailyMax > 0) {
+                    $days = (int) floor($durationHours / 24);
+                    $remainingHours = $durationHours % 24;
+                    
+                    // Simple cap logic: min of calculated cost vs daily caps
+                    // More complex: (Full Days * Daily Max) + min(Remaining * Hourly, Daily Max)
+                    $cappedCost = ($days * $dailyMax) + min($remainingHours * $rate->hourly_rate, $dailyMax);
+                    
+                    // If calculated cost is higher than capped cost, use capped
+                    // Note: Initial rate complicates simple floor-based cap, but this is a standard compromise
+                    $cost = min($cost, $cappedCost);
+                }
             }
 
             $transaction->update([

@@ -24,12 +24,16 @@ export default function RatesPage() {
         icon: string;
         hourly_rate: number;
         daily_max_rate: number;
+        grace_period_minutes: number;
+        initial_rate: number;
     }>({
         vehicle_type: '',
         description: '',
         icon: 'car',
         hourly_rate: 0,
-        daily_max_rate: 0
+        daily_max_rate: 0,
+        grace_period_minutes: 0,
+        initial_rate: 0
     });
 
     const icons = vehicleIcons;
@@ -54,7 +58,9 @@ export default function RatesPage() {
             description: rate.description || '',
             icon: rate.icon || 'car',
             hourly_rate: rate.hourly_rate,
-            daily_max_rate: rate.daily_max_rate || 0
+            daily_max_rate: rate.daily_max_rate || 0,
+            grace_period_minutes: rate.grace_period_minutes || 0,
+            initial_rate: rate.initial_rate || 0
         });
     };
 
@@ -64,7 +70,9 @@ export default function RatesPage() {
             const payload = {
                 ...formData,
                 hourly_rate: parseInt(formData.hourly_rate.toString()) || 0,
-                daily_max_rate: parseInt(formData.daily_max_rate.toString()) || 0
+                daily_max_rate: parseInt(formData.daily_max_rate.toString()) || 0,
+                grace_period_minutes: parseInt(formData.grace_period_minutes.toString()) || 0,
+                initial_rate: parseInt(formData.initial_rate.toString()) || 0
             };
 
             if (id) {
@@ -76,7 +84,7 @@ export default function RatesPage() {
                 setRates([...rates, created]);
                 setIsAdding(false);
             }
-            setFormData({ vehicle_type: '', description: '', icon: 'car', hourly_rate: 0, daily_max_rate: 0 });
+            setFormData({ vehicle_type: '', description: '', icon: 'car', hourly_rate: 0, daily_max_rate: 0, grace_period_minutes: 0, initial_rate: 0 });
         } catch (error: unknown) {
             const msg = error instanceof Error ? error.message : 'Error';
             alert('Gagal menyimpan: ' + msg);
@@ -194,20 +202,58 @@ export default function RatesPage() {
 
                                     <div className="space-y-4 pt-2">
                                         <div className="flex justify-between items-center group/item">
-                                            <span className="text-sm font-black text-slate-700 tracking-widest">Tarif per jam</span>
+                                            <span className="text-sm font-black text-slate-700 tracking-widest">Masa Tenggang</span>
+                                            {isEditing ? (
+                                                <div className="flex items-center gap-2">
+                                                    <Input
+                                                        type="number"
+                                                        min={0}
+                                                        value={formData.grace_period_minutes}
+                                                        onChange={(e) => setFormData({ ...formData, grace_period_minutes: Math.max(0, parseInt(e.target.value) || 0) })}
+                                                        className="w-24 h-10 text-xl font-black text-right border-none bg-slate-50 px-2"
+                                                    />
+                                                    <span className="text-sm font-bold text-slate-400">Menit</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-lg font-black text-blue-600 tracking-tight">
+                                                    {rate.grace_period_minutes || 0} menit
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex justify-between items-center group/item">
+                                            <span className="text-sm font-black text-slate-700 tracking-widest">Tarif Awal (Jam 1)</span>
                                             {isEditing ? (
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-xl font-black text-black">Rp.</span>
                                                     <Input
                                                         type="number"
                                                         min={0}
-                                                        value={formData.hourly_rate}
-                                                        onChange={(e) => setFormData({ ...formData, hourly_rate: Math.max(0, parseInt(e.target.value) || 0) })}
+                                                        value={formData.initial_rate}
+                                                        onChange={(e) => setFormData({ ...formData, initial_rate: Math.max(0, parseInt(e.target.value) || 0) })}
                                                         className="w-32 h-10 text-xl font-black text-right border-none bg-slate-50 px-2"
                                                     />
                                                 </div>
                                             ) : (
                                                 <span className="text-xl font-black text-black tracking-tight group-hover/item:text-blue-600 transition-colors">
+                                                    Rp. {rate.initial_rate?.toLocaleString() || '0'}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex justify-between items-center group/item bg-slate-50/50 rounded-lg">
+                                            <span className="text-sm font-black text-slate-700 tracking-widest">JAM BERIKUTNYA</span>
+                                            {isEditing ? (
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-base font-black text-black">Rp.</span>
+                                                    <Input
+                                                        type="number"
+                                                        min={0}
+                                                        value={formData.hourly_rate}
+                                                        onChange={(e) => setFormData({ ...formData, hourly_rate: Math.max(0, parseInt(e.target.value) || 0) })}
+                                                        className="w-24 h-8 text-base font-black text-right border-none bg-white px-2 shadow-inner"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <span className="text-base font-black text-slate-600">
                                                     Rp. {rate.hourly_rate.toLocaleString()}
                                                 </span>
                                             )}
@@ -288,13 +334,33 @@ export default function RatesPage() {
                                 />
                                 <div className="space-y-4 pt-2">
                                     <div className="flex justify-between items-center">
-                                        <span className="text-sm font-black text-slate-700 tracking-widest">Tarif per jam</span>
+                                        <span className="text-sm font-black text-slate-700 tracking-widest">Masa Tenggang (Menit)</span>
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            placeholder="0"
+                                            onChange={(e) => setFormData({ ...formData, grace_period_minutes: Math.max(0, parseInt(e.target.value) || 0) })}
+                                            className="w-40 h-10 text-lg font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
+                                        />
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm font-black text-slate-700 tracking-widest">Tarif Awal (Jam 1)</span>
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            placeholder="0"
+                                            onChange={(e) => setFormData({ ...formData, initial_rate: Math.max(0, parseInt(e.target.value) || 0) })}
+                                            className="w-40 h-10 text-lg font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
+                                        />
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm font-black text-slate-700 tracking-widest">Tarif per jam berikutnya</span>
                                         <Input
                                             type="number"
                                             min={0}
                                             placeholder="0"
                                             onChange={(e) => setFormData({ ...formData, hourly_rate: Math.max(0, parseInt(e.target.value) || 0) })}
-                                            className="w-40 h-12 text-xl font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
+                                            className="w-40 h-10 text-lg font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
                                         />
                                     </div>
                                     <div className="flex justify-between items-center">
@@ -304,7 +370,7 @@ export default function RatesPage() {
                                             min={0}
                                             placeholder="0"
                                             onChange={(e) => setFormData({ ...formData, daily_max_rate: Math.max(0, parseInt(e.target.value) || 0) })}
-                                            className="w-40 h-12 text-xl font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
+                                            className="w-40 h-10 text-lg font-black text-right border-4 border-slate-100 bg-slate-50 rounded-xl px-4"
                                         />
                                     </div>
                                 </div>

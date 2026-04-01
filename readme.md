@@ -29,6 +29,7 @@ php artisan key:generate
 php artisan migrate
 php artisan serve
 cd code; cd backend; composer install; php artisan key:generate; php artisan migrate; php artisan serve
+cd code; cd backend; php artisan migrate; php artisan serve
 ```
 
 ### Frontend
@@ -37,4 +38,5 @@ cd code/frontend
 npm install
 npm run dev
 cd code; cd frontend; npm install; npm run build; npm run dev
+cd code; cd frontend; npm run dev
 ```

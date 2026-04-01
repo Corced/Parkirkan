@@ -21,7 +21,9 @@ class ParkingRateSeeder extends Seeder
             'vehicle_type' => 'Motor',
             'description' => 'Untuk motor dengan CC 125 s dan CC 150-250',
             'icon' => 'motorsport',
-            'hourly_rate' => 2000,
+            'grace_period_minutes' => 5,
+            'initial_rate' => 2000,
+            'hourly_rate' => 1000,
             'daily_max_rate' => 10000,
         ]);
 
@@ -29,7 +31,9 @@ class ParkingRateSeeder extends Seeder
             'vehicle_type' => 'Mobil',
             'description' => 'Untuk mobil dengan CC 1.000 - 2.500 CC',
             'icon' => 'car',
-            'hourly_rate' => 5000,
+            'grace_period_minutes' => 10,
+            'initial_rate' => 5000,
+            'hourly_rate' => 3000,
             'daily_max_rate' => 25000,
         ]);
 
@@ -37,7 +41,9 @@ class ParkingRateSeeder extends Seeder
             'vehicle_type' => 'Truk Logistik',
             'description' => 'Untuk logistik',
             'icon' => 'truck',
-            'hourly_rate' => 10000,
+            'grace_period_minutes' => 15,
+            'initial_rate' => 10000,
+            'hourly_rate' => 5000,
             'daily_max_rate' => 50000,
         ]);
 
@@ -45,7 +51,9 @@ class ParkingRateSeeder extends Seeder
             'vehicle_type' => 'Motor Gede',
             'description' => 'Untuk motor dengan CC > 250cc - 1000cc+',
             'icon' => 'bicycle',
-            'hourly_rate' => 2500,
+            'grace_period_minutes' => 5,
+            'initial_rate' => 2500,
+            'hourly_rate' => 1500,
             'daily_max_rate' => 12000,
         ]);
 
@@ -53,8 +61,10 @@ class ParkingRateSeeder extends Seeder
             'vehicle_type' => 'Mobil Sports',
             'description' => 'Untuk mobil dengan > 2.500 CC',
             'icon' => 'car',
-            'hourly_rate' => 7500,
-            'daily_max_rate' => 37500,
+            'grace_period_minutes' => 10,
+            'initial_rate' => 10000,
+            'hourly_rate' => 5000,
+            'daily_max_rate' => 45000,
         ]);
     }
 }

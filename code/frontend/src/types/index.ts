@@ -61,6 +61,8 @@ export interface ParkingRate {
     icon?: string;
     hourly_rate: number;
     daily_max_rate: number;
+    grace_period_minutes: number;
+    initial_rate: number;
     created_at: string;
     updated_at: string;
 }
