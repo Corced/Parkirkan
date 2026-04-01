@@ -128,11 +128,12 @@ export default function TransactionsPage() {
             const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
             const hours = Math.floor(diffSecs / 3600);
             const mins = Math.floor((diffSecs % 3600) / 60);
-            const durationText = hours > 0 ? `${hours}j ${mins}m` : `${mins}m`;
+            const secs = diffSecs % 60;
+            const durationText = `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
             const petugasMasuk = t.entry_officer?.name || '-';
             const petugasKeluar = t.exit_officer?.name || '-';
-            const petugasText = petugasMasuk === petugasKeluar ? petugasMasuk : `M: ${petugasMasuk} / K: ${petugasKeluar}`;
+            const petugasText = petugasMasuk === petugasKeluar ? petugasMasuk : `Masuk: ${petugasMasuk} / Keluar: ${petugasKeluar}`;
 
             return [
                 checkIn.toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }),
@@ -165,7 +166,8 @@ export default function TransactionsPage() {
             const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
             const hours = Math.floor(diffSecs / 3600);
             const mins = Math.floor((diffSecs % 3600) / 60);
-            const durationText = hours > 0 ? `${hours}j ${mins}m` : `${mins}m`;
+            const secs = diffSecs % 60;
+            const durationText = `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
             const petugasMasuk = t.entry_officer?.name || '-';
             const petugasKeluar = t.exit_officer?.name || '-';
@@ -209,8 +211,12 @@ export default function TransactionsPage() {
         const avgSecs = Math.floor((totalMs / count) / 1000);
         const hours = Math.floor(avgSecs / 3600);
         const mins = Math.floor((avgSecs % 3600) / 60);
-        if (hours === 0) return `${mins} Menit`;
-        return `${hours} Jam ${mins} Menit`;
+        const secs = avgSecs % 60;
+        if (hours === 0) {
+            if (mins === 0) return `${secs} Detik`;
+            return `${mins} Menit ${secs} Detik`;
+        }
+        return `${hours} Jam ${mins} Menit ${secs} Detik`;
     })();
 
     const summaryStats = [
@@ -376,19 +382,19 @@ export default function TransactionsPage() {
                                                     const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
                                                     const hours = Math.floor(diffSecs / 3600);
                                                     const mins = Math.floor((diffSecs % 3600) / 60);
-                                                    if (hours > 0) return `${hours}j ${mins}m`;
-                                                    return `${mins}m`;
+                                                    const secs = diffSecs % 60;
+                                                    return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                                                 })()}
                                             </TableCell>
-                                            <TableCell className="text-slate-600">
+                                            <TableCell className="text-slate-700">
                                                 {(() => {
                                                     const petugasMasuk = transaction.entry_officer?.name || '-';
                                                     const petugasKeluar = transaction.exit_officer?.name || '-';
                                                     if (petugasMasuk === petugasKeluar) return petugasMasuk;
                                                     return (
                                                         <div className="flex flex-col text-[10px] leading-tight">
-                                                            <span>M: {petugasMasuk}</span>
-                                                            <span>K: {petugasKeluar}</span>
+                                                            <span>Masuk: {petugasMasuk}</span>
+                                                            <span>Keluar: {petugasKeluar}</span>
                                                         </div>
                                                     );
                                                 })()}
