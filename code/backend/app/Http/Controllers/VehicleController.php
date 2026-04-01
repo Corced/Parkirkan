@@ -106,7 +106,7 @@ class VehicleController extends Controller
                 'vehicle_id' => $vehicle->id,
                 'area_id' => $area->id,
                 'rate_id' => $rate->id,
-                'officer_id' => $request->user()->id, // Officer logged in
+                'entry_officer_id' => $request->user()->id, // Officer logged in
                 'ticket_number' => 'T-' . time() . '-' . rand(100, 999),
                 'check_in_time' => now(),
                 'status' => 'active',
@@ -171,6 +171,7 @@ class VehicleController extends Controller
                 'check_out_time' => $checkOutTime,
                 'duration_hours' => $durationHours,
                 'total_cost' => $cost,
+                'exit_officer_id' => auth()->id(), // Set exit officer
                 'status' => 'completed',
                 'payment_status' => 'paid'
             ]);

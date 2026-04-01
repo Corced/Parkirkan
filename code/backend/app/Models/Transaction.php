@@ -13,7 +13,8 @@ class Transaction extends Model
         'vehicle_id',
         'area_id',
         'rate_id',
-        'officer_id',
+        'entry_officer_id',
+        'exit_officer_id',
         'ticket_number',
         'check_in_time',
         'check_out_time',
@@ -45,8 +46,13 @@ class Transaction extends Model
         return $this->belongsTo(ParkingRate::class);
     }
 
-    public function officer()
+    public function entryOfficer()
     {
-        return $this->belongsTo(User::class, 'officer_id');
+        return $this->belongsTo(User::class, 'entry_officer_id');
+    }
+
+    public function exitOfficer()
+    {
+        return $this->belongsTo(User::class, 'exit_officer_id');
     }
 }

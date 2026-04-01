@@ -34,7 +34,8 @@ export interface Transaction {
     vehicle_id: number;
     area_id: number;
     rate_id: number;
-    officer_id: number;
+    entry_officer_id: number;
+    exit_officer_id?: number;
     ticket_number: string;
     check_in_time: string;
     check_out_time?: string;
@@ -49,7 +50,8 @@ export interface Transaction {
     vehicle?: Vehicle;
     area?: ParkingArea;
     rate?: ParkingRate;
-    officer?: User;
+    entry_officer?: User;
+    exit_officer?: User;
 }
 
 export interface ParkingRate {

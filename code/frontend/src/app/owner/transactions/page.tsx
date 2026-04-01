@@ -120,17 +120,33 @@ export default function TransactionsPage() {
         doc.text("Laporan Transaksi Parkir", 14, 15);
         doc.text(`Periode: ${startDate || 'Awal'} s/d ${endDate || 'Sekarang'}`, 14, 22);
 
-        const tableColumn = ["Tanggal", "No. Tiket", "Plat Nomor", "Jenis", "Area", "Masuk", "Keluar", "Biaya"];
-        const tableRows = filteredTransactions.map(t => [
-            parseUTC(t.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }),
-            t.ticket_number,
-            t.vehicle?.license_plate || '-',
-            t.vehicle?.vehicle_type || '-',
-            t.area?.name || '-',
-            formatWIB(t.check_in_time),
-            t.check_out_time ? formatWIB(t.check_out_time) : '-',
-            t.total_cost ? `Rp ${Number(t.total_cost).toLocaleString('id-ID')}` : '-'
-        ]);
+        const tableColumn = ["Tanggal", "No. Tiket", "Plat Nomor", "Jenis", "Area", "Masuk", "Keluar", "Durasi", "Petugas", "Biaya"];
+        const tableRows = filteredTransactions.map(t => {
+            const checkIn = parseUTC(t.check_in_time);
+            const checkOut = t.check_out_time ? parseUTC(t.check_out_time) : currentTime;
+            const diffMs = checkOut.getTime() - checkIn.getTime();
+            const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
+            const hours = Math.floor(diffSecs / 3600);
+            const mins = Math.floor((diffSecs % 3600) / 60);
+            const durationText = hours > 0 ? `${hours}j ${mins}m` : `${mins}m`;
+
+            const petugasMasuk = t.entry_officer?.name || '-';
+            const petugasKeluar = t.exit_officer?.name || '-';
+            const petugasText = petugasMasuk === petugasKeluar ? petugasMasuk : `M: ${petugasMasuk} / K: ${petugasKeluar}`;
+
+            return [
+                checkIn.toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }),
+                t.ticket_number,
+                t.vehicle?.license_plate || '-',
+                t.vehicle?.vehicle_type || '-',
+                t.area?.name || '-',
+                formatWIB(t.check_in_time),
+                t.check_out_time ? formatWIB(t.check_out_time) : '-',
+                durationText,
+                petugasText,
+                t.total_cost ? `Rp ${Number(t.total_cost).toLocaleString('id-ID')}` : '-'
+            ];
+        });
 
         autoTable(doc, {
             head: [tableColumn],
@@ -142,16 +158,32 @@ export default function TransactionsPage() {
     };
 
     const handleExportExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(filteredTransactions.map(t => ({
-            Tanggal: parseUTC(t.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }),
-            No_Tiket: t.ticket_number,
-            Plat_Nomor: t.vehicle?.license_plate,
-            Jenis: t.vehicle?.vehicle_type,
-            Area: t.area?.name || '-',
-            Masuk: formatWIB(t.check_in_time),
-            Keluar: t.check_out_time ? formatWIB(t.check_out_time) : '-',
-            Biaya: t.total_cost
-        })));
+        const worksheet = XLSX.utils.json_to_sheet(filteredTransactions.map(t => {
+            const checkIn = parseUTC(t.check_in_time);
+            const checkOut = t.check_out_time ? parseUTC(t.check_out_time) : currentTime;
+            const diffMs = checkOut.getTime() - checkIn.getTime();
+            const diffSecs = Math.max(0, Math.floor(diffMs / 1000));
+            const hours = Math.floor(diffSecs / 3600);
+            const mins = Math.floor((diffSecs % 3600) / 60);
+            const durationText = hours > 0 ? `${hours}j ${mins}m` : `${mins}m`;
+
+            const petugasMasuk = t.entry_officer?.name || '-';
+            const petugasKeluar = t.exit_officer?.name || '-';
+            const petugasText = petugasMasuk === petugasKeluar ? petugasMasuk : `Masuk: ${petugasMasuk}, Keluar: ${petugasKeluar}`;
+
+            return {
+                Tanggal: checkIn.toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }),
+                No_Tiket: t.ticket_number,
+                Plat_Nomor: t.vehicle?.license_plate,
+                Jenis: t.vehicle?.vehicle_type,
+                Area: t.area?.name || '-',
+                Masuk: formatWIB(t.check_in_time),
+                Keluar: t.check_out_time ? formatWIB(t.check_out_time) : '-',
+                Durasi: durationText,
+                Petugas: petugasText,
+                Biaya: t.total_cost
+            };
+        }));
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Transaksi");
         XLSX.writeFile(workbook, "laporan_transaksi.xlsx");
@@ -301,8 +333,8 @@ export default function TransactionsPage() {
                                     <TableHead className="font-bold text-black">Masuk</TableHead>
                                     <TableHead className="font-bold text-black">Keluar</TableHead>
                                     <TableHead className="font-bold text-black">Durasi</TableHead>
-                                    <TableHead className="font-bold text-black text-right">Biaya</TableHead>
                                     <TableHead className="font-bold text-black text-center">Petugas</TableHead>
+                                    <TableHead className="font-bold text-black text-right">Biaya</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -348,10 +380,22 @@ export default function TransactionsPage() {
                                                     return `${mins}m`;
                                                 })()}
                                             </TableCell>
+                                            <TableCell className="text-slate-600">
+                                                {(() => {
+                                                    const petugasMasuk = transaction.entry_officer?.name || '-';
+                                                    const petugasKeluar = transaction.exit_officer?.name || '-';
+                                                    if (petugasMasuk === petugasKeluar) return petugasMasuk;
+                                                    return (
+                                                        <div className="flex flex-col text-[10px] leading-tight">
+                                                            <span>M: {petugasMasuk}</span>
+                                                            <span>K: {petugasKeluar}</span>
+                                                        </div>
+                                                    );
+                                                })()}
+                                            </TableCell>
                                             <TableCell className="text-right font-bold text-black">
                                                 {transaction.total_cost ? `Rp ${Number(transaction.total_cost).toLocaleString('id-ID')}` : '-'}
                                             </TableCell>
-                                            <TableCell className="text-center text-slate-600">-</TableCell>
                                         </TableRow>
                                     ))
                                 )}

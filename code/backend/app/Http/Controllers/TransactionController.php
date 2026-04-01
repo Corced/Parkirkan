@@ -9,12 +9,12 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        return Transaction::with('vehicle', 'officer', 'area')->latest()->get();
+        return Transaction::with('vehicle', 'entryOfficer', 'exitOfficer', 'area')->latest()->get();
     }
 
     public function show(Transaction $transaction)
     {
-        return $transaction->load('vehicle', 'officer', 'area');
+        return $transaction->load('vehicle', 'entryOfficer', 'exitOfficer', 'area');
     }
 
     // Usually transactions are created via Check-in/Check-out flows in VehicleController,
