@@ -104,7 +104,7 @@ export default function RatesPage() {
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <h1 className="text-4xl font-extrabold text-black tracking-tight">Tarif Parkir</h1>
-                        <p className="text-slate-800 font-bold text-xs tracking-widest leading-none">Pengaturan tarif parkir kendaraan</p>
+                        <p className="text-slate-800 font-bold text-base tracking-widest leading-none">Pengaturan tarif parkir kendaraan</p>
                     </div>
                     <Button onClick={() => setIsAdding(true)} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
                         <Plus className="h-6 w-6" strokeWidth={3} />
@@ -178,7 +178,7 @@ export default function RatesPage() {
                                             <h3 className="text-3xl font-black text-black tracking-tighter">{rate.vehicle_type}</h3>
                                         )}
                                         {!isEditing && rate.description && (
-                                            <p className="text-xs font-bold text-slate-400 leading-relaxed mt-1">
+                                            <p className="text-base font-bold text-slate-400 leading-relaxed mt-1">
                                                 {rate.description}
                                             </p>
                                         )}

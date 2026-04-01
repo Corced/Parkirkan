@@ -80,7 +80,7 @@ export default function AreaPage() {
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <h1 className="text-4xl font-extrabold text-black tracking-tight">Area Parkir</h1>
-                        <p className="text-slate-800 font-bold text-xs tracking-widest leading-none">Manajemen area dan kapasitas parkir</p>
+                        <p className="text-slate-800 font-bold text-base tracking-widest leading-none">Manajemen area dan kapasitas parkir</p>
                     </div>
                     <Button onClick={() => setIsAdding(true)} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
                         <Plus className="h-6 w-6" strokeWidth={3} />
@@ -150,7 +150,7 @@ export default function AreaPage() {
 
                                 <div className="flex justify-between items-center pt-2">
                                     <span className={cn(
-                                        "px-6 py-2 rounded-xl text-xs font-black text-white tracking-widest shadow-sm",
+                                        "px-6 py-2 rounded-xl text-base font-black text-white tracking-widest shadow-sm",
                                         status.color
                                     )}>
                                         {status.label}
@@ -241,7 +241,7 @@ export default function AreaPage() {
                             </div>
 
                             <div className="space-y-6">
-                                <p className="text-xs font-black text-slate-700 tracking-[0.3em]">Ketik Kode Area untuk Konfirmasi</p>
+                                <p className="text-base font-black text-slate-700 tracking-[0.3em]">Ketik Kode Area untuk Konfirmasi</p>
                                 <Input
                                     value={confirmCode}
                                     onChange={(e) => setConfirmCode(e.target.value)}

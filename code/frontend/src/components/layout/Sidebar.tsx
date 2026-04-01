@@ -54,11 +54,11 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.removeItem('role');
-            
+
             // Remove cookies
             Cookies.remove('token');
             Cookies.remove('role');
-            
+
             window.location.href = '/login';
         }
     };
@@ -117,7 +117,7 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
 
                             {/* Tooltip for collapsed state */}
                             {isCollapsed && (
-                                <div className="absolute left-full ml-4 px-3 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[100] shadow-xl border border-slate-700">
+                                <div className="absolute left-full ml-4 px-3 py-2 bg-slate-900 text-white text-base font-bold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[100] shadow-xl border border-slate-700">
                                     {link.label}
                                 </div>
                             )}
@@ -145,7 +145,7 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
 
                     {/* Tooltip for collapsed logout */}
                     {isCollapsed && (
-                        <div className="absolute left-full ml-4 px-3 py-2 bg-red-600 text-white text-xs font-bold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[100] shadow-xl">
+                        <div className="absolute left-full ml-4 px-3 py-2 bg-red-600 text-white text-base font-bold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-[100] shadow-xl">
                             Keluar
                         </div>
                     )}

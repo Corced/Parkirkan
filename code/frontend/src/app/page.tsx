@@ -180,7 +180,7 @@ export default function Home() {
         <footer className="px-6 lg:px-12 py-12 border-t bg-[#EBEDF2]">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <span className="text-2xl font-black text-[#111827] tracking-tighter opacity-30">PARKIRKAN</span>
-            <p className="text-xs font-bold text-slate-700">
+            <p className="text-base font-bold text-slate-700">
               © 2026 Parkirkan. <span className="text-black">Aplikasi Manajemen Parkir Online</span>
             </p>
           </div>

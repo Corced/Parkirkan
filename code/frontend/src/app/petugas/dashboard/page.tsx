@@ -139,7 +139,7 @@ export default function PetugasDashboard() {
             <FadeIn direction="down" duration={0.5}>
                 <div>
                     <h1 className="text-4xl font-extrabold text-black tracking-tight">Dashboard Petugas</h1>
-                    <p className="text-slate-800 mt-2 font-bold text-xs tracking-widest">Sistem Operasional Parkir v1.0</p>
+                    <p className="text-slate-800 mt-2 font-bold text-base tracking-widest">Sistem Operasional Parkir v1.0</p>
                 </div>
             </FadeIn>
 
@@ -235,7 +235,7 @@ export default function PetugasDashboard() {
                                                 <Car className={cn("h-8 w-8", searchResult.is_currently_parked ? "text-blue-600" : "text-slate-700")} />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-black text-slate-700 tracking-widest mb-1">
+                                                <p className="text-base font-black text-slate-700 tracking-widest mb-1">
                                                     {searchResult.is_currently_parked ? 'Kendaraan Terparkir' : 'Terakhir Berkunjung'}
                                                 </p>
                                                 <h4 className="text-2xl font-black text-black">{searchResult.vehicle?.license_plate}</h4>
@@ -249,7 +249,7 @@ export default function PetugasDashboard() {
                                                 <MapPin className={cn("h-8 w-8", searchResult.is_currently_parked ? "text-emerald-600" : "text-slate-300")} />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-black text-slate-700 tracking-widest mb-1">Lokasi Area</p>
+                                                <p className="text-base font-black text-slate-700 tracking-widest mb-1">Lokasi Area</p>
                                                 <h4 className="text-2xl font-black text-black">
                                                     {searchResult.latest_transaction?.area?.name || '---'}
                                                 </h4>
@@ -290,7 +290,7 @@ export default function PetugasDashboard() {
                             {!isShiftActive ? (
                                 <>
                                     <div className="space-y-3">
-                                        <label className="text-xs font-black text-slate-700 tracking-widest">Pilih Shift</label>
+                                        <label className="text-base font-black text-slate-700 tracking-widest">Pilih Shift</label>
                                         <Select value={currentShift} onValueChange={setCurrentShift}>
                                             <SelectTrigger className="h-14 bg-slate-50 border-2 font-bold text-lg rounded-2xl">
                                                 <SelectValue />
@@ -313,16 +313,16 @@ export default function PetugasDashboard() {
                                 <>
                                     <div className="p-6 bg-emerald-50 rounded-2xl border-2 border-emerald-100 space-y-4">
                                         <div>
-                                            <p className="text-xs font-black text-emerald-600 tracking-widest mb-2">Shift Aktif</p>
+                                            <p className="text-base font-black text-emerald-600 tracking-widest mb-2">Shift Aktif</p>
                                             <p className="text-2xl font-black text-black">{currentShift}</p>
                                         </div>
                                         <div className="pt-4 border-t-2 border-emerald-100 flex justify-between items-center">
                                             <div>
-                                                <p className="text-xs font-bold text-slate-500">Kendaraan Keluar</p>
+                                                <p className="text-base font-bold text-slate-500">Kendaraan Keluar</p>
                                                 <p className="text-lg font-black text-slate-800">{isNaN(shiftTransactionCount) ? 0 : shiftTransactionCount}</p>
                                             </div>
                                             <div className="text-right">
-                                                <p className="text-xs font-bold text-slate-500">Pendapatan</p>
+                                                <p className="text-base font-bold text-slate-500">Pendapatan</p>
                                                 <p className="text-xl font-black text-emerald-600">Rp {isNaN(shiftRevenue) ? '0' : shiftRevenue.toLocaleString('id-ID')}</p>
                                             </div>
                                         </div>

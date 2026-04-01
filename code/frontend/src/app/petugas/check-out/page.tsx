@@ -81,14 +81,14 @@ function CheckOutContent() {
             const res = await vehicleService.checkOut({ ticket_number: transaction.ticket_number });
             setTransaction(res);
             setCheckoutSuccess(true);
-            
+
             // --- Shift Tracking Logic ---
             if (localStorage.getItem('petugas_shift_active') === 'true') {
                 const currentRevenue = parseInt(localStorage.getItem('petugas_shift_revenue') || '0');
                 const currentCount = parseInt(localStorage.getItem('petugas_shift_count') || '0');
-                
+
                 const addedRevenue = res.total_cost ? Number(res.total_cost) : totalCost;
-                
+
                 localStorage.setItem('petugas_shift_revenue', (currentRevenue + addedRevenue).toString());
                 localStorage.setItem('petugas_shift_count', (currentCount + 1).toString());
             }
@@ -177,7 +177,7 @@ function CheckOutContent() {
                 <div className="hidden print:block fixed inset-0 bg-white z-[9999] p-8 text-black font-mono">
                     <div className="max-w-[80mm] mx-auto border-b-2 border-dashed border-black pb-4 text-center">
                         <h2 className="text-2xl font-bold">PARKIRKAN</h2>
-                        <p className="text-xs">Sistem Parkir Modern</p>
+                        <p className="text-base">Sistem Parkir Modern</p>
                         <p className="text-[10px] mt-1">Terima kasih atas kunjungan Anda</p>
                     </div>
 
@@ -212,12 +212,12 @@ function CheckOutContent() {
                     </div>
 
                     <div className="mt-6 pt-4 border-t-2 border-black space-y-2">
-                        <div className="flex justify-between text-xs">
+                        <div className="flex justify-between text-base">
                             <span>Tarif / Jam:</span>
                             <span>{formatCurrency(transaction?.rate?.hourly_rate || 0)}</span>
                         </div>
                         {transaction?.rate?.daily_max_rate && (
-                            <div className="flex justify-between text-xs">
+                            <div className="flex justify-between text-base">
                                 <span>Maks / Hari:</span>
                                 <span>{formatCurrency(transaction.rate.daily_max_rate)}</span>
                             </div>
@@ -240,7 +240,7 @@ function CheckOutContent() {
                     {/* Header */}
                     <div className="space-y-2">
                         <h1 className="text-4xl font-black text-black tracking-tighter">Lapor Keluar Kendaraan</h1>
-                        <p className="text-slate-700 font-bold tracking-widest text-xs">Proses pembayaran dan keluar parkir</p>
+                        <p className="text-slate-700 font-bold tracking-widest text-base">Proses pembayaran dan keluar parkir</p>
                     </div>
 
                     <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">

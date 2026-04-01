@@ -94,13 +94,13 @@ export default function UserManagementPage() {
                 // Only include password in payload if it was actually changed
                 const { password, ...rest } = formData;
                 const payload = password ? { ...rest, password } : rest;
-                
+
                 // Backend UserController expects 'status' instead of 'is_active'
                 const submitData = {
                     ...payload,
                     status: rest.is_active ? 'active' : 'inactive'
                 };
-                
+
                 const updated = await userService.update(selectedUser.id, submitData as any);
                 setUsers(users.map(u => u.id === selectedUser.id ? updated : u));
                 setSelectedUser(updated);
@@ -150,7 +150,7 @@ export default function UserManagementPage() {
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <h1 className="text-4xl font-extrabold text-black tracking-tight">Kelola Pengguna</h1>
-                        <p className="text-slate-800 font-bold text-xs tracking-widest">Manajemen pengguna sistem</p>
+                        <p className="text-slate-800 font-bold text-base tracking-widest">Manajemen pengguna sistem</p>
                     </div>
                     {!isAdding && !isEditing && (
                         <Button onClick={handleAddClick} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
@@ -236,9 +236,9 @@ export default function UserManagementPage() {
                                                 <div className={cn(
                                                     "inline-flex px-6 py-2 rounded-xl text-lg font-black tracking-tighter",
                                                     user.role === 'superadmin' ? "bg-amber-400 text-amber-950 shadow-md shadow-amber-400/20" :
-                                                    user.role === 'admin' ? "bg-pink-300 text-pink-900" :
-                                                        user.role === 'petugas' ? "bg-yellow-300 text-yellow-900" :
-                                                            "bg-cyan-300 text-cyan-900"
+                                                        user.role === 'admin' ? "bg-pink-300 text-pink-900" :
+                                                            user.role === 'petugas' ? "bg-yellow-300 text-yellow-900" :
+                                                                "bg-cyan-300 text-cyan-900"
                                                 )}>
                                                     {user.role}
                                                 </div>
@@ -258,12 +258,12 @@ export default function UserManagementPage() {
                                                     </button>
                                                     {!(currentUserRole === 'admin' && (user.role === 'admin' || user.role === 'superadmin')) && (
                                                         <>
-                                                        <button className="h-10 w-10 flex items-center justify-center text-orange-400 hover:text-orange-600 transition-colors" onClick={() => handleEditClick(user)}>
-                                                            <Edit className="h-6 w-6" />
-                                                        </button>
-                                                        <button className="h-10 w-10 flex items-center justify-center text-red-300 hover:text-red-500 transition-colors" onClick={() => setUserToDelete(user)}>
-                                                            <Trash2 className="h-6 w-6" />
-                                                        </button>
+                                                            <button className="h-10 w-10 flex items-center justify-center text-orange-400 hover:text-orange-600 transition-colors" onClick={() => handleEditClick(user)}>
+                                                                <Edit className="h-6 w-6" />
+                                                            </button>
+                                                            <button className="h-10 w-10 flex items-center justify-center text-red-300 hover:text-red-500 transition-colors" onClick={() => setUserToDelete(user)}>
+                                                                <Trash2 className="h-6 w-6" />
+                                                            </button>
                                                         </>
                                                     )}
                                                 </div>
@@ -314,12 +314,12 @@ export default function UserManagementPage() {
                                     <div className="flex gap-4">
                                         {!(currentUserRole === 'admin' && (selectedUser.role === 'admin' || selectedUser.role === 'superadmin')) && (
                                             <>
-                                            <button className="p-3 bg-orange-50 text-orange-500 rounded-2xl hover:bg-orange-100 transition-all font-black flex items-center gap-2" onClick={() => handleEditClick(selectedUser)}>
-                                                <Edit className="h-8 w-8" />
-                                            </button>
-                                            <button className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all font-black flex items-center gap-2" onClick={() => setUserToDelete(selectedUser)}>
-                                                <Trash2 className="h-8 w-8" />
-                                            </button>
+                                                <button className="p-3 bg-orange-50 text-orange-500 rounded-2xl hover:bg-orange-100 transition-all font-black flex items-center gap-2" onClick={() => handleEditClick(selectedUser)}>
+                                                    <Edit className="h-8 w-8" />
+                                                </button>
+                                                <button className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all font-black flex items-center gap-2" onClick={() => setUserToDelete(selectedUser)}>
+                                                    <Trash2 className="h-8 w-8" />
+                                                </button>
                                             </>
                                         )}
                                     </div>

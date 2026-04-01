@@ -71,7 +71,7 @@ export default function ParkedVehiclesPage() {
                 {/* Header */}
                 <div>
                     <h1 className="text-4xl font-extrabold text-black tracking-tight">Kendaraan yang Sedang Parkir</h1>
-                    <p className="text-slate-800 mt-2 font-bold text-xs tracking-widest">Daftar kendaraan aktif di semua area</p>
+                    <p className="text-slate-800 mt-2 font-bold text-base tracking-widest">Daftar kendaraan aktif di semua area</p>
                 </div>
 
                 <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">
@@ -108,7 +108,7 @@ export default function ParkedVehiclesPage() {
                                                 </td>
                                                 <td className="px-10 py-8">
                                                     <div className={cn(
-                                                        "px-6 py-1.5 rounded-full text-white font-black text-xs inline-block",
+                                                        "px-6 py-1.5 rounded-full text-white font-black text-base inline-block",
                                                         getVehicleBadgeStyle(transaction.vehicle?.vehicle_type || '')
                                                     )}>
                                                         {transaction.vehicle?.vehicle_type}
@@ -119,7 +119,7 @@ export default function ParkedVehiclesPage() {
                                                     <div className="flex items-center gap-2 text-slate-800 font-bold">
                                                         <Clock className="h-4 w-4" />
                                                         {parseUTC(transaction.check_in_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' })}
-                                                        <span className="text-xs opacity-50 ml-1">({parseUTC(transaction.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' })})</span>
+                                                        <span className="text-base opacity-50 ml-1">({parseUTC(transaction.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' })})</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-10 py-8 text-center">

@@ -104,7 +104,7 @@ export default function OwnerDashboard() {
                 // Calculate Today's Stats
                 const today = new Date();
                 const todayStr = today.toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' });
-                const todayTransactions = txns.filter((t: Transaction) => 
+                const todayTransactions = txns.filter((t: Transaction) =>
                     parseUTC(t.check_in_time).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' }) === todayStr
                 );
                 const revenueToday = todayTransactions.reduce((acc: number, t: Transaction) => acc + (Number(t.total_cost) || 0), 0);
@@ -257,11 +257,11 @@ export default function OwnerDashboard() {
                                         <p className="text-sm font-medium text-slate-800">{card.label}</p>
                                         <h3 className="text-2xl font-bold text-black mt-1">{card.value}</h3>
                                         {card.change !== undefined ? (
-                                            <div className={cn("text-xs font-bold mt-1", card.change >= 0 ? "text-emerald-500" : "text-red-500")}>
+                                            <div className={cn("text-base font-bold mt-1", card.change >= 0 ? "text-emerald-500" : "text-red-500")}>
                                                 {card.change >= 0 ? '+' : ''}{card.change}% dari kemarin
                                             </div>
                                         ) : (
-                                            <p className="text-xs text-slate-700 mt-1">{card.subtext}</p>
+                                            <p className="text-base text-slate-700 mt-1">{card.subtext}</p>
                                         )}
                                     </div>
                                 </div>
@@ -579,7 +579,7 @@ export default function OwnerDashboard() {
                                         {/* Center label */}
                                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                             <span className="text-2xl font-black text-black">{totalVehiclesInYear}</span>
-                                            <span className="text-xs font-medium text-slate-400">Total</span>
+                                            <span className="text-base font-medium text-slate-400">Total</span>
                                         </div>
                                     </div>
 
@@ -592,9 +592,9 @@ export default function OwnerDashboard() {
                                                         className="h-2.5 w-2.5 rounded-full"
                                                         style={{ backgroundColor: getVehicleColor(type).border }}
                                                     />
-                                                    <span className="text-xs font-bold text-slate-600 capitalize">{type}</span>
+                                                    <span className="text-base font-bold text-slate-600 capitalize">{type}</span>
                                                 </div>
-                                                <span className="text-xs font-black text-black">{count}</span>
+                                                <span className="text-base font-black text-black">{count}</span>
                                             </div>
                                         ))}
                                     </div>

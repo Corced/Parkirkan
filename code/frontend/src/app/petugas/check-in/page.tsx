@@ -85,7 +85,7 @@ export default function CheckInPage() {
                 {/* Header */}
                 <div className="space-y-2">
                     <h1 className="text-4xl font-black text-black tracking-tighter">Lapor Masuk Kendaraan</h1>
-                    <p className="text-slate-700 font-bold tracking-widest text-xs">Masukkan data kendaraan yang akan parkir</p>
+                    <p className="text-slate-700 font-bold tracking-widest text-base">Masukkan data kendaraan yang akan parkir</p>
                 </div>
 
                 <Card className="border-none shadow-2xl shadow-slate-200/50 rounded-[3rem] overflow-hidden">

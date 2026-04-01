@@ -177,11 +177,11 @@ export default function VehiclesPage() {
                     <table className="w-full border-collapse">
                         <thead>
                             <tr className="bg-slate-50/50">
-                                <th className="px-10 py-8 text-left text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Plat Nomor</th>
-                                <th className="px-10 py-8 text-left text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Jenis</th>
-                                <th className="px-10 py-8 text-left text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Nama Pemilik</th>
-                                <th className="px-10 py-8 text-center text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Total Kunjungan</th>
-                                <th className="px-10 py-8 text-right text-xs font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Aksi</th>
+                                <th className="px-10 py-8 text-left text-base font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Plat Nomor</th>
+                                <th className="px-10 py-8 text-left text-base font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Jenis</th>
+                                <th className="px-10 py-8 text-left text-base font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Nama Pemilik</th>
+                                <th className="px-10 py-8 text-center text-base font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Total Kunjungan</th>
+                                <th className="px-10 py-8 text-right text-base font-black text-slate-700 tracking-[0.2em] border-b border-slate-100">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
@@ -266,28 +266,28 @@ export default function VehiclesPage() {
                                     <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
                                         <User className="h-6 w-6 text-blue-500" />
                                         <div>
-                                            <p className="text-xs font-bold text-slate-700 tracking-wider">Pemilik</p>
+                                            <p className="text-base font-bold text-slate-700 tracking-wider">Pemilik</p>
                                             <p className="text-lg font-bold text-black">{viewVehicle.owner_name || '-'}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
                                         <Phone className="h-6 w-6 text-emerald-500" />
                                         <div>
-                                            <p className="text-xs font-bold text-slate-700 tracking-wider">Telepon</p>
+                                            <p className="text-base font-bold text-slate-700 tracking-wider">Telepon</p>
                                             <p className="text-lg font-bold text-black">{viewVehicle.owner_phone || '-'}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
                                         <Hash className="h-6 w-6 text-purple-500" />
                                         <div>
-                                            <p className="text-xs font-bold text-slate-700 tracking-wider">Total Kunjungan</p>
+                                            <p className="text-base font-bold text-slate-700 tracking-wider">Total Kunjungan</p>
                                             <p className="text-lg font-bold text-black">{viewVehicle.total_visits}x</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl">
                                         <Calendar className="h-6 w-6 text-orange-500" />
                                         <div>
-                                            <p className="text-xs font-bold text-slate-700 tracking-wider">Kunjungan Terakhir</p>
+                                            <p className="text-base font-bold text-slate-700 tracking-wider">Kunjungan Terakhir</p>
                                             <p className="text-lg font-bold text-black">
                                                 {viewVehicle.last_visit ? new Date(viewVehicle.last_visit).toLocaleDateString('id-ID') : '-'}
                                             </p>
@@ -317,7 +317,7 @@ export default function VehiclesPage() {
                                                             {tx.total_cost ? `Rp ${Number(tx.total_cost).toLocaleString('id-ID')}` : '-'}
                                                         </p>
                                                         <Badge className={cn(
-                                                            "text-xs",
+                                                            "text-base",
                                                             tx.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
                                                         )}>
                                                             {tx.status === 'completed' ? 'Selesai' : 'Aktif'}
@@ -374,7 +374,7 @@ export default function VehiclesPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-700 tracking-widest">Nama Pemilik</label>
+                                    <label className="text-base font-black text-slate-700 tracking-widest">Nama Pemilik</label>
                                     <Input
                                         value={editForm.owner_name}
                                         onChange={(e) => setEditForm({ ...editForm, owner_name: e.target.value })}
@@ -384,7 +384,7 @@ export default function VehiclesPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-700 tracking-widest">No. Telepon</label>
+                                    <label className="text-base font-black text-slate-700 tracking-widest">No. Telepon</label>
                                     <Input
                                         value={editForm.owner_phone}
                                         onChange={(e) => setEditForm({ ...editForm, owner_phone: e.target.value })}
@@ -431,7 +431,7 @@ export default function VehiclesPage() {
 
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-700 tracking-widest">Plat Nomor</label>
+                                    <label className="text-base font-black text-slate-700 tracking-widest">Plat Nomor</label>
                                     <Input
                                         value={addForm.license_plate}
                                         onChange={(e) => setAddForm({ ...addForm, license_plate: e.target.value.toUpperCase() })}
@@ -441,7 +441,7 @@ export default function VehiclesPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-700 tracking-widest">Jenis Kendaraan</label>
+                                    <label className="text-base font-black text-slate-700 tracking-widest">Jenis Kendaraan</label>
                                     <Select value={addForm.vehicle_type} onValueChange={(v) => setAddForm({ ...addForm, vehicle_type: v })}>
                                         <SelectTrigger className="h-14 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold">
                                             <SelectValue />
@@ -457,7 +457,7 @@ export default function VehiclesPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-700 tracking-widest">Nama Pemilik</label>
+                                    <label className="text-base font-black text-slate-700 tracking-widest">Nama Pemilik</label>
                                     <Input
                                         value={addForm.owner_name}
                                         onChange={(e) => setAddForm({ ...addForm, owner_name: e.target.value })}
@@ -467,7 +467,7 @@ export default function VehiclesPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-700 tracking-widest">No. Telepon</label>
+                                    <label className="text-base font-black text-slate-700 tracking-widest">No. Telepon</label>
                                     <Input
                                         value={addForm.owner_phone}
                                         onChange={(e) => setAddForm({ ...addForm, owner_phone: e.target.value })}
@@ -509,7 +509,7 @@ export default function VehiclesPage() {
                             </div>
 
                             <div className="space-y-6">
-                                <p className="text-xs font-black text-slate-700 tracking-[0.3em]">Ketik Plat Nomor untuk Konfirmasi</p>
+                                <p className="text-base font-black text-slate-700 tracking-[0.3em]">Ketik Plat Nomor untuk Konfirmasi</p>
                                 <Input
                                     value={confirmPlate}
                                     onChange={(e) => setConfirmPlate(e.target.value)}

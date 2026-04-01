@@ -43,7 +43,7 @@ export default function AreaParkirPage() {
                                             style={{ width: `${percentage}%` }}
                                         />
                                     </div>
-                                    <p className="text-xs text-muted-foreground text-center">{percentage}% Terisi</p>
+                                    <p className="text-base text-muted-foreground text-center">{percentage}% Terisi</p>
 
                                     <div className="pt-4 border-t text-sm font-medium capitalize">
                                         Kode: {area.code}
