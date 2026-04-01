@@ -90,12 +90,23 @@ export default function UserManagementPage() {
                 // Only include password in payload if it was actually changed
                 const { password, ...rest } = formData;
                 const payload = password ? { ...rest, password } : rest;
-                const updated = await userService.update(selectedUser.id, payload);
+                
+                // Backend UserController expects 'status' instead of 'is_active'
+                const submitData = {
+                    ...payload,
+                    status: rest.is_active ? 'active' : 'inactive'
+                };
+                
+                const updated = await userService.update(selectedUser.id, submitData as any);
                 setUsers(users.map(u => u.id === selectedUser.id ? updated : u));
                 setSelectedUser(updated);
                 setIsEditing(false);
             } else if (isAdding) {
-                const created = await userService.create(formData);
+                const submitData = {
+                    ...formData,
+                    status: formData.is_active ? 'active' : 'inactive'
+                };
+                const created = await userService.create(submitData as any);
                 setUsers([...users, created]);
                 setIsAdding(false);
             }

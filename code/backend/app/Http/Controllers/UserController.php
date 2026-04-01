@@ -22,6 +22,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|in:admin,petugas,owner',
+            'status' => 'sometimes|in:active,inactive',
         ]);
 
         $user = User::create([
@@ -30,6 +31,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
+            'is_active' => isset($validated['status']) ? ($validated['status'] === 'active') : true,
         ]);
 
         // Log Activity
