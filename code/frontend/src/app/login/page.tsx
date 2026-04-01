@@ -45,7 +45,7 @@ export default function LoginPage() {
             else if (data.user.role === 'owner') router.push('/owner/dashboard');
         } catch (error: any) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            alert('Login failed: ' + (error as any).message || 'Unknown');
+            alert('Masuk gagal: ' + (error as any).message || 'Tidak diketahui');
         } finally {
             setLoading(false);
         }
@@ -67,7 +67,7 @@ export default function LoginPage() {
                             <form onSubmit={handleLogin} className="space-y-10">
                                 <div className="space-y-6 text-left">
                                     <div className="space-y-3">
-                                        <Label htmlFor="username" className="text-xl font-black text-black tracking-tight pl-1">Username/ID</Label>
+                                        <Label htmlFor="username" className="text-xl font-black text-black tracking-tight pl-1">Nama Pengguna/ID</Label>
                                         <Input
                                             id="username"
                                             className="h-16 rounded-2xl border-2 border-slate-900 bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] text-lg px-6 focus:ring-4 focus:ring-blue-100 transition-all font-bold text-black"
@@ -75,7 +75,7 @@ export default function LoginPage() {
                                         />
                                     </div>
                                     <div className="space-y-3">
-                                        <Label htmlFor="password" title="password" className="text-xl font-black text-black tracking-tight pl-1">Password</Label>
+                                        <Label htmlFor="password" title="Kata Sandi" className="text-xl font-black text-black tracking-tight pl-1">Kata Sandi</Label>
                                         <Input
                                             id="password"
                                             type="password"

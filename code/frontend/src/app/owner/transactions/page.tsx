@@ -308,7 +308,7 @@ export default function TransactionsPage() {
                             <TableBody>
                                 {loading ? (
                                     <TableRow>
-                                        <TableCell colSpan={10} className="h-24 text-center">Loading...</TableCell>
+                                        <TableCell colSpan={10} className="h-24 text-center">Memuat...</TableCell>
                                     </TableRow>
                                 ) : filteredTransactions.length === 0 ? (
                                     <TableRow>

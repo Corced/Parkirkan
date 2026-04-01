@@ -64,7 +64,7 @@ export default function CheckInPage() {
             });
         } catch (error: unknown) {
             const msg = error instanceof Error ? error.message : 'Unknown error';
-            alert('Check-in Failed: ' + msg);
+            alert('Lapor Masuk Gagal: ' + msg);
         } finally {
             setLoading(false);
         }

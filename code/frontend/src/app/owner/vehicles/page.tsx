@@ -50,7 +50,7 @@ export default function VehicleHistoryPage() {
                             {vehicles.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
-                                        No vehicle history found.
+                                        Tidak ada riwayat kendaraan.
                                     </TableCell>
                                 </TableRow>
                             )}

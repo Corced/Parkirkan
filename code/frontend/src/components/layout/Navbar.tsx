@@ -18,7 +18,7 @@ export function Navbar({ userName, userRole }: { userName: string, userRole?: st
                 <div className="flex items-center gap-4 pl-4 border-l border-slate-300">
                     <div className="flex flex-col items-end">
                         <span className="text-sm font-black text-black leading-none">{userName}</span>
-                        <span className="text-xs font-bold text-blue-600 mt-1 uppercase">{userRole || 'User'}</span>
+                        <span className="text-xs font-bold text-blue-600 mt-1 uppercase">{userRole || 'Pengguna'}</span>
                     </div>
                     {/* <div className="h-12 w-12 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-700">
                         <div className="h-8 w-8 rounded-full bg-slate-100" />

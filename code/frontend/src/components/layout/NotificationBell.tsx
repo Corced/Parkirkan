@@ -68,7 +68,7 @@ export function NotificationBell() {
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                     {loading ? (
-                        <div className="p-8 text-center bg-slate-50 text-slate-800">Loading...</div>
+                        <div className="p-8 text-center bg-slate-50 text-slate-800">Memuat...</div>
                     ) : notifications.length === 0 ? (
                         <div className="p-8 text-center bg-slate-50 text-slate-800">Tidak ada notifikasi</div>
                     ) : (

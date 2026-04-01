@@ -130,7 +130,7 @@ export default function ParkedVehiclesPage() {
                                                 <td className="px-10 py-8 text-right">
                                                     <Link href={`/petugas/check-out?ticket=${transaction.ticket_number}`}>
                                                         <Button className="bg-emerald-400 hover:bg-emerald-500 text-white px-8 h-12 rounded-2xl font-black shadow-lg shadow-emerald-200/50 transition-all active:scale-95">
-                                                            Check-out
+                                                            Lapor Keluar
                                                         </Button>
                                                     </Link>
                                                 </td>

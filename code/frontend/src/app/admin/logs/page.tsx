@@ -28,10 +28,10 @@ export default function LogsPage() {
 
     const getActionType = (action: string) => {
         const a = action.toLowerCase();
-        if (a.includes('create')) return { label: 'Create', color: 'bg-emerald-500', icon: Plus, iconBg: 'bg-emerald-100 text-emerald-600', border: 'border-emerald-200' };
-        if (a.includes('update')) return { label: 'Update', color: 'bg-sky-500', icon: Edit, iconBg: 'bg-sky-100 text-sky-600', border: 'border-sky-200' };
-        if (a.includes('delete')) return { label: 'Delete', color: 'bg-red-500', icon: Trash2, iconBg: 'bg-red-100 text-red-600', border: 'border-red-200' };
-        if (a.includes('transaction') || a.includes('check')) return { label: 'Transaction', color: 'bg-amber-500', icon: DollarSign, iconBg: 'bg-amber-100 text-amber-600', border: 'border-amber-200' };
+        if (a.includes('create')) return { label: 'Buat', color: 'bg-emerald-500', icon: Plus, iconBg: 'bg-emerald-100 text-emerald-600', border: 'border-emerald-200' };
+        if (a.includes('update')) return { label: 'Perbarui', color: 'bg-sky-500', icon: Edit, iconBg: 'bg-sky-100 text-sky-600', border: 'border-sky-200' };
+        if (a.includes('delete')) return { label: 'Hapus', color: 'bg-red-500', icon: Trash2, iconBg: 'bg-red-100 text-red-600', border: 'border-red-200' };
+        if (a.includes('transaction') || a.includes('check')) return { label: 'Transaksi', color: 'bg-amber-500', icon: DollarSign, iconBg: 'bg-amber-100 text-amber-600', border: 'border-amber-200' };
         return { label: 'Info', color: 'bg-slate-500', icon: Clock, iconBg: 'bg-slate-100 text-slate-600', border: 'border-slate-200' };
     };
 

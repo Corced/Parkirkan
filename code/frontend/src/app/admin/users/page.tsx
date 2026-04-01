@@ -208,8 +208,8 @@ export default function UserManagementPage() {
                                 <TableHeader>
                                     <TableRow className="hover:bg-transparent border-slate-50">
                                         <TableHead className="text-base font-black text-black tracking-widest px-8 pb-8">Nama Pengguna</TableHead>
-                                        <TableHead className="text-base font-black text-black tracking-widest pb-8">Email</TableHead>
-                                        <TableHead className="text-base font-black text-black tracking-widest pb-8">Role</TableHead>
+                                        <TableHead className="text-base font-black text-black tracking-widest pb-8">Alamat Email</TableHead>
+                                        <TableHead className="text-base font-black text-black tracking-widest pb-8">Peran</TableHead>
                                         <TableHead className="text-base font-black text-black tracking-widest pb-8">Status</TableHead>
                                         <TableHead className="text-base font-black text-black tracking-widest text-right pb-8 pr-8">Aksi</TableHead>
                                     </TableRow>
@@ -315,11 +315,11 @@ export default function UserManagementPage() {
 
                             <form onSubmit={handleSave} className="max-w-4xl space-y-6">
                                 {[
-                                    { label: 'Username', key: 'username', type: 'text', placeholder: 'petugas01' },
-                                    { label: 'Name', key: 'name', type: 'text', placeholder: 'Budi Santoso' },
-                                    { label: 'Email', key: 'email', type: 'email', placeholder: 'petugas@parkirkan.id' },
-                                    { label: 'Role', key: 'role', type: 'select', options: ['admin', 'petugas', 'owner'] },
-                                    { label: 'Password', key: 'password', type: 'password', placeholder: isEditing ? 'Kosongkan jika tidak diubah' : '********' },
+                                    { label: 'Nama Pengguna', key: 'username', type: 'text', placeholder: 'petugas01' },
+                                    { label: 'Nama Lengkap', key: 'name', type: 'text', placeholder: 'Budi Santoso' },
+                                    { label: 'Alamat Email', key: 'email', type: 'email', placeholder: 'petugas@parkirkan.id' },
+                                    { label: 'Peran', key: 'role', type: 'select', options: ['admin', 'petugas', 'owner'] },
+                                    { label: 'Kata Sandi', key: 'password', type: 'password', placeholder: isEditing ? 'Kosongkan jika tidak diubah' : '********' },
                                 ].filter(f => (isEditing || isAdding) || f.key !== 'password').map((field, idx) => (
                                     <div key={idx} className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-12 group">
                                         <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">{field.label}</label>

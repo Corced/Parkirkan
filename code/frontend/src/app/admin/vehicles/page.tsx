@@ -263,7 +263,7 @@ export default function VehiclesPage() {
                                 <div className="space-y-4">
                                     <h4 className="text-lg font-black text-black tracking-wide">Riwayat Transaksi</h4>
                                     {loadingTransactions ? (
-                                        <p className="text-slate-700 text-center py-8">Loading...</p>
+                                        <p className="text-slate-700 text-center py-8">Memuat...</p>
                                     ) : vehicleTransactions.length === 0 ? (
                                         <p className="text-slate-700 text-center py-8">Belum ada riwayat transaksi</p>
                                     ) : (
