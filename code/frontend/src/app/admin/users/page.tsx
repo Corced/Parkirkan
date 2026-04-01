@@ -207,7 +207,7 @@ export default function UserManagementPage() {
                             <Table>
                                 <TableHeader>
                                     <TableRow className="hover:bg-transparent border-slate-50">
-                                        <TableHead className="text-base font-black text-black tracking-widest px-8 pb-8">Username</TableHead>
+                                        <TableHead className="text-base font-black text-black tracking-widest px-8 pb-8">Nama Pengguna</TableHead>
                                         <TableHead className="text-base font-black text-black tracking-widest pb-8">Email</TableHead>
                                         <TableHead className="text-base font-black text-black tracking-widest pb-8">Role</TableHead>
                                         <TableHead className="text-base font-black text-black tracking-widest pb-8">Status</TableHead>
@@ -360,7 +360,9 @@ export default function UserManagementPage() {
                                             <label className="lg:w-64 text-2xl font-bold text-black tracking-tight">Status</label>
                                             <span className="hidden lg:block text-2xl font-bold text-black">:</span>
                                             <div className="flex-1">
-                                                <span className="text-2xl font-medium text-slate-800 tracking-tight">Aktif</span>
+                                                <span className="text-2xl font-medium text-slate-800 tracking-tight">
+                                                    {selectedUser?.is_active ? 'Aktif' : 'Non-aktif'}
+                                                </span>
                                             </div>
                                         </div>
                                     </>
