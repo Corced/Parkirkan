@@ -37,7 +37,7 @@ class AuthController extends Controller
             \App\Models\ActivityLog::create([
                 'user_id' => $user->id,
                 'action' => 'LOGIN',
-                'description' => "User {$user->username} logged in.",
+                'description' => "Pengguna {$user->username} berhasil masuk.",
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent()
             ]);
@@ -60,7 +60,7 @@ class AuthController extends Controller
         \App\Models\ActivityLog::create([
             'user_id' => $user->id,
             'action' => 'LOGOUT',
-            'description' => "User {$user->username} logged out.",
+            'description' => "Pengguna {$user->username} berhasil keluar.",
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);

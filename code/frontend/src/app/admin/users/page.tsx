@@ -145,13 +145,13 @@ export default function UserManagementPage() {
             <div className="space-y-10 relative">
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                        <h1 className="text-4xl font-extrabold text-black tracking-tight">Kelola User</h1>
+                        <h1 className="text-4xl font-extrabold text-black tracking-tight">Kelola Pengguna</h1>
                         <p className="text-slate-800 font-bold text-xs tracking-widest">Manajemen pengguna sistem</p>
                     </div>
                     {!isAdding && !isEditing && (
                         <Button onClick={handleAddClick} className="bg-[#2563EB] hover:bg-blue-700 h-14 px-8 rounded-2xl gap-3 text-lg font-black shadow-lg shadow-blue-500/20 transition-all active:scale-95">
                             <Plus className="h-6 w-6" />
-                            Tambah User
+                            Tambah Pengguna
                         </Button>
                     )}
                 </div>

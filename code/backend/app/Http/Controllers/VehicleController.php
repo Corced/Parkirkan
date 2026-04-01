@@ -96,7 +96,7 @@ class VehicleController extends Controller
             ActivityLog::create([
                 'user_id' => $request->user()->id,
                 'action' => 'VEHICLE_CHECK_IN',
-                'description' => "Vehicle {$vehicle->license_plate} checked in at {$area->name}.",
+                'description' => "Kendaraan {$vehicle->license_plate} masuk di area {$area->name}.",
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent()
             ]);
@@ -158,7 +158,7 @@ class VehicleController extends Controller
             ActivityLog::create([
                 'user_id' => auth()->id(),
                 'action' => 'VEHICLE_CHECK_OUT',
-                'description' => "Vehicle {$transaction->vehicle->license_plate} checked out. Cost: Rp {$cost}.",
+                'description' => "Kendaraan {$transaction->vehicle->license_plate} keluar. Biaya: Rp {$cost}.",
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent()
             ]);
@@ -209,7 +209,7 @@ class VehicleController extends Controller
         ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => 'VEHICLE_UPDATED',
-            'description' => "Vehicle {$vehicle->license_plate} data updated.",
+            'description' => "Data kendaraan {$vehicle->license_plate} diperbarui.",
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);

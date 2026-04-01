@@ -29,7 +29,7 @@ export function Sidebar({ role, isCollapsed, onToggle }: SidebarProps) {
     const links = {
         admin: [
             { href: '/admin/dashboard', label: 'Beranda', icon: LayoutDashboard },
-            { href: '/admin/users', label: 'Kelola User', icon: Users },
+            { href: '/admin/users', label: 'Kelola Pengguna', icon: Users },
             { href: '/admin/rates', label: 'Tarif Parkir', icon: CreditCard },
             { href: '/admin/area', label: 'Area Parkir', icon: MapPin },
             { href: '/admin/vehicles', label: 'Data Kendaraan', icon: Car },

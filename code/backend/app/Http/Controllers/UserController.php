@@ -38,7 +38,7 @@ class UserController extends Controller
         ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => 'USER_CREATED',
-            'description' => "User {$validated['username']} ({$validated['role']}) created.",
+            'description' => "Pengguna {$validated['username']} ({$validated['role']}) ditambahkan.",
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
@@ -81,7 +81,7 @@ class UserController extends Controller
         ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => 'USER_UPDATED',
-            'description' => "User {$user->username} updated.",
+            'description' => "Data pengguna {$user->username} diperbarui.",
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
@@ -98,7 +98,7 @@ class UserController extends Controller
         ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => 'USER_DELETED',
-            'description' => "User {$username} deleted.",
+            'description' => "Pengguna {$username} dihapus.",
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);

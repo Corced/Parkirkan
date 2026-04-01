@@ -71,7 +71,7 @@ export default function AdminDashboard() {
     ];
 
     const quickActions = [
-        { label: 'Tambah User', icon: Users, color: 'text-slate-600', border: 'border-blue-200', path: '/admin/users' },
+        { label: 'Tambah Pengguna', icon: Users, color: 'text-slate-600', border: 'border-blue-200', path: '/admin/users' },
         { label: 'Atur Tarif', icon: CreditCard, color: 'text-slate-600', border: 'border-purple-200', path: '/admin/rates' },
         { label: 'Kelola Area', icon: MapPin, color: 'text-slate-600', border: 'border-green-200', path: '/admin/area' },
         { label: 'Lihat Log', icon: Activity, color: 'text-slate-600', border: 'border-blue-200', path: '/admin/logs' },
