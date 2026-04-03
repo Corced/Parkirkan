@@ -161,37 +161,36 @@ class VehicleController extends Controller
             $checkInTime = Carbon::parse($transaction->check_in_time);
             
             $totalMinutes = $checkInTime->diffInMinutes($checkOutTime);
-            
+            $rate = $transaction->rate;
+
             // 1. Check Grace Period
-            if ($totalMinutes <= $transaction->rate->grace_period_minutes) {
+            if ($totalMinutes <= $rate->grace_period_minutes) {
                 $cost = 0;
                 $durationHours = 0;
             } else {
-                // 2. Standard Calculation with Initial Rate
-                // All staying past grace period are charged at least 1 hour (initial_rate)
-                $durationHours = max(1, (int) ceil($totalMinutes / 60));
+                // 2. Minute-based Pricing (Pro-rata)
+                // Cost = Initial Rate + (Minutes past Grace * Hourly Rate / 60)
+                // Floored to the nearest Rp 500 (Humane & Efficient)
+                $minutesPastGrace = $totalMinutes - $rate->grace_period_minutes;
+                $proRataCost = ($minutesPastGrace * $rate->hourly_rate) / 60;
                 
-                $rate = $transaction->rate;
-                $cost = $rate->initial_rate; // Cost for 1st hour
-                
-                if ($durationHours > 1) {
-                    // Hourly rate applies after the first hour
-                    $cost += ($durationHours - 1) * $rate->hourly_rate;
-                }
+                $cost = $rate->initial_rate + (int) floor($proRataCost / 500) * 500;
+                $durationHours = (float) round($totalMinutes / 60, 2);
 
                 // 3. Apply Daily Max Cap
                 $dailyMax = $rate->daily_max_rate;
-                if ($dailyMax > 0) {
-                    $days = (int) floor($durationHours / 24);
-                    $remainingHours = $durationHours % 24;
+                if ($dailyMax > 0 && $cost > $dailyMax) {
+                    $days = (int) floor($totalMinutes / 1440); // 1440 mins = 24h
+                    $remainderMins = $totalMinutes % 1440;
                     
-                    // Simple cap logic: min of calculated cost vs daily caps
-                    // More complex: (Full Days * Daily Max) + min(Remaining * Hourly, Daily Max)
-                    $cappedCost = ($days * $dailyMax) + min($remainingHours * $rate->hourly_rate, $dailyMax);
-                    
-                    // If calculated cost is higher than capped cost, use capped
-                    // Note: Initial rate complicates simple floor-based cap, but this is a standard compromise
-                    $cost = min($cost, $cappedCost);
+                    if ($remainderMins > $rate->grace_period_minutes) {
+                        $remainderPastGrace = $remainderMins - $rate->grace_period_minutes;
+                        $remainderCost = ($remainderPastGrace * $rate->hourly_rate) / 60;
+                        $cappedRemainder = min($dailyMax, $rate->initial_rate + (int) floor($remainderCost / 500) * 500);
+                        $cost = ($days * $dailyMax) + $cappedRemainder;
+                    } else {
+                        $cost = $days * $dailyMax;
+                    }
                 }
             }
 
@@ -199,7 +198,7 @@ class VehicleController extends Controller
                 'check_out_time' => $checkOutTime,
                 'duration_hours' => $durationHours,
                 'total_cost' => $cost,
-                'exit_officer_id' => auth()->id(), // Set exit officer
+                'exit_officer_id' => auth()->id(), 
                 'status' => 'completed',
                 'payment_status' => 'paid'
             ]);

@@ -22,7 +22,7 @@ class ParkingRateSeeder extends Seeder
             'description' => 'Untuk motor dengan CC 125 s dan CC 150-250',
             'icon' => 'motorsport',
             'grace_period_minutes' => 5,
-            'initial_rate' => 2000,
+            'initial_rate' => 1000,
             'hourly_rate' => 1000,
             'daily_max_rate' => 10000,
         ]);
@@ -32,7 +32,7 @@ class ParkingRateSeeder extends Seeder
             'description' => 'Untuk mobil dengan CC 1.000 - 2.500 CC',
             'icon' => 'car',
             'grace_period_minutes' => 10,
-            'initial_rate' => 5000,
+            'initial_rate' => 3000,
             'hourly_rate' => 3000,
             'daily_max_rate' => 25000,
         ]);
@@ -52,7 +52,7 @@ class ParkingRateSeeder extends Seeder
             'description' => 'Untuk motor dengan CC > 250cc - 1000cc+',
             'icon' => 'bicycle',
             'grace_period_minutes' => 5,
-            'initial_rate' => 2500,
+            'initial_rate' => 2000,
             'hourly_rate' => 1500,
             'daily_max_rate' => 12000,
         ]);
@@ -62,7 +62,7 @@ class ParkingRateSeeder extends Seeder
             'description' => 'Untuk mobil dengan > 2.500 CC',
             'icon' => 'car',
             'grace_period_minutes' => 10,
-            'initial_rate' => 10000,
+            'initial_rate' => 5000,
             'hourly_rate' => 5000,
             'daily_max_rate' => 45000,
         ]);

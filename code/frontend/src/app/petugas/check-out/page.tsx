@@ -154,23 +154,27 @@ function CheckOutContent() {
 
         // 1. Check Grace Period
         if (totalMinutes > rate.grace_period_minutes) {
-            // 2. Initial Rate for the first hour
-            const billedHours = Math.max(1, Math.ceil(totalMinutes / 60));
-            totalCost = Number(rate.initial_rate);
+            // 2. Minute-based Pricing (Pro-rata)
+            // Cost = Initial Rate + (Minutes past Grace * Hourly Rate / 60)
+            const minutesPastGrace = totalMinutes - rate.grace_period_minutes;
+            const proRataCost = (minutesPastGrace * Number(rate.hourly_rate)) / 60;
+            
+            totalCost = Number(rate.initial_rate) + Math.floor(proRataCost / 500) * 500;
 
-            if (billedHours > 1) {
-                // 3. Hourly Rate for subsequent hours
-                totalCost += (billedHours - 1) * Number(rate.hourly_rate);
-            }
-
-            // 4. Apply Daily Max Cap
+            // 3. Apply Daily Max Cap
             const dailyMax = Number(rate.daily_max_rate);
-            if (dailyMax > 0) {
-                const billDays = Math.floor(billedHours / 24);
-                const remainingHours = billedHours % 24;
+            if (dailyMax > 0 && totalCost > dailyMax) {
+                const days = Math.floor(totalMinutes / 1440); // 1440 mins = 24h
+                const remainderMins = totalMinutes % 1440;
                 
-                const cappedCost = (billDays * dailyMax) + Math.min(remainingHours * Number(rate.hourly_rate), dailyMax);
-                totalCost = Math.min(totalCost, cappedCost);
+                if (remainderMins > rate.grace_period_minutes) {
+                    const remainderPastGrace = remainderMins - rate.grace_period_minutes;
+                    const remainderCost = (remainderPastGrace * Number(rate.hourly_rate)) / 60;
+                    const cappedRemainder = Math.min(dailyMax, Number(rate.initial_rate) + Math.floor(remainderCost / 500) * 500);
+                    totalCost = (days * dailyMax) + cappedRemainder;
+                } else {
+                    totalCost = days * dailyMax;
+                }
             }
         }
 
