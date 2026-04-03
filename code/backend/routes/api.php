@@ -61,8 +61,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('transactions', TransactionController::class)->only(['index', 'show']);
     });
 
-    // Shifts & Simulation - Petugas & Admin
-    Route::middleware('role:admin|petugas')->group(function () {
+    // Shifts & Simulation - Petugas, Admin, & Owner
+    Route::middleware('role:admin|petugas|owner')->group(function () {
         Route::post('/shifts/start', [App\Http\Controllers\ShiftController::class, 'start']);
         Route::post('/shifts/end', [App\Http\Controllers\ShiftController::class, 'end']);
         Route::post('/simulate/shift', [App\Http\Controllers\SimulationController::class, 'simulateShift']);

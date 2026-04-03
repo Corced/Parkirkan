@@ -241,7 +241,9 @@ export default function OwnerDashboard() {
             </FadeIn>
 
             {/* Simulation Tool */}
-            {/* <ShiftSimulator onSimulationComplete={fetchDashboardData} /> */}
+            <FadeIn delay={0.2} duration={0.5}>
+                <ShiftSimulator onSimulationComplete={fetchDashboardData} />
+            </FadeIn>
 
             {/* Stat Cards - Row of 4 */}
             <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-4" staggerDelay={0.08} delay={0.1}>

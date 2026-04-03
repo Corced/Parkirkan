@@ -106,9 +106,9 @@ export const rateService = {
 
 // Simulation Service
 export const simulationService = {
-    simulateShift: (shift: string) => fetchAPI<{ message: string; generated_transactions: number }>('/simulate/shift', {
+    simulateShift: (params: { role: string; scenario: string }) => fetchAPI<{ message: string; generated_transactions: number }>('/simulate/shift', {
         method: 'POST',
-        body: JSON.stringify({ shift })
+        body: JSON.stringify(params)
     }),
 };
 
