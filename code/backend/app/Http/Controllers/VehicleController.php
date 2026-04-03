@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+use Illuminate\Validation\Rule;
+
 class VehicleController extends Controller
 {
     public function index()
@@ -20,16 +22,24 @@ class VehicleController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'license_plate' => 'required|string|unique:vehicles',
+        $request->validate([
+            'license_plate' => 'required|string',
             'vehicle_type' => 'required|string',
             'owner_name' => 'nullable|string|max:255',
             'owner_phone' => 'nullable|string|max:20',
         ]);
 
-        $validated['total_visits'] = 0;
+        // Find even if soft-deleted
+        $vehicle = Vehicle::withTrashed()->where('license_plate', $request->license_plate)->first();
 
-        $vehicle = Vehicle::create($validated);
+        if ($vehicle) {
+            if ($vehicle->trashed()) {
+                $vehicle->restore();
+            }
+            $vehicle->update($request->only(['vehicle_type', 'owner_name', 'owner_phone']));
+        } else {
+            $vehicle = Vehicle::create($request->all());
+        }
 
         ActivityLog::create([
             'user_id' => auth()->id(),
@@ -63,8 +73,8 @@ class VehicleController extends Controller
         ]);
 
         return DB::transaction(function () use ($validated, $request) {
-            // Find or Create Vehicle
-            $vehicle = Vehicle::firstOrCreate(
+            // Find or Create Vehicle (including soft-deleted)
+            $vehicle = Vehicle::withTrashed()->firstOrCreate(
                 ['license_plate' => $validated['license_plate']],
                 [
                     'vehicle_type' => $validated['vehicle_type'], 
@@ -73,6 +83,11 @@ class VehicleController extends Controller
                     'total_visits' => 0
                 ]
             );
+
+            // Restore if it was soft-deleted
+            if ($vehicle->trashed()) {
+                $vehicle->restore();
+            }
 
             // If vehicle exists, update owner info if provided
             if (!$vehicle->wasRecentlyCreated) {
@@ -221,7 +236,7 @@ class VehicleController extends Controller
         }
 
         // Find its latest transaction (active or not)
-        $latestTransaction = Transaction::with('area', 'rate')
+        $latestTransaction = Transaction::with('vehicle', 'area', 'rate')
             ->where('vehicle_id', $vehicle->id)
             ->latest()
             ->first();
@@ -253,5 +268,31 @@ class VehicleController extends Controller
         ]);
 
         return response()->json($vehicle);
+    }
+
+    public function destroy(Request $request, Vehicle $vehicle)
+    {
+        // Check if vehicle has active transactions
+        $activeTransaction = $vehicle->transactions()->where('status', 'active')->exists();
+
+        if ($activeTransaction) {
+            return response()->json([
+                'message' => 'Kendaraan sedang parkir, tidak bisa dihapus.'
+            ], 400);
+        }
+
+        $licensePlate = $vehicle->license_plate;
+        $vehicle->delete();
+
+        // Log Activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'VEHICLE_DELETED',
+            'description' => "Data kendaraan {$licensePlate} dihapus.",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
+        return response()->json(null, 204);
     }
 }

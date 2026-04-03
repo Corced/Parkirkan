@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/vehicles/search-parked', [VehicleController::class, 'searchParked']);
         Route::post('/vehicles/check-in', [VehicleController::class, 'checkIn']);
         Route::post('/vehicles/check-out', [VehicleController::class, 'checkOut']);
-        Route::apiResource('vehicles', VehicleController::class)->only(['index', 'show', 'update', 'store']);
+        Route::apiResource('vehicles', VehicleController::class)->only(['index', 'show', 'update', 'store', 'destroy']);
     });
 
     // Transactions - Admin & Owner (Read), Admin (Write if any)

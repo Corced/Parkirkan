@@ -147,22 +147,31 @@ function CheckOutContent() {
 
         const durationText = `${String(days).padStart(2, '0')} Hari ${String(hours).padStart(2, '0')} Jam ${String(mins).padStart(2, '0')} Menit ${String(secs).padStart(2, '0')} Detik`;
 
-        // Billing Logic (Hourly Round Up)
-        const totalMinutes = diffSecs / 60;
-        const billedHours = Math.max(1, Math.ceil(totalMinutes / 60));
-
+        // Billing Logic (Matching Backend VehicleController@checkOut)
+        const totalMinutes = Math.floor(diffSecs / 60);
         const rate = transaction.rate;
-        const dailyMax = rate.daily_max_rate;
-        const hourlyRate = rate.hourly_rate;
-
-        const billDays = Math.floor(billedHours / 24);
-        const remainingHours = billedHours % 24;
-
         let totalCost = 0;
-        if (dailyMax > 0) {
-            totalCost = (billDays * dailyMax) + Math.min(remainingHours * hourlyRate, dailyMax);
-        } else {
-            totalCost = billedHours * hourlyRate;
+
+        // 1. Check Grace Period
+        if (totalMinutes > rate.grace_period_minutes) {
+            // 2. Initial Rate for the first hour
+            const billedHours = Math.max(1, Math.ceil(totalMinutes / 60));
+            totalCost = Number(rate.initial_rate);
+
+            if (billedHours > 1) {
+                // 3. Hourly Rate for subsequent hours
+                totalCost += (billedHours - 1) * Number(rate.hourly_rate);
+            }
+
+            // 4. Apply Daily Max Cap
+            const dailyMax = Number(rate.daily_max_rate);
+            if (dailyMax > 0) {
+                const billDays = Math.floor(billedHours / 24);
+                const remainingHours = billedHours % 24;
+                
+                const cappedCost = (billDays * dailyMax) + Math.min(remainingHours * Number(rate.hourly_rate), dailyMax);
+                totalCost = Math.min(totalCost, cappedCost);
+            }
         }
 
         return { durationText, totalCost, days, hours, mins, secs };
