@@ -8,13 +8,29 @@ use App\Models\Vehicle;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\ParkingArea;
 
 class SimulationController extends Controller
 {
+    private function syncAllOccupancy()
+    {
+        // Re-sync all occupied_slots based on actual active transactions
+        $areas = ParkingArea::all();
+        foreach ($areas as $area) {
+            $actualCount = Transaction::where('area_id', $area->id)
+                ->where('status', 'active')
+                ->count();
+            $area->update(['occupied_slots' => $actualCount]);
+        }
+    }
+
     public function simulateShift(Request $request)
     {
         $role = $request->input('role', 'petugas');
         $scenario = $request->input('scenario', 'morning');
+        
+        // Sync first to repair any negative/incorrect numbers
+        $this->syncAllOccupancy();
         
         // Find a user with the requested role
         $officer = User::where('role', $role)->inRandomOrder()->first() ?? User::find(1);
@@ -82,9 +98,17 @@ class SimulationController extends Controller
                 ['vehicle_type' => $type, 'total_visits' => rand(1, 10)]
             );
 
+            $areaId = $areaMap[$type] ?? 1;
+            
+            // Increment occupied_slots in ParkingArea
+            $area = ParkingArea::find($areaId);
+            if ($area && $area->occupied_slots < $area->total_capacity) {
+                $area->increment('occupied_slots');
+            }
+
             $transactions[] = Transaction::create([
                 'vehicle_id' => $vehicle->id,
-                'area_id' => $areaMap[$type] ?? 1,
+                'area_id' => $areaId,
                 'rate_id' => $rateMap[$type] ?? 1,
                 'entry_officer_id' => $officer->id,
                 'ticket_number' => 'T-' . time() . '-' . $i,

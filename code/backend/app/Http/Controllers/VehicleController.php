@@ -203,8 +203,14 @@ class VehicleController extends Controller
                 'payment_status' => 'paid'
             ]);
 
-            // Decrement Area Occupancy
-            $transaction->area->decrement('occupied_slots');
+            // Decrement Area Occupancy with safety check
+            if ($transaction->area->occupied_slots > 0) {
+                $transaction->area->decrement('occupied_slots');
+            } else {
+                // If it's already 0 but we're checking out, something was out of sync.
+                // We leave it at 0 to avoid negative numbers.
+                $transaction->area->update(['occupied_slots' => 0]);
+            }
 
             // Log Activity
             ActivityLog::create([

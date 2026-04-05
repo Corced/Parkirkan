@@ -30,6 +30,7 @@ php artisan migrate
 php artisan serve
 cd code; cd backend; composer install; php artisan key:generate; php artisan migrate; php artisan serve
 cd code; cd backend; php artisan migrate; php artisan serve
+cd code; cd backend; php artisan serve
 ```
 
 ### Frontend
